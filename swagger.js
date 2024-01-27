@@ -4,11 +4,11 @@ const options = {
   definition: {
     info: {
       title: 'Your API',
-      version: '1.0.0',
+      version: '3.0.0',
       description: 'Your API description',
     },
   },
-  apis: ['./routes/*.js'],
+  apis: ['./allRouter.js'],
 };
 
 const swaggerSpec = swaggerJSDoc(options);
