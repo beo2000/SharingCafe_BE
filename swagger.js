@@ -26,7 +26,7 @@ const options = {
       description: 'This is the local development environment',
     },
     {
-      url: 'https://pc-geared-capstone-com.onrender.com',
+      url: '',
       description: 'This is the cloud development environment',
     },
   ],
