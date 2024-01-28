@@ -2,15 +2,39 @@ import swaggerJSDoc from 'swagger-jsdoc';
 
 const options = {
   definition: {
+    openapi: '3.0.0',
     info: {
       title: 'Your API',
-      version: '3.0.0',
-      description: 'Your API description',
+      version: '1.0.0',
+      description: 'API SHARING_COFFEE',
+    },
+    components: {
+      securitySchemes: {
+        BearerAuth: {
+          type: 'apiKey',
+          in: 'header',
+          name: 'Authorization',
+        },
+      },
     },
   },
+  schema: ['http', 'https'],
   apis: ['./allRouter.js'],
+  servers: [
+    {
+      url: 'http://localhost:3500',
+      description: 'This is the local development environment',
+    },
+    {
+      url: 'https://pc-geared-capstone-com.onrender.com',
+      description: 'This is the cloud development environment',
+    },
+  ],
+  security: [
+    {
+      BearerAuth: [],
+    },
+  ],
 };
 
-const swaggerSpec = swaggerJSDoc(options);
-
-module.exports = swaggerSpec;
+export default options;

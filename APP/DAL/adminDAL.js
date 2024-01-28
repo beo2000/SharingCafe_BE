@@ -2,11 +2,32 @@ import { Role, User } from '../utility/DbHelper.js';
 
 export async function getAdmDetails(email, password) {
   const user = await User.findOne({
-    where: { userName, password },
-    include: {
-      model: Role,
-      where: { roleName: 'admin' },
+    attributes: [
+      'user_id',
+      'user_name',
+      'password',
+      'phone',
+      'email',
+      'profile_avatar',
+      'Bio',
+      'registration',
+    ],
+    include: [
+      {
+        model: Role,
+        attributes: ['role_name'],
+        where: {
+          role_name: 'ADMIN',
+        },
+        as: 'UserRole',
+      },
+    ],
+    where: {
+      email: email,
+      password: password,
     },
+    limit: 1,
   });
+  console.log(user.dataValues);
   return user;
 }

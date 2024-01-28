@@ -6,12 +6,6 @@
 
 // const { Pool } = pkg;
 
-// const DB_HOST = process.env.DB_HOST;
-// const DB_PORT = process.env.DB_PORT;
-// const DB_DATABASE = process.env.DB_DATABASE;
-// const DB_USER = process.env.DB_USER;
-// const DB_PASSWORD = process.env.DB_PASSWORD;
-
 // console.log(
 //   '~~~~DB_HOST',
 //   DB_HOST,
@@ -35,9 +29,14 @@
 
 // export { pool };
 
-import { Sequelize } from 'sequelize';
+import { Sequelize, DataTypes } from 'sequelize';
 import dotenv from 'dotenv';
 dotenv.config();
+const DB_HOST = process.env.DB_HOST;
+const DB_PORT = process.env.DB_PORT;
+const DB_DATABASE = process.env.DB_DATABASE;
+const DB_USER = process.env.DB_USER;
+const DB_PASSWORD = process.env.DB_PASSWORD;
 console.log(
   '~~~~DB_HOST',
   DB_HOST,
@@ -53,338 +52,453 @@ console.log(
 
 const sequelize = new Sequelize({
   dialect: 'postgres',
-  host: process.env.DB_HOST,
-  port: process.env.DB_PORT,
-  database: process.env.DB_DATABASE,
-  username: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
+  host: DB_HOST,
+  port: DB_PORT,
+  username: DB_USER,
+  password: DB_PASSWORD,
+  database: DB_DATABASE,
+  sync: false,
 });
-sequelize
-  .authenticate()
-  .then(() => {
-    console.log('Connection has been established successfully.');
-  })
-  .catch((err) => {
-    console.error('Unable to connect to the database:', err);
-  });
-export const User = sequelize.define('User', {
-  userId: {
-    type: DataTypes.UUID,
-    defaultValue: DataTypes.UUIDV4,
-    primaryKey: true,
+// sequelize
+//   .authenticate()
+//   .then(() => {
+//     console.log('Connection has been established successfully.');
+//   })
+//   .catch((err) => {
+//     console.error('Unable to connect to the database:', err);
+//   });
+const User = sequelize.define(
+  'User',
+  {
+    user_id: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true,
+    },
+    user_name: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+    },
+    password: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+    },
+    phone: {
+      type: DataTypes.TEXT,
+    },
+    email: {
+      type: DataTypes.TEXT,
+    },
+    profile_avatar: {
+      type: DataTypes.TEXT,
+    },
+    Bio: {
+      type: DataTypes.JSON,
+    },
+    registration: {
+      type: DataTypes.DATE,
+    },
+    role_id: {
+      type: DataTypes.UUID,
+    },
   },
-  userName: {
-    type: DataTypes.TEXT,
-    allowNull: false,
+  {
+    tableName: 'user',
+    timestamps: false,
   },
-  password: {
-    type: DataTypes.TEXT,
-    allowNull: false,
+);
+const Role = sequelize.define(
+  'Role',
+  {
+    role_id: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true,
+    },
+    role_name: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+    },
   },
-  phone: {
-    type: DataTypes.TEXT,
+  {
+    tableName: 'role',
+    timestamps: false,
   },
-  email: {
-    type: DataTypes.TEXT,
+);
+const GoogleLogin = sequelize.define(
+  'GoogleLogin',
+  {
+    googleLoginId: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true,
+    },
+    userId: {
+      type: DataTypes.UUID,
+    },
+    token: {
+      type: DataTypes.TEXT,
+    },
+    expiry: {
+      type: DataTypes.DATE,
+    },
   },
-  profileAvatar: {
-    type: DataTypes.TEXT,
+  {
+    tableName: 'google_login',
+    timestamps: false,
   },
-  bio: {
-    type: DataTypes.JSON,
-  },
-  registration: {
-    type: DataTypes.DATE,
-  },
-  roleId: {
-    type: DataTypes.UUID,
-  },
-});
-export const Role = sequelize.define('Role', {
-  roleId: {
-    type: DataTypes.UUID,
-    defaultValue: DataTypes.UUIDV4,
-    primaryKey: true,
-  },
-  roleName: {
-    type: DataTypes.TEXT,
-    allowNull: false,
-  },
-});
-export const GoogleLogin = sequelize.define('GoogleLogin', {
-  googleLoginId: {
-    type: DataTypes.UUID,
-    defaultValue: DataTypes.UUIDV4,
-    primaryKey: true,
-  },
-  userId: {
-    type: DataTypes.UUID,
-  },
-  token: {
-    type: DataTypes.TEXT,
-  },
-  expiry: {
-    type: DataTypes.DATE,
-  },
-});
+);
 
-export const Notification = sequelize.define('Notification', {
-  notificationId: {
-    type: DataTypes.UUID,
-    defaultValue: DataTypes.UUIDV4,
-    primaryKey: true,
+const Notification = sequelize.define(
+  'Notification',
+  {
+    notificationId: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true,
+    },
+    userId: {
+      type: DataTypes.UUID,
+    },
+    content: {
+      type: DataTypes.TEXT,
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+    },
+    status: {
+      type: DataTypes.BOOLEAN,
+    },
   },
-  userId: {
-    type: DataTypes.UUID,
+  {
+    tableName: 'notification',
+    timestamps: false,
   },
-  content: {
-    type: DataTypes.TEXT,
-  },
-  createdAt: {
-    type: DataTypes.DATE,
-  },
-  status: {
-    type: DataTypes.BOOLEAN,
-  },
-});
+);
 
-export const Friendship = sequelize.define('Friendship', {
-  friendshipId: {
-    type: DataTypes.UUID,
-    defaultValue: DataTypes.UUIDV4,
-    primaryKey: true,
+const Friendship = sequelize.define(
+  'Friendship',
+  {
+    friendshipId: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true,
+    },
+    userId1: {
+      type: DataTypes.UUID,
+    },
+    userId2: {
+      type: DataTypes.UUID,
+    },
+    friendshipStatusId: {
+      type: DataTypes.UUID,
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+    },
   },
-  userId1: {
-    type: DataTypes.UUID,
+  {
+    tableName: 'friend_ship',
+    timestamps: false,
   },
-  userId2: {
-    type: DataTypes.UUID,
+);
+const FriendshipStatus = sequelize.define(
+  'FriendshipStatus',
+  {
+    friendshipStatusId: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true,
+    },
+    friendshipStatus: {
+      type: DataTypes.TEXT,
+    },
   },
-  friendshipStatusId: {
-    type: DataTypes.UUID,
+  {
+    tableName: 'friendship_status',
+    timestamps: false,
   },
-  createdAt: {
-    type: DataTypes.DATE,
+);
+const Blog = sequelize.define(
+  'Blog',
+  {
+    blogId: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true,
+    },
+    userId: {
+      type: DataTypes.UUID,
+    },
+    content: {
+      type: DataTypes.TEXT,
+    },
+    likesCount: {
+      type: DataTypes.INTEGER,
+    },
+    commentsCount: {
+      type: DataTypes.INTEGER,
+    },
+    isApprove: {
+      type: DataTypes.BOOLEAN,
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+    },
   },
-});
-export const FriendshipStatus = sequelize.define('FriendshipStatus', {
-  friendshipStatusId: {
-    type: DataTypes.UUID,
-    defaultValue: DataTypes.UUIDV4,
-    primaryKey: true,
+  {
+    tableName: 'blog',
+    timestamps: false,
   },
-  friendshipStatus: {
-    type: DataTypes.TEXT,
+);
+const Comment = sequelize.define(
+  'Comment',
+  {
+    commentId: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true,
+    },
+    blogId: {
+      type: DataTypes.UUID,
+    },
+    userId: {
+      type: DataTypes.UUID,
+    },
+    content: {
+      type: DataTypes.TEXT,
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+    },
   },
-});
-export const Blog = sequelize.define('Blog', {
-  blogId: {
-    type: DataTypes.UUID,
-    defaultValue: DataTypes.UUIDV4,
-    primaryKey: true,
+  {
+    tableName: 'comment',
+    timestamps: false,
   },
-  userId: {
-    type: DataTypes.UUID,
+);
+const Message = sequelize.define(
+  'Message',
+  {
+    messageId: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true,
+    },
+    senderId: {
+      type: DataTypes.UUID,
+    },
+    receiverId: {
+      type: DataTypes.UUID,
+    },
+    content: {
+      type: DataTypes.TEXT,
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+    },
+    isRead: {
+      type: DataTypes.BOOLEAN,
+    },
   },
-  content: {
-    type: DataTypes.TEXT,
+  {
+    tableName: 'message',
+    timestamps: false,
   },
-  likesCount: {
-    type: DataTypes.INTEGER,
+);
+const Event = sequelize.define(
+  'Event',
+  {
+    eventId: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true,
+    },
+    organizerId: {
+      type: DataTypes.UUID,
+    },
+    title: {
+      type: DataTypes.TEXT,
+    },
+    description: {
+      type: DataTypes.TEXT,
+    },
+    timeOfEvent: {
+      type: DataTypes.DATE,
+    },
+    location: {
+      type: DataTypes.TEXT,
+    },
+    participantsCount: {
+      type: DataTypes.INTEGER,
+    },
+    isApprove: {
+      type: DataTypes.BOOLEAN,
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+    },
   },
-  commentsCount: {
-    type: DataTypes.INTEGER,
+  {
+    tableName: 'event',
+    timestamps: false,
   },
-  isApprove: {
-    type: DataTypes.BOOLEAN,
+);
+const EventParticipation = sequelize.define(
+  'EventParticipation',
+  {
+    participationId: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true,
+    },
+    eventId: {
+      type: DataTypes.UUID,
+    },
+    userId: {
+      type: DataTypes.UUID,
+    },
+    eventParticipationStatusId: {
+      type: DataTypes.UUID,
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+    },
   },
-  createdAt: {
-    type: DataTypes.DATE,
+  {
+    tableName: 'event_participation',
+    timestamps: false,
   },
-});
-export const Comment = sequelize.define('Comment', {
-  commentId: {
-    type: DataTypes.UUID,
-    defaultValue: DataTypes.UUIDV4,
-    primaryKey: true,
+);
+const EventParticipationStatus = sequelize.define(
+  'EventParticipationStatus',
+  {
+    eventParticipationStatusId: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true,
+    },
+    eventParticipationStatus: {
+      type: DataTypes.TEXT,
+    },
   },
-  blogId: {
-    type: DataTypes.UUID,
+  {
+    tableName: 'event_participation_status',
+    timestamps: false,
   },
-  userId: {
-    type: DataTypes.UUID,
+);
+const UserStatistics = sequelize.define(
+  'UserStatistics',
+  {
+    statisticsId: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true,
+    },
+    userId: {
+      type: DataTypes.UUID,
+    },
+    loginCount: {
+      type: DataTypes.INTEGER,
+    },
+    blogCount: {
+      type: DataTypes.INTEGER,
+    },
+    eventCount: {
+      type: DataTypes.INTEGER,
+    },
+    messageCount: {
+      type: DataTypes.INTEGER,
+    },
+    friendCount: {
+      type: DataTypes.INTEGER,
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+    },
   },
-  content: {
-    type: DataTypes.TEXT,
+  {
+    tableName: 'user_statistics',
+    timestamps: false,
   },
-  createdAt: {
-    type: DataTypes.DATE,
+);
+const BlogReport = sequelize.define(
+  'BlogReport',
+  {
+    reportId: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true,
+    },
+    reporterId: {
+      type: DataTypes.UUID,
+    },
+    blogId: {
+      type: DataTypes.UUID,
+    },
+    content: {
+      type: DataTypes.TEXT,
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+    },
+    reportStatusId: {
+      type: DataTypes.UUID,
+    },
   },
-});
-export const Message = sequelize.define('Message', {
-  messageId: {
-    type: DataTypes.UUID,
-    defaultValue: DataTypes.UUIDV4,
-    primaryKey: true,
+  {
+    tableName: 'blog_report',
+    timestamps: false,
   },
-  senderId: {
-    type: DataTypes.UUID,
+);
+const EventReport = sequelize.define(
+  'EventReport',
+  {
+    reportId: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true,
+    },
+    reporterId: {
+      type: DataTypes.UUID,
+    },
+    eventId: {
+      type: DataTypes.UUID,
+    },
+    content: {
+      type: DataTypes.TEXT,
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+    },
+    reportStatusId: {
+      type: DataTypes.UUID,
+    },
   },
-  receiverId: {
-    type: DataTypes.UUID,
+  {
+    tableName: 'event_report',
+    timestamps: false,
   },
-  content: {
-    type: DataTypes.TEXT,
+);
+const ReportStatus = sequelize.define(
+  'ReportStatus',
+  {
+    reportStatusId: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true,
+    },
+    reportStatus: {
+      type: DataTypes.TEXT,
+    },
   },
-  createdAt: {
-    type: DataTypes.DATE,
+  {
+    tableName: 'report_status',
+    timestamps: false,
   },
-  isRead: {
-    type: DataTypes.BOOLEAN,
-  },
-});
-export const Event = sequelize.define('Event', {
-  eventId: {
-    type: DataTypes.UUID,
-    defaultValue: DataTypes.UUIDV4,
-    primaryKey: true,
-  },
-  organizerId: {
-    type: DataTypes.UUID,
-  },
-  title: {
-    type: DataTypes.TEXT,
-  },
-  description: {
-    type: DataTypes.TEXT,
-  },
-  timeOfEvent: {
-    type: DataTypes.DATE,
-  },
-  location: {
-    type: DataTypes.TEXT,
-  },
-  participantsCount: {
-    type: DataTypes.INTEGER,
-  },
-  isApprove: {
-    type: DataTypes.BOOLEAN,
-  },
-  createdAt: {
-    type: DataTypes.DATE,
-  },
-});
-export const EventParticipation = sequelize.define('EventParticipation', {
-  participationId: {
-    type: DataTypes.UUID,
-    defaultValue: DataTypes.UUIDV4,
-    primaryKey: true,
-  },
-  eventId: {
-    type: DataTypes.UUID,
-  },
-  userId: {
-    type: DataTypes.UUID,
-  },
-  eventParticipationStatusId: {
-    type: DataTypes.UUID,
-  },
-  createdAt: {
-    type: DataTypes.DATE,
-  },
-});
-const EventParticipationStatus = sequelize.define('EventParticipationStatus', {
-  eventParticipationStatusId: {
-    type: DataTypes.UUID,
-    defaultValue: DataTypes.UUIDV4,
-    primaryKey: true,
-  },
-  eventParticipationStatus: {
-    type: DataTypes.TEXT,
-  },
-});
-export const UserStatistics = sequelize.define('UserStatistics', {
-  statisticsId: {
-    type: DataTypes.UUID,
-    defaultValue: DataTypes.UUIDV4,
-    primaryKey: true,
-  },
-  userId: {
-    type: DataTypes.UUID,
-  },
-  loginCount: {
-    type: DataTypes.INTEGER,
-  },
-  blogCount: {
-    type: DataTypes.INTEGER,
-  },
-  eventCount: {
-    type: DataTypes.INTEGER,
-  },
-  messageCount: {
-    type: DataTypes.INTEGER,
-  },
-  friendCount: {
-    type: DataTypes.INTEGER,
-  },
-  createdAt: {
-    type: DataTypes.DATE,
-  },
-});
-export const BlogReport = sequelize.define('BlogReport', {
-  reportId: {
-    type: DataTypes.UUID,
-    defaultValue: DataTypes.UUIDV4,
-    primaryKey: true,
-  },
-  reporterId: {
-    type: DataTypes.UUID,
-  },
-  blogId: {
-    type: DataTypes.UUID,
-  },
-  content: {
-    type: DataTypes.TEXT,
-  },
-  createdAt: {
-    type: DataTypes.DATE,
-  },
-  reportStatusId: {
-    type: DataTypes.UUID,
-  },
-});
-export const EventReport = sequelize.define('EventReport', {
-  reportId: {
-    type: DataTypes.UUID,
-    defaultValue: DataTypes.UUIDV4,
-    primaryKey: true,
-  },
-  reporterId: {
-    type: DataTypes.UUID,
-  },
-  eventId: {
-    type: DataTypes.UUID,
-  },
-  content: {
-    type: DataTypes.TEXT,
-  },
-  createdAt: {
-    type: DataTypes.DATE,
-  },
-  reportStatusId: {
-    type: DataTypes.UUID,
-  },
-});
-export const ReportStatus = sequelize.define('ReportStatus', {
-  reportStatusId: {
-    type: DataTypes.UUID,
-    defaultValue: DataTypes.UUIDV4,
-    primaryKey: true,
-  },
-  reportStatus: {
-    type: DataTypes.TEXT,
-  },
-});
+);
+
+User.belongsTo(Role, { foreignKey: 'role_id', as: 'UserRole' });
 
 EventReport.belongsTo(User, { foreignKey: 'reporterId', as: 'reporter' });
 EventReport.belongsTo(Event, { foreignKey: 'eventId', as: 'event' });
@@ -434,3 +548,22 @@ Friendship.belongsTo(FriendshipStatus, {
 GoogleLogin.belongsTo(User, { foreignKey: 'userId', as: 'user' });
 
 export default sequelize;
+export {
+  sequelize as SequelizeInstance,
+  User,
+  Role,
+  GoogleLogin,
+  ReportStatus,
+  EventReport,
+  BlogReport,
+  UserStatistics,
+  EventParticipationStatus,
+  EventParticipation,
+  Event,
+  Message,
+  Comment,
+  Blog,
+  FriendshipStatus,
+  Friendship,
+  Notification,
+};

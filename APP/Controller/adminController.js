@@ -13,9 +13,11 @@ const secret_key = process.env.SECRET_KEY;
 export async function loginAdmin(req, res) {
   try {
     const { email, password } = req.body;
-    const userDetails = await admService.getAdmDetails(email, password);
+    const result = await admService.getAdmDetails(email, password);
+    const userDetails = result.dataValues;
     if (userDetails) {
-      const accessToken = jwt.sign({ email: userDetails.email }, secret_key, {
+      const email = userDetails.email;
+      const accessToken = jwt.sign({ email: email }, secret_key, {
         expiresIn: '30d',
       });
       res.header('Authorization', `Bearer ${accessToken}`);

@@ -1,19 +1,27 @@
 import express from 'express';
-
-import uploadCloud from './APP/middleware/uploadCloudImg.js';
 import * as admController from './APP/Controller/adminController.js';
 
 const router = express.Router();
-// ADMIN SWAGGER
+
 /**
  * @swagger
  * tags:
- *   name: Admin
- *   description: Admin-related routes
+ *   - name: Admin section
+ *     description: API endpoints for admin
+ * securityDefinitions:
+ *   BearerAuth:
+ *     type: apiKey
+ *     in: header
+ *     name: Authorization
+ */
+
+/**
+ * @swagger
  * /api/admin/login:
  *   post:
- *     summary: Admin login
- *     description: Login as an admin
+ *     summary: Admin login only
+ *     tags:
+ *       - Admin section
  *     requestBody:
  *       required: true
  *       content:
@@ -21,17 +29,39 @@ const router = express.Router();
  *           schema:
  *             type: object
  *             properties:
- *               username:
+ *               email:
  *                 type: string
+ *                 default: johndoe@gmail.com
  *               password:
  *                 type: string
+ *                 default: pass
+ *           example:
+ *             email: johndoe@gmail.com
+ *             password: pass
  *     responses:
- *       200:
- *         description: Successful login
- *       401:
- *         description: Unauthorized
- *       500:
- *         description: Internal Server Error
+ *       '200':
+ *         description: The details of admin after login
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Login successful
+ *                 token:
+ *                   type: string
+ *                   example: your_access_token
+ *       '404':
+ *         description: Admin not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Admin not found
  */
 router.post('/api/admin/login', admController.loginAdmin);
 
