@@ -498,41 +498,55 @@ const ReportStatus = sequelize.define(
   },
 );
 
-const Interest = sequelize.define('interest', {
-  interest_id: {
-    type: DataTypes.UUID,
-    primaryKey: true,
-    defaultValue: DataTypes.UUIDV4,
+const Interest = sequelize.define(
+  'interest',
+  {
+    interest_id: {
+      type: DataTypes.UUID,
+      primaryKey: true,
+      defaultValue: DataTypes.UUIDV4,
+    },
+    name: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+    },
+    created_at: {
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW,
+    },
   },
-  name: {
-    type: DataTypes.TEXT,
-    allowNull: false,
+  {
+    tableName: 'interest',
+    timestamps: false,
   },
-  created_at: {
-    type: DataTypes.DATE,
-    defaultValue: DataTypes.NOW,
-  },
-});
+);
 
-const UserInterest = sequelize.define('user_interest', {
-  user_interest_id: {
-    type: DataTypes.UUID,
-    primaryKey: true,
-    defaultValue: DataTypes.UUIDV4,
+const UserInterest = sequelize.define(
+  'user_interest',
+  {
+    user_interest_id: {
+      type: DataTypes.UUID,
+      primaryKey: true,
+      defaultValue: DataTypes.UUIDV4,
+    },
+    interest_id: {
+      type: DataTypes.UUID,
+      allowNull: false,
+    },
+    user_id: {
+      type: DataTypes.UUID,
+      allowNull: false,
+    },
+    created_at: {
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW,
+    },
   },
-  interest_id: {
-    type: DataTypes.UUID,
-    allowNull: false,
+  {
+    tableName: 'user_interest',
+    timestamps: false,
   },
-  user_id: {
-    type: DataTypes.UUID,
-    allowNull: false,
-  },
-  created_at: {
-    type: DataTypes.DATE,
-    defaultValue: DataTypes.NOW,
-  },
-});
+);
 
 User.belongsTo(Role, { foreignKey: 'role_id', as: 'UserRole' });
 

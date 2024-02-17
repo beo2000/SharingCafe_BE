@@ -5,8 +5,10 @@ export async function getInterests() {
   return interests;
 }
 export async function getInterest(interestId) {
-  const interest = await Interest.findOne({ interest_id: interestId });
-  return interests;
+  const interest = await Interest.findOne({
+    where: { interest_id: interestId },
+  });
+  return interest;
 }
 
 export async function createInterest(interestDetails) {

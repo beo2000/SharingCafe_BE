@@ -1,13 +1,26 @@
 import express from 'express';
 import * as interestService from '../Service/interestService.js';
+import { SequelizeInstance } from '../utility/DbHelper.js';
 
 export async function getInterests(req, res) {
   try {
-    const result = interestService.getInterests();
+    const result = await interestService.getInterests();
+    console.log(result);
     res.status(200).send(result);
   } catch (e) {
-    console.log(error);
-    res.status(404).send(error);
+    console.log(e);
+    res.status(404).send(e);
+  }
+}
+export async function getInterest(req, res) {
+  try {
+    const interestId = req.params.interestId;
+    const result = await interestService.getInterest(interestId);
+    console.log(result);
+    res.status(200).send(result);
+  } catch (e) {
+    console.log(e);
+    res.status(404).send(e);
   }
 }
 
@@ -20,8 +33,8 @@ export async function createInterest(req, res) {
     await t.commit();
   } catch (e) {
     await t.rollback();
-    console.log(error);
-    res.status(404).send(error);
+    console.log(e);
+    res.status(404).send(e);
   }
 }
 
@@ -38,8 +51,8 @@ export async function updateInterest(req, res) {
     await t.commit();
   } catch (e) {
     await t.rollback();
-    console.log(error);
-    res.status(404).send(error);
+    console.log(e);
+    res.status(404).send(e);
   }
 }
 
@@ -48,11 +61,11 @@ export async function deleteInterest(req, res) {
   try {
     const interestId = req.params.interestId;
     const interest = await interestService.deleteInterest(interestId);
-    res.status(200).send(interest);
+    res.status(200).send({ interest });
     await t.commit();
   } catch (e) {
     await t.rollback();
-    console.log(error);
-    res.status(404).send(error);
+    console.log(e);
+    res.status(404).send(e);
   }
 }
