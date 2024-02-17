@@ -1,7 +1,7 @@
 import express from 'express';
 import * as admController from './APP/Controller/adminController.js';
 import * as userController from './APP/Controller/userController.js';
-
+import * as interestController from './APP/Controller/interestController.js';
 const router = express.Router();
 
 /**
@@ -97,5 +97,10 @@ router.post('/api/admin/login', admController.loginAdmin);
  *         description: Internal Server Error
  */
 router.post('/api/user/login', userController.loginUser);
+
+router.get('/api/interest', interestController.getInterests);
+router.post('/api/interest', interestController.createInterest);
+router.put('/api/interest/:interestId', interestController.updateInterest);
+router.delete('/api/interest/:interestId', interestController.deleteInterest);
 
 export default router;

@@ -498,6 +498,42 @@ const ReportStatus = sequelize.define(
   },
 );
 
+const Interest = sequelize.define('interest', {
+  interest_id: {
+    type: DataTypes.UUID,
+    primaryKey: true,
+    defaultValue: DataTypes.UUIDV4,
+  },
+  name: {
+    type: DataTypes.TEXT,
+    allowNull: false,
+  },
+  created_at: {
+    type: DataTypes.DATE,
+    defaultValue: DataTypes.NOW,
+  },
+});
+
+const UserInterest = sequelize.define('user_interest', {
+  user_interest_id: {
+    type: DataTypes.UUID,
+    primaryKey: true,
+    defaultValue: DataTypes.UUIDV4,
+  },
+  interest_id: {
+    type: DataTypes.UUID,
+    allowNull: false,
+  },
+  user_id: {
+    type: DataTypes.UUID,
+    allowNull: false,
+  },
+  created_at: {
+    type: DataTypes.DATE,
+    defaultValue: DataTypes.NOW,
+  },
+});
+
 User.belongsTo(Role, { foreignKey: 'role_id', as: 'UserRole' });
 
 EventReport.belongsTo(User, { foreignKey: 'reporterId', as: 'reporter' });
@@ -566,4 +602,5 @@ export {
   FriendshipStatus,
   Friendship,
   Notification,
+  Interest,
 };
