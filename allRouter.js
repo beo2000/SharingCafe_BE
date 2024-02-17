@@ -1,5 +1,6 @@
 import express from 'express';
 import * as admController from './APP/Controller/adminController.js';
+import * as userController from './APP/Controller/userController.js';
 
 const router = express.Router();
 
@@ -64,5 +65,37 @@ const router = express.Router();
  *                   example: Admin not found
  */
 router.post('/api/admin/login', admController.loginAdmin);
+
+/**
+ * @swagger
+ * /api/user/login:
+ *   post:
+ *     summary: Login User
+ *     description: Endpoint for user login
+ *     tags:
+ *       - User section
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *                 example: janedoe@gmail.com
+ *               password:
+ *                 type: string
+ *                 example: pass
+ *     responses:
+ *       '200':
+ *         description: Successful login
+ *       '401':
+ *         description: Unauthorized - Invalid credentials
+ *       '500':
+ *         description: Internal Server Error
+ */
+router.post('/api/user/login', userController.loginUser);
 
 export default router;
