@@ -35,7 +35,6 @@ export async function loginAdmin(req, res) {
 export async function getStatics(req, res) {
   try {
     const statics = await admService.getStatics();
-    console.log(statics);
     res.status(200).send(statics);
   } catch (e) {
     console.log(e);
