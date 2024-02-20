@@ -64,7 +64,22 @@ const router = express.Router();
  *                   type: string
  *                   example: Admin not found
  */
+/**
+ * @swagger
+ * /api/admin/statics:
+ *   get:
+ *     summary: Get statistics for admin
+ *     description: Retrieve statistics data for the admin.
+ *     tags:
+ *       - Admin section
+ *     responses:
+ *       200:
+ *         description: Successful response
+ *       500:
+ *         description: Internal server error
+ */
 router.post('/api/admin/login', admController.loginAdmin);
+router.get('/api/admin/statics', admController.getStatics);
 
 /**
  * @swagger

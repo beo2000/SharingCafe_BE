@@ -1,4 +1,4 @@
-import { Role, User } from '../utility/DbHelper.js';
+import { Role, SequelizeInstance, User } from '../utility/DbHelper.js';
 
 export async function getAdmDetails(email, password) {
   const user = await User.findOne({
@@ -30,4 +30,20 @@ export async function getAdmDetails(email, password) {
   });
   console.log(user.dataValues);
   return user;
+}
+export async function getStatics() {
+  const sqlQuery = `
+SELECT 'Account' AS entity_type, COUNT(*) AS entity_count
+FROM public.user
+UNION
+SELECT 'Blog' AS entity_type, COUNT(*) AS entity_count
+FROM blog
+UNION
+SELECT 'Event' AS entity_type, COUNT(*) AS entity_count
+FROM event;`;
+
+  const categories = await SequelizeInstance.query(sqlQuery, {
+    type: SequelizeInstance.QueryTypes.SELECT,
+    raw: true,
+  });
 }

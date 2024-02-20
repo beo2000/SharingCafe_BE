@@ -31,3 +31,13 @@ export async function loginAdmin(req, res) {
     res.status(404).send(error);
   }
 }
+
+export async function getStatics(req, res) {
+  try {
+    const statics = await admService.getStatics();
+    res.send(200).send(statics);
+  } catch (e) {
+    console.log(e);
+    res.status(400).send(e);
+  }
+}
