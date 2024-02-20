@@ -42,8 +42,9 @@ UNION
 SELECT 'Event' AS entity_type, COUNT(*) AS entity_count
 FROM event;`;
 
-  const categories = await SequelizeInstance.query(sqlQuery, {
+  const statics = await SequelizeInstance.query(sqlQuery, {
     type: SequelizeInstance.QueryTypes.SELECT,
     raw: true,
   });
+  return statics;
 }
