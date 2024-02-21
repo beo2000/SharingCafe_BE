@@ -16,8 +16,7 @@ export async function getInterest(req, res) {
   try {
     const interestId = req.params.interestId;
     const result = await interestService.getInterest(interestId);
-    console.log(result);
-    res.status(200).send(result);
+    res.status(200).send(result ? result : 'No interest found !!!');
   } catch (e) {
     console.log(e);
     res.status(404).send(e);

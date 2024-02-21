@@ -278,15 +278,15 @@ router.post('/api/user/login', userController.loginUser);
  *     description: Deletes interests based on the provided interest IDs.
  *     tags:
  *       - Interest Section
- *     parameters:
- *       - in: body
- *         name: interestIds
- *         description: Array of interest IDs to be deleted
- *         required: true
- *         schema:
- *           type: array
- *           items:
- *             type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: array
+ *             items:
+ *               type: string
+ *           example: ["interestId1", "interestId2"]
  *     responses:
  *       200:
  *         description: Number of deleted interests
