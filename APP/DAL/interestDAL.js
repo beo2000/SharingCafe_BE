@@ -20,9 +20,9 @@ export async function updateInterest(interest, interestDetail) {
     name: interestDetail.name,
   });
 }
-export async function deleteInterest(interestId) {
+export async function deleteInterests(interestIds) {
   const deletedInterest = await Interest.destroy({
-    where: { interest_id: interestId },
+    where: { interest_id: interestIds },
   });
   return deletedInterest;
 }

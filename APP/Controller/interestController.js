@@ -59,8 +59,8 @@ export async function updateInterest(req, res) {
 export async function deleteInterest(req, res) {
   const t = await SequelizeInstance.transaction();
   try {
-    const interestId = req.params.interestId;
-    const interest = await interestService.deleteInterest(interestId);
+    const interestIds = req.body;
+    const interest = await interestService.deleteInterest(interestIds);
     res.status(200).send({ interest });
     await t.commit();
   } catch (e) {

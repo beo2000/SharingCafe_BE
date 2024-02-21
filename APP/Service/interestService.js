@@ -17,8 +17,6 @@ export async function updateInterest(interestId, interestDetails) {
   if (!interest) throw new Error('Interest Not Found !!!');
   return await interestDAL.updateInterest(interest, interestDetails);
 }
-export async function deleteInterest(interestId) {
-  const interest = await getInterest(interestId);
-  if (!interest) throw new Error('Interest Not Found !!!');
-  return await interestDAL.deleteInterest(interestId);
+export async function deleteInterest(interestIds) {
+  return await interestDAL.deleteInterests(interestIds);
 }

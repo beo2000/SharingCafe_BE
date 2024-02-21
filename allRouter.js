@@ -269,30 +269,34 @@ router.post('/api/user/login', userController.loginUser);
  *         description: Interest not found
  *       '500':
  *         description: Internal Server Error
+ */
+/**
+ * @swagger
+ * /api/interest:
  *   delete:
- *     summary: Delete an interest
- *     description: Delete an existing interest.
+ *     summary: Delete interests
+ *     description: Deletes interests based on the provided interest IDs.
  *     tags:
  *       - Interest Section
  *     parameters:
- *       - in: path
- *         name: interest_id
+ *       - in: body
+ *         name: interestIds
+ *         description: Array of interest IDs to be deleted
  *         required: true
- *         description: The ID of the interest to delete.
  *         schema:
- *           type: string
+ *           type: array
+ *           items:
+ *             type: integer
  *     responses:
- *       '204':
- *         description: Interest deleted successfully
- *       '404':
- *         description: Interest not found
- *       '500':
+ *       200:
+ *         description: Number of deleted interests
+ *       500:
  *         description: Internal Server Error
  */
 router.get('/api/interest', interestController.getInterests);
 router.post('/api/interest', interestController.createInterest);
 router.get('/api/interest/:interestId', interestController.getInterest);
 router.put('/api/interest/:interestId', interestController.updateInterest);
-router.delete('/api/interest/:interestId', interestController.deleteInterest);
+router.delete('/api/interest', interestController.deleteInterest);
 
 export default router;
