@@ -78,6 +78,37 @@ const router = express.Router();
  *       500:
  *         description: Internal server error
  */
+/**
+ * @swagger
+ * tags:
+ *   - name: Admin section
+ *
+ * /api/admin/users:
+ *   get:
+ *     security:
+ *       - BearerAuth: []
+ *     summary: Get all admin users
+ *     description: Retrieve a list of all admin users.
+ *     tags:
+ *       - Admin section
+ *     responses:
+ *       200:
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             example:
+ *               message: Success
+ *               data:
+ *                 users:
+ *                   - userId: 1
+ *                     username: "admin1"
+ *                   - userId: 2
+ *                     username: "admin2"
+ *       401:
+ *         description: Unauthorized - Missing or invalid token
+ *       500:
+ *         description: Internal server error
+ */
 router.post('/api/admin/login', admController.loginAdmin);
 router.get('/api/admin/statics', admController.getStatics);
 
@@ -299,4 +330,12 @@ router.get('/api/interest/:interestId', interestController.getInterest);
 router.put('/api/interest/:interestId', interestController.updateInterest);
 router.delete('/api/interest', interestController.deleteInterest);
 
+// Làm cái gì ? có trả data hay không ? có xử lí data hay không
+// Admin đang thiếu 1 API get toàn bộ user đang có
+// Restful convention -> Về tìm hiểu
+//  METHOD      URL          HANDLING/ PROCESSING/ CONTROLLER
+router.get('/api/admin/users', admController.getUsers);
+// Mỗi function trong controller chỉ handle cho 1 API
+//  Nhưng có thể dùng nhiều function trong Service cho các Controller
+//  Bản chất cốt lõi của API là SQL .... Hết
 export default router;

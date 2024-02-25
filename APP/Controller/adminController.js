@@ -41,3 +41,13 @@ export async function getStatics(req, res) {
     res.status(400).send(e);
   }
 }
+
+export async function getUsers(req, res) {
+  try {
+    const result = await admService.getUsers();
+    res.status(200).send(result);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ error: error.message });
+  }
+}
