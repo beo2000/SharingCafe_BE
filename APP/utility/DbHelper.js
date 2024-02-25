@@ -309,12 +309,12 @@ const Message = sequelize.define(
 const Event = sequelize.define(
   'Event',
   {
-    eventId: {
+    event_id: {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
     },
-    organizerId: {
+    organizer_id: {
       type: DataTypes.UUID,
     },
     title: {
@@ -323,20 +323,25 @@ const Event = sequelize.define(
     description: {
       type: DataTypes.TEXT,
     },
-    timeOfEvent: {
+    time_of_event: {
       type: DataTypes.DATE,
     },
     location: {
       type: DataTypes.TEXT,
     },
-    participantsCount: {
+    participants_count: {
       type: DataTypes.INTEGER,
     },
-    isApprove: {
+    is_approve: {
       type: DataTypes.BOOLEAN,
     },
-    createdAt: {
+    background_img: {
+      type: DataTypes.TEXT,
+    },
+    created_at: {
       type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),
     },
   },
   {
@@ -573,7 +578,7 @@ EventParticipation.belongsTo(EventParticipationStatus, {
   as: 'eventParticipationStatus',
 });
 
-Event.belongsTo(User, { foreignKey: 'organizerId', as: 'organizer' });
+Event.belongsTo(User, { foreignKey: 'organizer_id', as: 'organizer' });
 Event.hasMany(EventParticipation, {
   foreignKey: 'eventId',
   as: 'eventParticipations',

@@ -2,6 +2,7 @@ import express from 'express';
 import * as admController from './APP/Controller/adminController.js';
 import * as userController from './APP/Controller/userController.js';
 import * as interestController from './APP/Controller/interestController.js';
+import * as eventController from './APP/Controller/EventController.js';
 const router = express.Router();
 
 /**
@@ -338,4 +339,124 @@ router.get('/api/admin/users', admController.getUsers);
 // Mỗi function trong controller chỉ handle cho 1 API
 //  Nhưng có thể dùng nhiều function trong Service cho các Controller
 //  Bản chất cốt lõi của API là SQL .... Hết
+
+// EVENT SECTION
+//  Phân quyền Authorization -> Middleware handle -> Middleware ???
+/**
+ * @swagger
+ * tags:
+ *   - name: Event Section
+ *     description: Operations related to events
+ *
+ * /api/event:
+ *   get:
+ *     security:
+ *       - BearerAuth: []
+ *     summary: Get all events
+ *     description: Retrieve a list of all events.
+ *     tags:
+ *       - Event Section
+ *     responses:
+ *       200:
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             example:
+ *               message: Success
+ *               data:
+ *                 events:
+ *                   - eventId: 1
+ *                     eventName: "Event A"
+ *                   - eventId: 2
+ *                     eventName: "Event B"
+ *       401:
+ *         description: Unauthorized - Missing or invalid token
+ *       500:
+ *         description: Internal server error
+ */
+/**
+ * @swagger
+ * tags:
+ *   - name: Event Section
+ *     description: Operations related to events
+ *
+ * /api/event/{eventId}:
+ *   parameters:
+ *     - in: path
+ *       name: eventId
+ *       required: true
+ *       description: ID of the event
+ *       example: "50b415b6-b874-429c-9f31-56db62ff0c18"
+ *   get:
+ *     security:
+ *       - BearerAuth: []
+ *     summary: Get event details
+ *     description: Retrieve details for a specific event.
+ *     tags:
+ *       - Event Section
+ *     responses:
+ *       200:
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             example:
+ *               message: Success
+ *               data:
+ *                 event:
+ *                   eventId: "50b415b6-b874-429c-9f31-56db62ff0c18"
+ *                   eventName: "Event A"
+ *       401:
+ *         description: Unauthorized - Missing or invalid token
+ *       404:
+ *         description: Event not found
+ *       500:
+ *         description: Internal server error
+ */
+/**
+ * @swagger
+ * tags:
+ *   - name: Event Section
+ *     description: Operations related to events
+ *
+ * /api/event:
+ *   post:
+ *     security:
+ *       - BearerAuth: []
+ *     summary: Create a new event
+ *     description: Create a new event with the specified details.
+ *     tags:
+ *       - Event Section
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           example:
+ *             organizer_id: "6150886b-5920-4884-8e43-d4efb62f89d3"
+ *             title: "Nude"
+ *             description: "Explore the latest advancements, insights, and collaborative discussions in the dynamic world of technology. Join us for a day of knowledge sharing, innovation, and community building as experts and enthusiasts come together to share ideas, trends, and experiences shaping the future of technology."
+ *             time_of_event: "2024-02-29T17:00:00.000Z"
+ *             location: "TP HCM"
+ *             participants_count: 88
+ *             is_approve: true
+ *             background_img: "https://res.cloudinary.com/dvepci5on/image/upload/v1708879045/sharing-coffee-images-storage/B-Tech-Degree_pfkflz.jpg"
+ *     responses:
+ *       201:
+ *         description: Event created successfully
+ *         content:
+ *           application/json:
+ *             example:
+ *               message: Success
+ *               data:
+ *                 event:
+ *                   eventId: "6150886b-5920-4884-8e43-d4efb62f89d3"  # Generated event ID
+ *       400:
+ *         description: Bad request - Invalid input data
+ *       401:
+ *         description: Unauthorized - Missing or invalid token
+ *       500:
+ *         description: Internal server error
+ */
+router.get('/api/event', eventController.getEvents);
+router.post('/api/event', eventController.createEvent);
+router.get('/api/event/:eventId', eventController.getEvent);
 export default router;
