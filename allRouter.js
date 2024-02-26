@@ -3,6 +3,7 @@ import * as admController from './APP/Controller/adminController.js';
 import * as userController from './APP/Controller/userController.js';
 import * as interestController from './APP/Controller/interestController.js';
 import * as eventController from './APP/Controller/EventController.js';
+import * as blogController from './APP/Controller/blogController.js';
 const router = express.Router();
 
 /**
@@ -459,4 +460,8 @@ router.get('/api/admin/users', admController.getUsers);
 router.get('/api/event', eventController.getEvents);
 router.post('/api/event', eventController.createEvent);
 router.get('/api/event/:eventId', eventController.getEvent);
+
+router.get('/api/blog', blogController.getBlogs);
+router.get('/api/blog/:blogId', blogController.getBlog);
+router.post('/api/blog', blogController.createBlog);
 export default router;
