@@ -145,7 +145,8 @@ router.get('/api/admin/statics', admController.getStatics);
  *         description: Internal Server Error
  */
 router.post('/api/user/login', userController.loginUser);
-
+router.get('/api/user/interest/:userInterestId', userController.getInterest);
+router.put('/api/user/interest/:userInterestId', userController.updateInterest);
 /**
  * @swagger
  * /api/interest:

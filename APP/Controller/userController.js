@@ -4,6 +4,7 @@ import express from 'express';
 import jwt from 'jsonwebtoken';
 import * as userService from '../Service/userService.js';
 import dotenv from 'dotenv';
+import { SequelizeInstance } from '../utility/DbHelper.js';
 
 dotenv.config();
 
@@ -30,4 +31,33 @@ export async function loginUser(req, res) {
     console.log(error);
     res.status(404).send(error);
   }
+}
+
+export async function getInterest(req, res) {
+  try {
+    const interestId = req.params.userInterestId;
+    const result = await userService.getInterest(interestId);
+    res.status(200).send(result);
+  } catch (error){
+    console.log(error);
+    res.status(500).send({ error: error.message });
+  }
+}
+
+export async function updateInterest(req, res){
+  const t = await SequelizeInstance.transaction();
+    try{
+        const userInterestId = req.params.userInterestId;
+        const userInterestDetails = req.body;
+        const userInterest = await userService.updateInterest(
+            userInterestId,
+            userInterestDetails
+        );
+        res.status(200).send(userInterest);
+        await t.commit();
+    } catch (error){
+        await t.rollback();
+        console.log(error);
+        res.status(404).send(error);
+    }
 }
