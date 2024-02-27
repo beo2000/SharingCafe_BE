@@ -144,6 +144,68 @@ router.get('/api/admin/statics', admController.getStatics);
  *       '500':
  *         description: Internal Server Error
  */
+/**
+ * @swagger
+ * /api/user/interest/{userInterestId}:
+ *   get:
+ *     summary: Get a specific user interest by ID
+ *     tags:
+ *       - User Section
+ *     parameters:
+ *       - in: path
+ *         name: userInterestId
+ *         required: true
+ *         description: ID of the user interest
+ *         schema:
+ *           type: string
+ *         example: your-user-interest-id
+ *     responses:
+ *       '200':
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             example:
+ *               userInterestId: your-user-interest-id
+ *               userId: your-user-id
+ *               interest: Sample Interest
+ *       '404':
+ *         description: User interest not found
+ *       '500':
+ *         description: Internal server error
+ */
+/**
+ * @swagger
+ * /api/user/interest/{userInterestId}:
+ *   put:
+ *     summary: Update a specific user interest by ID
+ *     tags:
+ *       - User Section
+ *     parameters:
+ *       - in: path
+ *         name: userInterestId
+ *         required: true
+ *         description: ID of the user interest to be updated
+ *         schema:
+ *           type: string
+ *         example: your-user-interest-id
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               interest_id:
+ *                 type: string
+ *                 description: ID of the user interest to be updated
+ *     responses:
+ *       '200':
+ *         description: User interest updated successfully
+ *       '404':
+ *         description: User interest not found
+ *       '500':
+ *         description: Internal server error
+ */
 router.post('/api/user/login', userController.loginUser);
 router.get('/api/user/interest/:userInterestId', userController.getInterest);
 router.put('/api/user/interest/:userInterestId', userController.updateInterest);
