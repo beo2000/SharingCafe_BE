@@ -32,6 +32,7 @@ export async function updateBlog(blog, blogDetails){
         comments_count: blogDetails.comments_count,
         is_approve: blogDetails.is_approve
     })
+    return blog;
 }
 
 export async function deleteBlog(blogId) {
