@@ -21,3 +21,22 @@ export async function createBlog(blogId, dataObj){
         is_approve: dataObj.is_approve
     });
 }
+
+export async function updateBlog(blog, blogDetails){
+    await blog.update({
+        user_id: blogDetails.user_id,
+        title: blogDetails.title,
+        content: blogDetails.content,
+        image: blogDetails.image,
+        likes_count: blogDetails.likes_count,
+        comments_count: blogDetails.comments_count,
+        is_approve: blogDetails.is_approve
+    })
+}
+
+export async function deleteBlog(blogId) {
+    const deletedBlog = await Blog.destroy({
+      where: { blog_id: blogId },
+    });
+    return deletedBlog;
+  }

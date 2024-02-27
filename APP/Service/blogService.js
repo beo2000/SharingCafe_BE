@@ -12,3 +12,15 @@ export async function createBlog(dataObj){
     const blog_id = uuidv4();
     return await blogDAL.createBlog(blog_id, dataObj);
 }
+
+export async function updateBlog(blogId, blogDetails){
+    const blog = await getBlog(blogId);
+    if (!blog) throw new Error('Blog not found !!!');
+    return await blogDAL.updateBlog(blog, blogDetails);
+}
+
+export async function deleteBlog(blogId) {
+    const blog = await getBlog(blogId);
+    if (!blog) throw new Error('Blog not found !!!');
+    return await blogDAL.deleteBlog(blogId);
+  }
