@@ -641,4 +641,5 @@ export {
   Friendship,
   Notification,
   Interest,
+  UserInterest
 };

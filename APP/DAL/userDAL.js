@@ -1,4 +1,4 @@
-import { Role, User } from '../utility/DbHelper.js';
+import { Role, User, UserInterest } from '../utility/DbHelper.js';
 
 export async function getUserDetails(email, password) {
   const user = await User.findOne({
@@ -30,4 +30,16 @@ export async function getUserDetails(email, password) {
   });
   console.log(user.dataValues);
   return user;
+}
+
+export async function getInterest(userInterestId){
+  const result = await UserInterest.findByPk(userInterestId);
+  return result;
+}
+
+export async function updateInterest(userInterest, userInterestDetails){
+  await userInterest.update({
+    interest_id: userInterestDetails.interest_id
+  });
+  return userInterest;
 }
