@@ -32,6 +32,26 @@ export async function getUserDetails(email, password) {
   return user;
 }
 
+export async function getUser(userId){
+  const result = await User.findByPk(userId);
+  return result;
+}
+
+export async function getInterests(userId){
+  const result = await UserInterest.findAll({
+    where: {user_id: userId}
+  })
+  return result;
+}
+
+export async function createInterest (userInterestId, userInterestDetails){
+  return await UserInterest.create({
+    user_interest_id: userInterestId,
+    interest_id: userInterestDetails.interest_id,
+    user_id: userInterestDetails.user_id
+  });
+}
+
 export async function getInterest(userInterestId){
   const result = await UserInterest.findByPk(userInterestId);
   return result;
@@ -42,4 +62,11 @@ export async function updateInterest(userInterest, userInterestDetails){
     interest_id: userInterestDetails.interest_id
   });
   return userInterest;
+}
+
+export async function deleteInterests(interestIds){
+  const deletedInterest = await UserInterest.destroy({
+    where: { user_interest_id: interestIds },
+  });
+  return deletedInterest;
 }

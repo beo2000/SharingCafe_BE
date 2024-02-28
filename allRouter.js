@@ -145,8 +145,12 @@ router.get('/api/admin/statics', admController.getStatics);
  *         description: Internal Server Error
  */
 router.post('/api/user/login', userController.loginUser);
+router.get('/api/user/:userId', userController.getUser);
+router.post('/api/user/interest', userController.createInterest);
+router.get('/api/user/interest/:userId', userController.getInterests);
 router.get('/api/user/interest/:userInterestId', userController.getInterest);
 router.put('/api/user/interest/:userInterestId', userController.updateInterest);
+router.delete('/api/user/interest', userController.deleteInterest);
 /**
  * @swagger
  * /api/interest:
@@ -338,6 +342,7 @@ router.delete('/api/interest', interestController.deleteInterest);
 // Restful convention -> Về tìm hiểu
 //  METHOD      URL          HANDLING/ PROCESSING/ CONTROLLER
 router.get('/api/admin/users', admController.getUsers);
+router.get('/api/admin/user/:userId', admController.getUser);
 // Mỗi function trong controller chỉ handle cho 1 API
 //  Nhưng có thể dùng nhiều function trong Service cho các Controller
 //  Bản chất cốt lõi của API là SQL .... Hết
