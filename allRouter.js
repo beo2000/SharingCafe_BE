@@ -144,6 +144,68 @@ router.get('/api/admin/statics', admController.getStatics);
  *       '500':
  *         description: Internal Server Error
  */
+/**
+ * @swagger
+ * /api/user/interest/{userInterestId}:
+ *   get:
+ *     summary: Get a specific user interest by ID
+ *     tags:
+ *       - User Section
+ *     parameters:
+ *       - in: path
+ *         name: userInterestId
+ *         required: true
+ *         description: ID of the user interest
+ *         schema:
+ *           type: string
+ *         example: your-user-interest-id
+ *     responses:
+ *       '200':
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             example:
+ *               userInterestId: your-user-interest-id
+ *               userId: your-user-id
+ *               interest: Sample Interest
+ *       '404':
+ *         description: User interest not found
+ *       '500':
+ *         description: Internal server error
+ */
+/**
+ * @swagger
+ * /api/user/interest/{userInterestId}:
+ *   put:
+ *     summary: Update a specific user interest by ID
+ *     tags:
+ *       - User Section
+ *     parameters:
+ *       - in: path
+ *         name: userInterestId
+ *         required: true
+ *         description: ID of the user interest to be updated
+ *         schema:
+ *           type: string
+ *         example: your-user-interest-id
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               interest_id:
+ *                 type: string
+ *                 description: ID of the user interest to be updated
+ *     responses:
+ *       '200':
+ *         description: User interest updated successfully
+ *       '404':
+ *         description: User interest not found
+ *       '500':
+ *         description: Internal server error
+ */
 router.post('/api/user/login', userController.loginUser);
 router.get('/api/user/:userId', userController.getUser);
 router.post('/api/user/interest', userController.createInterest);
@@ -467,6 +529,174 @@ router.get('/api/event', eventController.getEvents);
 router.post('/api/event', eventController.createEvent);
 router.get('/api/event/:eventId', eventController.getEvent);
 
+/**
+ * @swagger
+ * /api/blog:
+ *   get:
+ *     summary: Get a list of blogs
+ *     tags:
+ *      - Blog Section
+ *     responses:
+ *       '200':
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             example:
+ *               - blogId: 1
+ *                 title: Sample Blog 1
+ *                 content: Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ *               - blogId: 2
+ *                 title: Sample Blog 2
+ *                 content: Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.
+ *       '500':
+ *         description: Internal server error
+ */
+/**
+ * @swagger
+ * /api/blog/{blogId}:
+ *   get:
+ *     summary: Get a specific blog by ID
+ *     tags:
+ *      - Blog Section
+ *     parameters:
+ *       - in: path
+ *         name: blogId
+ *         required: true
+ *         description: ID of the blog
+ *         schema:
+ *           type: string
+ *         example: fe4e88bd-7211-4285-918e-a1ba14cc946c
+ *     responses:
+ *       '200':
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             example:
+ *               blogId: fe4e88bd-7211-4285-918e-a1ba14cc946c
+ *               title: Sample Blog
+ *               content: Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ *       '404':
+ *         description: Blog not found
+ *       '500':
+ *         description: Internal server error
+ */
+/**
+ * @swagger
+ * /api/blog:
+ *   post:
+ *     summary: Create a new blog
+ *     tags:
+ *      - Blog Section
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               user_id:
+ *                 type: string
+ *                 description: ID of the user creating the blog
+ *               content:
+ *                 type: string
+ *                 description: Content of the blog
+ *               title:
+ *                 type: string
+ *                 description: Title of the blog
+ *               image:
+ *                 type: string
+ *                 description: Image URL associated with the blog
+ *               likes_count:
+ *                 type: integer
+ *                 description: Count of likes for the blog
+ *               comments_count:
+ *                 type: integer
+ *                 description: Count of comments for the blog
+ *               is_approve:
+ *                 type: boolean
+ *                 description: Approval status of the blog
+ *     responses:
+ *       '201':
+ *         description: Blog created successfully
+ *       '400':
+ *         description: Bad request, e.g., missing parameters
+ *       '500':
+ *         description: Internal server error
+ */
+/**
+ * @swagger
+ * /api/blog/{blogId}:
+ *   patch:
+ *     summary: Update a specific blog by ID
+ *     tags:
+ *      - Blog Section
+ *     parameters:
+ *       - in: path
+ *         name: blogId
+ *         required: true
+ *         description: ID of the blog
+ *         schema:
+ *           type: string
+ *         example: fe4e88bd-7211-4285-918e-a1ba14cc946c
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               user_id:
+ *                 type: string
+ *                 description: ID of the user updating the blog
+ *               content:
+ *                 type: string
+ *                 description: Updated content of the blog
+ *               title:
+ *                 type: string
+ *                 description: Updated title of the blog
+ *               image:
+ *                 type: string
+ *                 description: Updated image URL associated with the blog
+ *               likes_count:
+ *                 type: integer
+ *                 description: Updated count of likes for the blog
+ *               comments_count:
+ *                 type: integer
+ *                 description: Updated count of comments for the blog
+ *               is_approve:
+ *                 type: boolean
+ *                 description: Updated approval status of the blog
+ *     responses:
+ *       '200':
+ *         description: Blog updated successfully
+ *       '404':
+ *         description: Blog not found
+ *       '500':
+ *         description: Internal server error
+ */
+/**
+ * @swagger
+ * /api/blog/{blogId}:
+ *   delete:
+ *     summary: Delete a specific blog by ID
+ *     tags:
+ *       - Blog Section
+ *     parameters:
+ *       - in: path
+ *         name: blogId
+ *         required: true
+ *         description: ID of the blog to be deleted
+ *         schema:
+ *           type: string
+ *         example: fe4e88bd-7211-4285-918e-a1ba14cc946c
+ *     responses:
+ *       '204':
+ *         description: Blog deleted successfully
+ *       '404':
+ *         description: Blog not found
+ *       '500':
+ *         description: Internal server error
+ */
 router.get('/api/blog', blogController.getBlogs);
 router.get('/api/blog/:blogId', blogController.getBlog);
 router.post('/api/blog', blogController.createBlog);
