@@ -206,6 +206,137 @@ router.get('/api/admin/statics', admController.getStatics);
  *       '500':
  *         description: Internal server error
  */
+/**
+ * @swagger
+ * /api/user/{userId}:
+ *   get:
+ *     summary: Get user information by ID
+ *     tags:
+ *       - User Section
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         description: ID of the user to retrieve
+ *         schema:
+ *           type: string
+ *         example: 6150886b-5920-4884-8e43-d4efb62f89d3
+ *     responses:
+ *       '200':
+ *         description: Successfully retrieved user information
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 userId:
+ *                   type: string
+ *                   description: ID of the user
+ *                   example: 6150886b-5920-4884-8e43-d4efb62f89d3
+ *       '404':
+ *         description: User not found
+ *       '500':
+ *         description: Internal server error
+ */
+/**
+ * @swagger
+ * /api/user/interests/{userId}:
+ *   get:
+ *     summary: Get user interests by user ID
+ *     tags:
+ *       - User Section
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         description: ID of the user to retrieve interests
+ *         schema:
+ *           type: string
+ *         example: 6150886b-5920-4884-8e43-d4efb62f89d3
+ *     responses:
+ *       '200':
+ *         description: Successfully retrieved user interests
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   interestId:
+ *                     type: string
+ *                     description: ID of the interest
+ *                     example: your-interest-id
+ *       '404':
+ *         description: User not found or no interests available
+ *       '500':
+ *         description: Internal server error
+ */
+/**
+ * @swagger
+ * /api/user/interest:
+ *   post:
+ *     summary: Create a new user interest
+ *     tags:
+ *       - User Section
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               interest_id:
+ *                 type: string
+ *                 description: ID of the interest
+ *                 example: 1805a210-afd7-4a87-ac4c-845bdfa37127
+ *               user_id:
+ *                 type: string
+ *                 description: ID of the user
+ *                 example: 6150886b-5920-4884-8e43-d4efb62f89d3
+ *             required:
+ *               - interest_id
+ *               - user_id
+ *     responses:
+ *       '201':
+ *         description: User interest created successfully
+ *       '400':
+ *         description: Bad request, missing required parameters
+ *       '500':
+ *         description: Internal server error
+ */
+/**
+ * @swagger
+ * /api/event/{eventId}:
+ *   get:
+ *     summary: Get information about a specific event by ID
+ *     tags:
+ *       - Event Section
+ *     parameters:
+ *       - in: path
+ *         name: eventId
+ *         required: true
+ *         description: ID of the event to retrieve
+ *         schema:
+ *           type: string
+ *         example: a73ca8fb-64a6-4b4a-9d09-620cd3aa11d8
+ *     responses:
+ *       '200':
+ *         description: Successfully retrieved event information
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 eventId:
+ *                   type: string
+ *                   description: ID of the event
+ *                   example: a73ca8fb-64a6-4b4a-9d09-620cd3aa11d8
+ *       '404':
+ *         description: Event not found
+ *       '500':
+ *         description: Internal server error
+ */
 router.post('/api/user/login', userController.loginUser);
 router.get('/api/user/:userId', userController.getUser);
 router.post('/api/user/interest', userController.createInterest);
@@ -399,15 +530,40 @@ router.get('/api/interest/:interestId', interestController.getInterest);
 router.put('/api/interest/:interestId', interestController.updateInterest);
 router.delete('/api/interest', interestController.deleteInterest);
 
-// Làm cái gì ? có trả data hay không ? có xử lí data hay không
-// Admin đang thiếu 1 API get toàn bộ user đang có
-// Restful convention -> Về tìm hiểu
-//  METHOD      URL          HANDLING/ PROCESSING/ CONTROLLER
 router.get('/api/admin/users', admController.getUsers);
+/**
+ * @swagger
+ * /api/admin/user/{userId}:
+ *   get:
+ *     summary: Get admin user information by ID
+ *     tags:
+ *       - Admin section
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         description: ID of the admin user to retrieve
+ *         schema:
+ *           type: string
+ *         example: 6150886b-5920-4884-8e43-d4efb62f89d3
+ *     responses:
+ *       '200':
+ *         description: Successfully retrieved admin user information
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 userId:
+ *                   type: string
+ *                   description: ID of the admin user
+ *                   example: 6150886b-5920-4884-8e43-d4efb62f89d3
+ *       '404':
+ *         description: Admin user not found
+ *       '500':
+ *         description: Internal server error
+ */
 router.get('/api/admin/user/:userId', admController.getUser);
-// Mỗi function trong controller chỉ handle cho 1 API
-//  Nhưng có thể dùng nhiều function trong Service cho các Controller
-//  Bản chất cốt lõi của API là SQL .... Hết
 
 // EVENT SECTION
 //  Phân quyền Authorization -> Middleware handle -> Middleware ???
