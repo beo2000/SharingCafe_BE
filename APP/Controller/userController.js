@@ -68,14 +68,14 @@ export async function getInterests(req, res) {
   }
 }
 
-export async function getInterest(req, res) {
+export async function getInterest(req, res){
   try {
-    const interestId = req.params.userInterestId;
-    const result = await userService.getInterest(interestId);
-    res.status(200).send(result);
-  } catch (error){
-    console.log(error);
-    res.status(500).send({ error: error.message });
+      const interestId = req.params.userInterestId;
+      const result = await userService.getInterest(interestId);
+      res.status(200).send(result);
+  } catch (error) {
+      console.log(error);
+      res.status(500).send({ error: error.message });
   }
 }
 

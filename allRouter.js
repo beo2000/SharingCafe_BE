@@ -209,7 +209,7 @@ router.get('/api/admin/statics', admController.getStatics);
 router.post('/api/user/login', userController.loginUser);
 router.get('/api/user/:userId', userController.getUser);
 router.post('/api/user/interest', userController.createInterest);
-router.get('/api/user/interest/:userId', userController.getInterests);
+router.get('/api/user/interests/:userId', userController.getInterests);
 router.get('/api/user/interest/:userInterestId', userController.getInterest);
 router.put('/api/user/interest/:userInterestId', userController.updateInterest);
 router.delete('/api/user/interest', userController.deleteInterest);
