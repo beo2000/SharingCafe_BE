@@ -5,6 +5,7 @@ import dotenv from 'dotenv';
 import options from './swagger.js';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
+import * as userService from './APP/Service/userService.js';
 // Trái tim của app
 /**
  * Source code này đang chia theo mô hình MVC - Service đứng ở giữa để handle logic
@@ -32,6 +33,46 @@ const PORT = process.env.PORT || 5000;
 // Middleware
 app.use(cors()); // Phải tìm hiểu báo cáo lại
 app.use(express.json()); // Phải tìm hiểu
+
+const getUserInfoMiddleware = async (req, res, next) => {
+  const accessToken =
+    req.headers.authorization && req.headers.authorization.split(' ')[1];
+
+  if (!accessToken) {
+    return res.status(401).json({
+      error: 'Unauthorized - Access token missing',
+      accessToken: accessToken,
+    });
+  }
+  try {
+    const decodedToken = jwt.verify(accessToken, SECRET_KEY);
+    const userId = decodedToken.user_id;
+    const [loginUser] = await userService.getUserInfoById(userId);
+    req.loginUser = loginUser;
+    next();
+  } catch (error) {
+    res.status(401).json({
+      error: 'Unauthorized - Invalid access token',
+      message: error.message,
+    });
+  }
+};
+
+// Define an array of routes that require authentication
+const authenticatedRoutes = ['/api/auth/'];
+
+// Middleware for authentication
+app.use(async (req, res, next) => {
+  const requestedRoute = req.path;
+  const authCheck = authenticatedRoutes.some((prefix) =>
+    requestedRoute.includes(prefix),
+  );
+  if (authCheck) {
+    await getUserInfoMiddleware(req, res, next);
+  } else {
+    next();
+  }
+});
 
 // Routes   -> API :  METHOD + URL
 // METHOD : GET  && URL : /

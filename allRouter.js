@@ -4,6 +4,7 @@ import * as userController from './APP/Controller/userController.js';
 import * as interestController from './APP/Controller/interestController.js';
 import * as eventController from './APP/Controller/EventController.js';
 import * as blogController from './APP/Controller/blogController.js';
+import * as matchController from './APP/Controller/matchController.js';
 const router = express.Router();
 
 /**
@@ -858,4 +859,53 @@ router.get('/api/blog/:blogId', blogController.getBlog);
 router.post('/api/blog', blogController.createBlog);
 router.patch('/api/blog/:blogId', blogController.updateBlog);
 router.delete('/api/blog/:blogId', blogController.deleteBlog);
+
+// MATCH SECTION
+/**
+ * @swagger
+ * tags:
+ *   name: MATCH SECTION
+ *   description: API operations related to user matches
+ */
+
+/**
+ * @swagger
+ * /api/auth/matches-interest:
+ *   get:
+ *     summary: Get user matches by interests with pagination
+ *     security:
+ *       - BearerAuth: []
+ *     tags:
+ *       - MATCH SECTION
+ *     parameters:
+ *       - in: query
+ *         name: limit
+ *         description: 1
+ *         required: false
+ *         type: integer
+ *         default: 1
+ *         minimum: 1
+ *         maximum: 100
+ *       - in: query
+ *         name: offset
+ *         description: 0
+ *         required: false
+ *         type: integer
+ *         default: 0
+ *         minimum: 0
+ *     responses:
+ *       200:
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             example:
+ *               message: Successfully retrieved user matches
+ *               data:
+ *                 matches: [user1, user2, user3]
+ *       401:
+ *         description: Unauthorized, invalid or missing token
+ *       500:
+ *         description: Internal Server Error
+ */
+router.get('api/auth/matches-interest', matchController.getUserMatchByInterest);
 export default router;
