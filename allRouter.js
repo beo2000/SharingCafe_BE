@@ -658,6 +658,7 @@ router.get('/api/admin/user/:userId', admController.getUser);
  *         application/json:
  *           example:
  *             organizer_id: "6150886b-5920-4884-8e43-d4efb62f89d3"
+ *             interest_id: "7ebbd78e-9589-45f2-af64-d6713ad2e0a9"
  *             title: "Nude"
  *             description: "Explore the latest advancements, insights, and collaborative discussions in the dynamic world of technology. Join us for a day of knowledge sharing, innovation, and community building as experts and enthusiasts come together to share ideas, trends, and experiences shaping the future of technology."
  *             time_of_event: "2024-02-29T17:00:00.000Z"
@@ -754,24 +755,35 @@ router.get('/api/event/:eventId', eventController.getEvent);
  *               user_id:
  *                 type: string
  *                 description: ID of the user creating the blog
+ *                 example: "6150886b-5920-4884-8e43-d4efb62f89d5"
+ *               interest_id:
+ *                 type: string
+ *                 description: ID of the interest for the blog
+ *                 example: "7ebbd78e-9589-45f2-af64-d6713ad2e0a9"
  *               content:
  *                 type: string
  *                 description: Content of the blog
+ *                 example: "Make your code better"
  *               title:
  *                 type: string
  *                 description: Title of the blog
+ *                 example: "Sharing some traveling tips"
  *               image:
  *                 type: string
  *                 description: Image URL associated with the blog
+ *                 example: "https://res.cloudinary.com/dvepci5on/image/upload/v1708879045/sharing-coffee-images-storage/B-Tech-Degree_pfkflz.jpg"
  *               likes_count:
  *                 type: integer
  *                 description: Count of likes for the blog
+ *                 example: 10
  *               comments_count:
  *                 type: integer
  *                 description: Count of comments for the blog
+ *                 example: 15
  *               is_approve:
  *                 type: boolean
  *                 description: Approval status of the blog
+ *                 example: true
  *     responses:
  *       '201':
  *         description: Blog created successfully

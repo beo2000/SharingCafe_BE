@@ -230,6 +230,9 @@ const Blog = sequelize.define(
     user_id: {
       type: DataTypes.UUID,
     },
+    interest_id: {
+      type: DataTypes.UUID,
+    },
     content: {
       type: DataTypes.TEXT,
     },
@@ -247,12 +250,12 @@ const Blog = sequelize.define(
       allowNull: false,
       defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),
     },
-    image:{
+    image: {
       type: DataTypes.TEXT,
     },
-    title:{
+    title: {
       type: DataTypes.TEXT,
-    }
+    },
   },
   {
     tableName: 'blog',
@@ -327,6 +330,9 @@ const Event = sequelize.define(
       primaryKey: true,
     },
     organizer_id: {
+      type: DataTypes.UUID,
+    },
+    interest_id: {
       type: DataTypes.UUID,
     },
     title: {
@@ -641,5 +647,5 @@ export {
   Friendship,
   Notification,
   Interest,
-  UserInterest
+  UserInterest,
 };
