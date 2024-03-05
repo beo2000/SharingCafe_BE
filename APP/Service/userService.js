@@ -31,3 +31,15 @@ export async function updateInterest(userInterestId, userInterestDetails){
 export async function deleteInterest(interestIds){
   return await userDAL.deleteInterests(interestIds);
 }
+
+export async function getMyEvents(userId){
+  return await userDAL.getMyEvents(userId);
+}
+
+export async function getEventsByInterest(interestId){
+  return await userDAL.getEventsByInterest(interestId);
+}
+
+export async function getBlogsByInterest(interestId){
+  return await userDAL.getBlogsByInterest(interestId);
+}

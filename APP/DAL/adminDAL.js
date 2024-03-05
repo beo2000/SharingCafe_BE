@@ -64,3 +64,8 @@ export async function getUsers() {
   });
   return result;
 }
+
+export async function getUser(userId){
+  const result = await User.findByPk(userId);
+  return result;
+}

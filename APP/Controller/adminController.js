@@ -1,14 +1,14 @@
 // admRoutes.js
 
-import express from 'express';
+// import express from 'express';
 import jwt from 'jsonwebtoken';
 import * as admService from '../Service/adminService.js';
-import * as userService from '../Service/userService.js';
+
 import dotenv from 'dotenv';
 
 dotenv.config();
 
-const router = express.Router();
+// const router = express.Router();
 const secret_key = process.env.SECRET_KEY;
 
 export async function loginAdmin(req, res) {
@@ -46,7 +46,7 @@ export async function getStatics(req, res) {
 export async function getUser(req, res){
   try {
     const userId = req.params.userId;
-    const result = await userService.getUser(userId);
+    const result = await admService.getUser(userId);
     res.status(200).send(result);
   } catch (error){
     console.log(error);

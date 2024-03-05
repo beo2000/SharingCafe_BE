@@ -1,4 +1,5 @@
 import * as eventService from '../Service/eventService.js';
+import { SequelizeInstance } from '../utility/DbHelper.js';
 export async function getEvents(req, res) {
   try {
     const result = await eventService.getEvents();
@@ -30,5 +31,37 @@ export async function createEvent(req, res) {
   } catch (error) {
     console.log(error);
     res.status(500).send({ error: error.message });
+  }
+}
+
+export async function updateEvent(req, res) {
+  const t = await SequelizeInstance.transaction();
+    try{
+        const eventId = req.params.eventId;
+        const eventDetails = req.body;
+        const event = await eventService.updateEvent(
+            eventId,
+            eventDetails
+        );
+        res.status(200).send(event);
+        await t.commit();
+    } catch (error){
+        await t.rollback();
+        console.log(error);
+        res.status(404).send(error);
+    }
+}
+
+export async function deleteEvent(req, res) {
+  const t = await SequelizeInstance.transaction();
+  try {
+    const eventId = req.params.eventId;
+    const event = await eventService.deleteEvent(eventId);
+    res.status(200).send({ event });
+    await t.commit();
+  } catch (error) {
+    await t.rollback();
+    console.log(error);
+    res.status(404).send(error);
   }
 }

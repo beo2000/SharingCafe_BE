@@ -11,3 +11,15 @@ export async function createEvent(dataObj) {
   const event_id = uuidv4();
   return await eventDAL.createEvent(event_id, dataObj);
 }
+
+export async function updateEvent(eventId, eventDetails) {
+  const event = await getEvent(eventId);
+  if (!event) throw new Error('Event not found 😢😢😢');
+  return await eventDAL.updateEvent(event, eventDetails);
+}
+
+export async function deleteEvent(eventId) {
+  const event = await getEvent(eventId);
+  if (!event) throw new Error('Event not found !!!');
+  return await eventDAL.deleteEvent(eventId);
+}

@@ -6,6 +6,11 @@ export async function getAdmDetails(email, password) {
 export async function getStatics() {
   return await adminDAL.getStatics();
 }
+
+export async function getUser(userId){
+  return await adminDAL.getUser(userId);
+}
+
 export async function getUsers() {
   return await adminDAL.getUsers();
 }

@@ -239,7 +239,14 @@ const Blog = sequelize.define(
     comments_count: {
       type: DataTypes.INTEGER,
     },
+    interest_id: {
+      type: DataTypes.UUID,
+      allowNull: false,
+    },
     is_approve: {
+      type: DataTypes.BOOLEAN,
+    },
+    is_visible: {
       type: DataTypes.BOOLEAN,
     },
     created_at: {
@@ -338,17 +345,27 @@ const Event = sequelize.define(
     time_of_event: {
       type: DataTypes.DATE,
     },
+    end_of_event: {
+      type: DataTypes.DATE,
+    },
     location: {
       type: DataTypes.TEXT,
     },
     participants_count: {
       type: DataTypes.INTEGER,
     },
+    interest_id: {
+      type: DataTypes.UUID,
+      allowNull: false,
+    },
     is_approve: {
       type: DataTypes.BOOLEAN,
     },
     background_img: {
       type: DataTypes.TEXT,
+    },
+    is_visible: {
+      type: DataTypes.BOOLEAN,
     },
     created_at: {
       type: DataTypes.DATE,

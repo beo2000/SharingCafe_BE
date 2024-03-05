@@ -23,4 +23,4 @@ export async function deleteBlog(blogId) {
     const blog = await getBlog(blogId);
     if (!blog) throw new Error('Blog not found !!!');
     return await blogDAL.deleteBlog(blogId);
-  }
+}

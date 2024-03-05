@@ -4,6 +4,7 @@ import * as userController from './APP/Controller/userController.js';
 import * as interestController from './APP/Controller/interestController.js';
 import * as eventController from './APP/Controller/EventController.js';
 import * as blogController from './APP/Controller/blogController.js';
+import * as modController from './APP/Controller/modController.js';
 const router = express.Router();
 
 /**
@@ -208,11 +209,16 @@ router.get('/api/admin/statics', admController.getStatics);
  */
 router.post('/api/user/login', userController.loginUser);
 router.get('/api/user/:userId', userController.getUser);
+
 router.post('/api/user/interest', userController.createInterest);
 router.get('/api/user/interests/:userId', userController.getInterests);
 router.get('/api/user/interest/:userInterestId', userController.getInterest);
 router.put('/api/user/interest/:userInterestId', userController.updateInterest);
 router.delete('/api/user/interest', userController.deleteInterest);
+
+router.get('/api/user/events/:userId', userController.getMyEvents);
+router.get('/api/user/events/interest/:interestId', userController.getEventsByInterest);
+router.get('/api/user/blogs/interest/:interestId', userController.getBlogsByInterest);
 /**
  * @swagger
  * /api/interest:
@@ -528,7 +534,8 @@ router.get('/api/admin/user/:userId', admController.getUser);
 router.get('/api/event', eventController.getEvents);
 router.post('/api/event', eventController.createEvent);
 router.get('/api/event/:eventId', eventController.getEvent);
-
+router.patch('/api/event/:eventId', eventController.updateEvent);
+router.delete('/api/event/:eventId', eventController.deleteEvent);
 /**
  * @swagger
  * /api/blog:
@@ -702,4 +709,8 @@ router.get('/api/blog/:blogId', blogController.getBlog);
 router.post('/api/blog', blogController.createBlog);
 router.patch('/api/blog/:blogId', blogController.updateBlog);
 router.delete('/api/blog/:blogId', blogController.deleteBlog);
+
+router.post('/api/moderator/login', modController.loginMod);
+router.patch('/api/moderator/blog/:blogId', modController.censorBlog);
+router.patch('/api/moderator/event/:eventId', modController.censorEvent);
 export default router;

@@ -24,7 +24,7 @@ export async function loginUser(req, res) {
       userDetails.accessToken = `Bearer ${accessToken}`;
       res.send(userDetails);
     } else {
-      res.status(400).send({ message: 'Admin not found' });
+      res.status(400).send({ message: 'User not found' });
     }
   } catch (error) {
     console.log(error);
@@ -68,14 +68,14 @@ export async function getInterests(req, res) {
   }
 }
 
-export async function getInterest(req, res){
+export async function getInterest(req, res) {
   try {
-      const interestId = req.params.userInterestId;
-      const result = await userService.getInterest(interestId);
-      res.status(200).send(result);
-  } catch (error) {
-      console.log(error);
-      res.status(500).send({ error: error.message });
+    const interestId = req.params.userInterestId;
+    const result = await userService.getInterest(interestId);
+    res.status(200).send(result);
+  } catch (error){
+    console.log(error);
+    res.status(500).send({ error: error.message });
   }
 }
 
@@ -108,5 +108,38 @@ export async function deleteInterest(req, res){
     await t.rollback();
     console.log(error);
     res.status(404).send(error);
+  }
+}
+
+export async function getMyEvents(req, res) {
+  try {
+    const userId = req.params.userId;
+    const result = await userService.getMyEvents(userId);
+    res.status(200).send(result);
+  } catch (error){
+    console.log(error);
+    res.status(500).send({ error: error.message });
+  }
+}
+
+export async function getEventsByInterest(req, res) {
+  try {
+    const interestId = req.params.interestId;
+    const result = await userService.getEventsByInterest(interestId);
+    res.status(200).send(result);
+  } catch (error){
+    console.log(error);
+    res.status(500).send({ error: error.message });
+  }
+}
+
+export async function getBlogsByInterest(req, res) {
+  try {
+    const interestId = req.params.interestId;
+    const result = await userService.getBlogsByInterest(interestId);
+    res.status(200).send(result);
+  } catch (error){
+    console.log(error);
+    res.status(500).send({ error: error.message });
   }
 }

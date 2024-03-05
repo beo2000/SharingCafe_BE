@@ -1,4 +1,4 @@
-import { Role, User, UserInterest } from '../utility/DbHelper.js';
+import { Role, User, UserInterest, Event, Blog } from '../utility/DbHelper.js';
 
 export async function getUserDetails(email, password) {
   const user = await User.findOne({
@@ -69,4 +69,25 @@ export async function deleteInterests(interestIds){
     where: { user_interest_id: interestIds },
   });
   return deletedInterest;
+}
+
+export async function getMyEvents(userId){
+  const result = await Event.findAll({
+    where: {organizer_id: userId}
+  })
+  return result;
+}
+
+export async function getEventsByInterest(interestId){
+  const result = await Event.findAll({
+    where: {interest_id: interestId}
+  })
+  return result;
+}
+
+export async function getBlogsByInterest(interestId){
+  const result = await Blog.findAll({
+    where: {interest_id: interestId}
+  })
+  return result;
 }
