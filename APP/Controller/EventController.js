@@ -24,13 +24,16 @@ export async function getEvent(req, res) {
 }
 
 export async function createEvent(req, res) {
+  const t = await SequelizeInstance.transaction();
   try {
     const dataObj = req.body;
     const result = await eventService.createEvent(dataObj);
     res.status(200).send(result);
+    t.commit();
   } catch (error) {
     console.log(error);
     res.status(500).send({ error: error.message });
+    t.rollback();
   }
 }
 

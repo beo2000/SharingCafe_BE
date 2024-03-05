@@ -1,11 +1,38 @@
-import { Event } from '../utility/DbHelper.js';
+import { Event, SequelizeInstance } from '../utility/DbHelper.js';
 export async function getEvents() {
-  const result = await Event.findAll();
+  const sqlQuery = `
+  select 
+    * 
+  from
+    public."event" e 
+  left join 
+    interest i 
+    on 1=1 
+    and e.interest_id = i.interest_id 
+  `;
+  const result = await SequelizeInstance.query(sqlQuery, {
+    type: SequelizeInstance.QueryTypes.SELECT,
+    raw: true,
+  });
   return result;
 }
 
 export async function getEvent(eventId) {
-  const result = await Event.findByPk(eventId);
+  const sqlQuery = `
+  select 
+    * 
+  from
+    public."event" e 
+  left join 
+    interest i 
+    on 1=1 
+    and e.interest_id = i.interest_id
+  where e.event_id = '${eventId}'
+  `;
+  const result = await SequelizeInstance.query(sqlQuery, {
+    type: SequelizeInstance.QueryTypes.SELECT,
+    raw: true,
+  });
   return result;
 }
 export async function createEvent(eventId, dataObj) {

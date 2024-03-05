@@ -1,12 +1,39 @@
-import {Blog} from '../utility/DbHelper.js';
-export async function getBlogs(){
-    const result = await Blog.findAll();
-    return result;
+import { Blog, SequelizeInstance } from '../utility/DbHelper.js';
+export async function getBlogs() {
+  const sqlQuery = `
+  select 
+    * 
+  from 
+    blog b 
+  left join 
+    interest i 
+    on 1=1 
+    and b.interest_id = i.interest_id
+  `;
+  const result = await SequelizeInstance.query(sqlQuery, {
+    type: SequelizeInstance.QueryTypes.SELECT,
+    raw: true,
+  });
+  return result;
 }
 
-export async function getBlog(blogId){
-    const result = await Blog.findByPk(blogId);
-    return result;
+export async function getBlog(blogId) {
+  const sqlQuery = `
+  select 
+    * 
+  from 
+    blog b 
+  left join 
+    interest i 
+    on 1=1 
+    and b.interest_id = i.interest_id
+   where b.blog_id = '${blogId}'
+  `;
+  const result = await SequelizeInstance.query(sqlQuery, {
+    type: SequelizeInstance.QueryTypes.SELECT,
+    raw: true,
+  });
+  return result;
 }
 
 export async function createBlog(blogId, dataObj){

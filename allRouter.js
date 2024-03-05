@@ -4,7 +4,9 @@ import * as userController from './APP/Controller/userController.js';
 import * as interestController from './APP/Controller/interestController.js';
 import * as eventController from './APP/Controller/EventController.js';
 import * as blogController from './APP/Controller/blogController.js';
+import * as matchController from './APP/Controller/matchController.js';
 import * as modController from './APP/Controller/modController.js';
+
 const router = express.Router();
 
 /**
@@ -207,6 +209,137 @@ router.get('/api/admin/statics', admController.getStatics);
  *       '500':
  *         description: Internal server error
  */
+/**
+ * @swagger
+ * /api/user/{userId}:
+ *   get:
+ *     summary: Get user information by ID
+ *     tags:
+ *       - User Section
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         description: ID of the user to retrieve
+ *         schema:
+ *           type: string
+ *         example: 6150886b-5920-4884-8e43-d4efb62f89d3
+ *     responses:
+ *       '200':
+ *         description: Successfully retrieved user information
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 userId:
+ *                   type: string
+ *                   description: ID of the user
+ *                   example: 6150886b-5920-4884-8e43-d4efb62f89d3
+ *       '404':
+ *         description: User not found
+ *       '500':
+ *         description: Internal server error
+ */
+/**
+ * @swagger
+ * /api/user/interests/{userId}:
+ *   get:
+ *     summary: Get user interests by user ID
+ *     tags:
+ *       - User Section
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         description: ID of the user to retrieve interests
+ *         schema:
+ *           type: string
+ *         example: 6150886b-5920-4884-8e43-d4efb62f89d3
+ *     responses:
+ *       '200':
+ *         description: Successfully retrieved user interests
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   interestId:
+ *                     type: string
+ *                     description: ID of the interest
+ *                     example: your-interest-id
+ *       '404':
+ *         description: User not found or no interests available
+ *       '500':
+ *         description: Internal server error
+ */
+/**
+ * @swagger
+ * /api/user/interest:
+ *   post:
+ *     summary: Create a new user interest
+ *     tags:
+ *       - User Section
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               interest_id:
+ *                 type: string
+ *                 description: ID of the interest
+ *                 example: 1805a210-afd7-4a87-ac4c-845bdfa37127
+ *               user_id:
+ *                 type: string
+ *                 description: ID of the user
+ *                 example: 6150886b-5920-4884-8e43-d4efb62f89d3
+ *             required:
+ *               - interest_id
+ *               - user_id
+ *     responses:
+ *       '201':
+ *         description: User interest created successfully
+ *       '400':
+ *         description: Bad request, missing required parameters
+ *       '500':
+ *         description: Internal server error
+ */
+/**
+ * @swagger
+ * /api/event/{eventId}:
+ *   get:
+ *     summary: Get information about a specific event by ID
+ *     tags:
+ *       - Event Section
+ *     parameters:
+ *       - in: path
+ *         name: eventId
+ *         required: true
+ *         description: ID of the event to retrieve
+ *         schema:
+ *           type: string
+ *         example: a73ca8fb-64a6-4b4a-9d09-620cd3aa11d8
+ *     responses:
+ *       '200':
+ *         description: Successfully retrieved event information
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 eventId:
+ *                   type: string
+ *                   description: ID of the event
+ *                   example: a73ca8fb-64a6-4b4a-9d09-620cd3aa11d8
+ *       '404':
+ *         description: Event not found
+ *       '500':
+ *         description: Internal server error
+ */
 router.post('/api/user/login', userController.loginUser);
 router.get('/api/user/:userId', userController.getUser);
 
@@ -405,15 +538,40 @@ router.get('/api/interest/:interestId', interestController.getInterest);
 router.put('/api/interest/:interestId', interestController.updateInterest);
 router.delete('/api/interest', interestController.deleteInterest);
 
-// Làm cái gì ? có trả data hay không ? có xử lí data hay không
-// Admin đang thiếu 1 API get toàn bộ user đang có
-// Restful convention -> Về tìm hiểu
-//  METHOD      URL          HANDLING/ PROCESSING/ CONTROLLER
 router.get('/api/admin/users', admController.getUsers);
+/**
+ * @swagger
+ * /api/admin/user/{userId}:
+ *   get:
+ *     summary: Get admin user information by ID
+ *     tags:
+ *       - Admin section
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         description: ID of the admin user to retrieve
+ *         schema:
+ *           type: string
+ *         example: 6150886b-5920-4884-8e43-d4efb62f89d3
+ *     responses:
+ *       '200':
+ *         description: Successfully retrieved admin user information
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 userId:
+ *                   type: string
+ *                   description: ID of the admin user
+ *                   example: 6150886b-5920-4884-8e43-d4efb62f89d3
+ *       '404':
+ *         description: Admin user not found
+ *       '500':
+ *         description: Internal server error
+ */
 router.get('/api/admin/user/:userId', admController.getUser);
-// Mỗi function trong controller chỉ handle cho 1 API
-//  Nhưng có thể dùng nhiều function trong Service cho các Controller
-//  Bản chất cốt lõi của API là SQL .... Hết
 
 // EVENT SECTION
 //  Phân quyền Authorization -> Middleware handle -> Middleware ???
@@ -507,6 +665,7 @@ router.get('/api/admin/user/:userId', admController.getUser);
  *         application/json:
  *           example:
  *             organizer_id: "6150886b-5920-4884-8e43-d4efb62f89d3"
+ *             interest_id: "7ebbd78e-9589-45f2-af64-d6713ad2e0a9"
  *             title: "Nude"
  *             description: "Explore the latest advancements, insights, and collaborative discussions in the dynamic world of technology. Join us for a day of knowledge sharing, innovation, and community building as experts and enthusiasts come together to share ideas, trends, and experiences shaping the future of technology."
  *             time_of_event: "2024-02-29T17:00:00.000Z"
@@ -604,24 +763,35 @@ router.delete('/api/event/:eventId', eventController.deleteEvent);
  *               user_id:
  *                 type: string
  *                 description: ID of the user creating the blog
+ *                 example: "6150886b-5920-4884-8e43-d4efb62f89d5"
+ *               interest_id:
+ *                 type: string
+ *                 description: ID of the interest for the blog
+ *                 example: "7ebbd78e-9589-45f2-af64-d6713ad2e0a9"
  *               content:
  *                 type: string
  *                 description: Content of the blog
+ *                 example: "Make your code better"
  *               title:
  *                 type: string
  *                 description: Title of the blog
+ *                 example: "Sharing some traveling tips"
  *               image:
  *                 type: string
  *                 description: Image URL associated with the blog
+ *                 example: "https://res.cloudinary.com/dvepci5on/image/upload/v1708879045/sharing-coffee-images-storage/B-Tech-Degree_pfkflz.jpg"
  *               likes_count:
  *                 type: integer
  *                 description: Count of likes for the blog
+ *                 example: 10
  *               comments_count:
  *                 type: integer
  *                 description: Count of comments for the blog
+ *                 example: 15
  *               is_approve:
  *                 type: boolean
  *                 description: Approval status of the blog
+ *                 example: true
  *     responses:
  *       '201':
  *         description: Blog created successfully
@@ -713,4 +883,53 @@ router.delete('/api/blog/:blogId', blogController.deleteBlog);
 router.post('/api/moderator/login', modController.loginMod);
 router.patch('/api/moderator/blog/:blogId', modController.censorBlog);
 router.patch('/api/moderator/event/:eventId', modController.censorEvent);
+
+// MATCH SECTION
+/**
+ * @swagger
+ * tags:
+ *   name: MATCH SECTION
+ *   description: API operations related to user matches
+ */
+
+/**
+ * @swagger
+ * /api/auth/matches-interest:
+ *   get:
+ *     summary: Get user matches by interests with pagination
+ *     security:
+ *       - BearerAuth: []
+ *     tags:
+ *       - MATCH SECTION
+ *     parameters:
+ *       - in: query
+ *         name: limit
+ *         description: 1
+ *         required: false
+ *         type: integer
+ *         default: 1
+ *         minimum: 1
+ *         maximum: 100
+ *       - in: query
+ *         name: offset
+ *         description: 0
+ *         required: false
+ *         type: integer
+ *         default: 0
+ *         minimum: 0
+ *     responses:
+ *       200:
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             example:
+ *               message: Successfully retrieved user matches
+ *               data:
+ *                 matches: [user1, user2, user3]
+ *       401:
+ *         description: Unauthorized, invalid or missing token
+ *       500:
+ *         description: Internal Server Error
+ */
+router.get('api/auth/matches-interest', matchController.getUserMatchByInterest);
 export default router;
