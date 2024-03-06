@@ -16,7 +16,7 @@ export async function createBlog(dataObj){
 export async function updateBlog(blogId, blogDetails){
     const blog = await getBlog(blogId);
     if (!blog) throw new Error('Blog not found !!!');
-    return await blogDAL.updateBlog(blog, blogDetails);
+    return await blogDAL.updateBlog(blogId, blogDetails);
 }
 
 export async function deleteBlog(blogId) {

@@ -61,15 +61,3 @@ export async function getEventsByInterest(interestId){
 export async function getBlogsByInterest(interestId){
   return await userDAL.getBlogsByInterest(interestId);
 }
-
-export async function getMyEvents(userId){
-  return await userDAL.getMyEvents(userId);
-}
-
-export async function getEventsByInterest(interestId){
-  return await userDAL.getEventsByInterest(interestId);
-}
-
-export async function getBlogsByInterest(interestId){
-  return await userDAL.getBlogsByInterest(interestId);
-}

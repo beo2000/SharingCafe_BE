@@ -693,7 +693,7 @@ router.get('/api/admin/user/:userId', admController.getUser);
 router.get('/api/event', eventController.getEvents);
 router.post('/api/event', eventController.createEvent);
 router.get('/api/event/:eventId', eventController.getEvent);
-router.patch('/api/event/:eventId', eventController.updateEvent);
+router.put('/api/event/:eventId', eventController.updateEvent);
 router.delete('/api/event/:eventId', eventController.deleteEvent);
 /**
  * @swagger
@@ -877,12 +877,12 @@ router.delete('/api/event/:eventId', eventController.deleteEvent);
 router.get('/api/blog', blogController.getBlogs);
 router.get('/api/blog/:blogId', blogController.getBlog);
 router.post('/api/blog', blogController.createBlog);
-router.patch('/api/blog/:blogId', blogController.updateBlog);
+router.put('/api/blog/:blogId', blogController.updateBlog);
 router.delete('/api/blog/:blogId', blogController.deleteBlog);
 
 router.post('/api/moderator/login', modController.loginMod);
-router.patch('/api/moderator/blog/:blogId', modController.censorBlog);
-router.patch('/api/moderator/event/:eventId', modController.censorEvent);
+router.put('/api/moderator/blog/:blogId', modController.censorBlog);
+router.put('/api/moderator/event/:eventId', modController.censorEvent);
 
 // MATCH SECTION
 /**

@@ -38,32 +38,33 @@ export async function getBlog(blogId) {
 
 export async function createBlog(blogId, dataObj){
     return await Blog.create({
-        blog_id: blogId,
-        user_id: dataObj.user_id,
-        title: dataObj.title,
-        content: dataObj.content,
-        image: dataObj.image,
-        likes_count: dataObj.likes_count,
-        comments_count: dataObj.comments_count,
-        is_approve: dataObj.is_approve,
-        is_visible: dataObj.is_visible,
-        interest_id: dataObj.interest_id
+      blog_id: blogId,
+      user_id: dataObj.user_id,
+      title: dataObj.title,
+      contetn: dataObj.content,
+      image: dataObj.image,
+      likes_count: dataObj.likes_count,
+      comments_count: dataObj.comments_count,
+      is_approve: dataObj.is_approve,
+      is_visible: dataObj.is_visible,
+      interest_id: dataObj.interest_id
     });
 }
 
-export async function updateBlog(blog, blogDetails){
-    await blog.update({
-        user_id: blogDetails.user_id,
-        title: blogDetails.title,
-        content: blogDetails.content,
-        image: blogDetails.image,
-        likes_count: blogDetails.likes_count,
-        comments_count: blogDetails.comments_count,
-        is_approve: blogDetails.is_approve,
-        is_visible: blogDetails.is_visible,
-        interest_id: blogDetails.interest_id
-    })
-    return blog;
+export async function updateBlog(blogId, blogDetails){
+  return await Blog.update({
+    user_id: blogDetails.user_id,
+    title: blogDetails.title,
+    content: blogDetails.content,
+    image: blogDetails.image,
+    likes_count: blogDetails.likes_count,
+    comments_count: blogDetails.comments_count,
+    is_approve: blogDetails.is_approve,
+    is_visible: blogDetails.is_visible,
+    interest_id: blogDetails.interest_id
+ }, {
+   where: {blog_id: blogId}
+ });
 }
 
 export async function deleteBlog(blogId) {

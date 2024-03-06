@@ -242,10 +242,6 @@ const Blog = sequelize.define(
     comments_count: {
       type: DataTypes.INTEGER,
     },
-    interest_id: {
-      type: DataTypes.UUID,
-      allowNull: false,
-    },
     is_approve: {
       type: DataTypes.BOOLEAN,
     },

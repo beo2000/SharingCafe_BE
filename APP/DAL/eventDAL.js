@@ -1,3 +1,4 @@
+import { where } from 'sequelize';
 import { Event, SequelizeInstance } from '../utility/DbHelper.js';
 export async function getEvents() {
   const sqlQuery = `
@@ -52,21 +53,23 @@ export async function createEvent(eventId, dataObj) {
   });
 }
 
-export async function updateEvent(event, eventDetails){
-  await event.update({
+export async function updateEvent(eventId, eventDetails){
+   return await Event.update({
     organizer_id: eventDetails.organizer_id,
+    interest_id: eventDetails.interest_id,
     title: eventDetails.title,
     description: eventDetails.description,
     time_of_event: eventDetails.time_of_event,
     end_of_event: eventDetails.end_of_event,
     location: eventDetails.location,
     participants_count: eventDetails.participants_count,
+    interest_id: eventDetails.interest_id,
     is_approve: eventDetails.is_approve,
     background_img: eventDetails.background_img,
-    is_visible: eventDetails.is_visible,
-    interest_id: eventDetails.interest_id
+    is_visible: eventDetails.is_visible
+  }, {
+    where: {event_id: eventId}
   });
-  return event;
 }
 
 export async function deleteEvent(eventId) {
