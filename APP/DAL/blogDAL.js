@@ -2,13 +2,16 @@ import { Blog, SequelizeInstance } from '../utility/DbHelper.js';
 export async function getBlogs() {
   const sqlQuery = `
   select 
-    * 
+    b.*, u.user_name, i.name
   from 
     blog b 
-  left join 
+  join 
     interest i 
     on 1=1 
     and b.interest_id = i.interest_id
+  join
+    "user" u
+    on u.user_id = b.user_id
   `;
   const result = await SequelizeInstance.query(sqlQuery, {
     type: SequelizeInstance.QueryTypes.SELECT,
@@ -20,13 +23,16 @@ export async function getBlogs() {
 export async function getBlog(blogId) {
   const sqlQuery = `
   select 
-    * 
+    b.*, u.user_name, i.name
   from 
     blog b 
-  left join 
+  join 
     interest i 
     on 1=1 
     and b.interest_id = i.interest_id
+  join
+    "user" u
+    on u.user_id = b.user_id
    where b.blog_id = '${blogId}'
   `;
   const result = await SequelizeInstance.query(sqlQuery, {

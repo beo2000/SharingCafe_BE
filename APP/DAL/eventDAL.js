@@ -1,15 +1,17 @@
-import { where } from 'sequelize';
 import { Event, SequelizeInstance } from '../utility/DbHelper.js';
 export async function getEvents() {
   const sqlQuery = `
   select 
-    * 
+    e.*, u.user_name, i.name
   from
     public."event" e 
   left join 
     interest i 
     on 1=1 
-    and e.interest_id = i.interest_id 
+    and e.interest_id = i.interest_id
+  join
+    "user" u
+    on u.user_id = e.organizer_id
   `;
   const result = await SequelizeInstance.query(sqlQuery, {
     type: SequelizeInstance.QueryTypes.SELECT,
@@ -21,13 +23,16 @@ export async function getEvents() {
 export async function getEvent(eventId) {
   const sqlQuery = `
   select 
-    * 
+    e.*, u.user_name, i.name 
   from
     public."event" e 
   left join 
     interest i 
     on 1=1 
     and e.interest_id = i.interest_id
+  join
+    "user" u
+    on e.organizer_id = u.user_id
   where e.event_id = '${eventId}'
   `;
   const result = await SequelizeInstance.query(sqlQuery, {

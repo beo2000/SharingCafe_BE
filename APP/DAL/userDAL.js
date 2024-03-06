@@ -172,7 +172,7 @@ export async function getEventsByInterest(interestId){
 
 export async function getBlogsByInterest(interestId){
   const result = await Blog.findAll({
-    where: {interest_id: interestId}
+    where: {interest_id: interestId},
   })
   return result;
 }
