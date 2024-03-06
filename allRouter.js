@@ -349,9 +349,144 @@ router.get('/api/user/interest/:userInterestId', userController.getInterest);
 router.put('/api/user/interest/:userInterestId', userController.updateInterest);
 router.delete('/api/user/interest', userController.deleteInterest);
 
+/**
+ * @swagger
+ * /api/user/events/{userId}:
+ *   get:
+ *     summary: Get events for a specific user by ID
+ *     tags:
+ *       - User Events
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         description: ID of the user to retrieve events for
+ *         schema:
+ *           type: string
+ *         example: a73ca8fb-64a6-4b4a-9d09-620cd3aa11d8
+ *     responses:
+ *       '200':
+ *         description: Successfully retrieved user events
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 userId:
+ *                   type: string
+ *                   description: ID of the user
+ *                   example: a73ca8fb-64a6-4b4a-9d09-620cd3aa11d8
+ *                 events:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       eventId:
+ *                         type: string
+ *                         description: ID of the event
+ *                         example: 123456
+ *                       eventName:
+ *                         type: string
+ *                         description: Name of the event
+ *                         example: Example Event
+ *       '404':
+ *         description: User not found
+ *       '500':
+ *         description: Internal server error
+ */
+/**
+ * @swagger
+ * /api/user/events/interest/{interestId}:
+ *   get:
+ *     summary: Get events based on user's interest by ID
+ *     tags:
+ *       - User Events
+ *     parameters:
+ *       - in: path
+ *         name: interestId
+ *         required: true
+ *         description: ID of the interest to retrieve events for
+ *         schema:
+ *           type: string
+ *         example: abfa4293-5d5e-4a8b-a1d1-ce3cab1c1285
+ *     responses:
+ *       '200':
+ *         description: Successfully retrieved events based on interest
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   eventId:
+ *                     type: string
+ *                     description: ID of the event
+ *                     example: 123456
+ *                   eventName:
+ *                     type: string
+ *                     description: Name of the event
+ *                     example: Example Event
+ *                   interestId:
+ *                     type: string
+ *                     description: ID of the interest
+ *                     example: abfa4293-5d5e-4a8b-a1d1-ce3cab1c1285
+ *       '404':
+ *         description: Interest not found or no events available
+ *       '500':
+ *         description: Internal server error
+ */
+/**
+ * @swagger
+ * /api/user/blogs/interest/{interestId}:
+ *   get:
+ *     summary: Get blogs based on a specific interest ID
+ *     tags:
+ *       - User Blogs
+ *     parameters:
+ *       - in: path
+ *         name: interestId
+ *         required: true
+ *         description: ID of the interest to retrieve blogs for
+ *         schema:
+ *           type: string
+ *         example: 5ba1c54c-7610-4916-a4be-d55140952289
+ *     responses:
+ *       '200':
+ *         description: Successfully retrieved blogs based on the interest ID
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   blogId:
+ *                     type: string
+ *                     description: ID of the blog
+ *                     example: 123456
+ *                   blogTitle:
+ *                     type: string
+ *                     description: Title of the blog
+ *                     example: Example Blog
+ *                   author:
+ *                     type: string
+ *                     description: Author of the blog
+ *                     example: John Doe
+ *       '404':
+ *         description: Blogs not found for the specified interest
+ *       '500':
+ *         description: Internal server error
+ */
 router.get('/api/user/events/:userId', userController.getMyEvents);
-router.get('/api/user/events/interest/:interestId', userController.getEventsByInterest);
-router.get('/api/user/blogs/interest/:interestId', userController.getBlogsByInterest);
+router.get(
+  '/api/user/events/interest/:interestId',
+  userController.getEventsByInterest,
+);
+router.get(
+  '/api/user/blogs/interest/:interestId',
+  userController.getBlogsByInterest,
+);
 /**
  * @swagger
  * /api/interest:
@@ -690,6 +825,87 @@ router.get('/api/admin/user/:userId', admController.getUser);
  *       500:
  *         description: Internal server error
  */
+/**
+ * @swagger
+ * /api/event/{eventId}:
+ *   put:
+ *     summary: Update an event by ID
+ *     tags:
+ *       - Event
+ *     parameters:
+ *       - in: path
+ *         name: eventId
+ *         required: true
+ *         description: ID of the event to update
+ *         schema:
+ *           type: string
+ *         example: a73ca8fb-64a6-4b4a-9d09-620cd3aa11d8
+ *       - in: body
+ *         name: updateEventBody
+ *         description: Request body to update an event
+ *         required: true
+ *         schema:
+ *           type: object
+ *           properties:
+ *             organizer_id:
+ *               type: string
+ *               description: ID of the event organizer
+ *               example: 6150886b-5920-4884-8e43-d4efb62f89d3
+ *             title:
+ *               type: string
+ *               description: Title of the event
+ *               example: Cooking competition
+ *             description:
+ *               type: string
+ *               description: Description of the event
+ *               example: Challenge yourself with all other chefs around the city to earn yourself a Master Chef title
+ *             time_of_event:
+ *               type: string
+ *               format: date-time
+ *               description: Time of the event
+ *               example: 2024-03-19T17:00:00.000Z
+ *             location:
+ *               type: string
+ *               description: Location of the event
+ *               example: Hue
+ *             participants_count:
+ *               type: integer
+ *               description: Number of participants for the event
+ *               example: 50
+ *             is_approve:
+ *               type: boolean
+ *               description: Approval status of the event
+ *               example: true
+ *             created_at:
+ *               type: string
+ *               format: date-time
+ *               description: Creation timestamp of the event
+ *               example: 2024-02-25T09:50:34.977Z
+ *             background_img:
+ *               type: string
+ *               description: URL of the background image for the event
+ *               example: https://res.cloudinary.com/dvepci5on/image/upload/v1708879045/sharing-coffee-images-storage/B-Tech-Degree_pfkflz.jpg
+ *             is_visible:
+ *               type: boolean
+ *               description: Visibility status of the event
+ *               example: true
+ *             interest_id:
+ *               type: string
+ *               description: ID of the event's interest
+ *               example: 729b0a48-c9f2-450c-9482-7fbb129ba9db
+ *             end_of_event:
+ *               type: string
+ *               format: date
+ *               description: End date of the event
+ *               example: 2024-03-10
+ *     responses:
+ *       '204':
+ *         description: Event successfully updated
+ *       '404':
+ *         description: Event not found
+ *       '500':
+ *         description: Internal server error
+ */
 router.get('/api/event', eventController.getEvents);
 router.post('/api/event', eventController.createEvent);
 router.get('/api/event/:eventId', eventController.getEvent);
@@ -880,6 +1096,105 @@ router.post('/api/blog', blogController.createBlog);
 router.put('/api/blog/:blogId', blogController.updateBlog);
 router.delete('/api/blog/:blogId', blogController.deleteBlog);
 
+/**
+ * @swagger
+ * /api/moderator/login:
+ *   post:
+ *     summary: Moderator login
+ *     tags:
+ *       - Moderator
+ *     consumes:
+ *       - application/json
+ *     parameters:
+ *       - in: body
+ *         name: loginPayload
+ *         description: Moderator login payload
+ *         required: true
+ *         schema:
+ *           type: object
+ *           properties:
+ *             username:
+ *               type: string
+ *               description: Moderator username
+ *               example: moderator123
+ *             password:
+ *               type: string
+ *               description: Moderator password
+ *               example: password123
+ *     responses:
+ *       '200':
+ *         description: Moderator successfully logged in
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 token:
+ *                   type: string
+ *                   description: Authentication token for the moderator session
+ *                   example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+ *       '401':
+ *         description: Unauthorized - Invalid credentials
+ *       '500':
+ *         description: Internal server error
+ */
+/**
+ * @swagger
+ * /api/moderator/blog/{blogId}:
+ *   put:
+ *     summary: Censor a blog post by ID
+ *     tags:
+ *       - Moderator
+ *     parameters:
+ *       - in: path
+ *         name: blogId
+ *         required: true
+ *         description: ID of the blog post to censor
+ *         schema:
+ *           type: string
+ *         example: 423e7485-3d45-42b4-a1dd-2b05641d8943
+ *       - in: body
+ *         name: censorBlogBody
+ *         description: Request body to censor the blog post
+ *         required: true
+ *         schema:
+ *           type: object
+ *           properties:
+ *             censorReason:
+ *               type: string
+ *               description: Reason for censoring the blog post
+ *               example: Inappropriate content
+ *     responses:
+ *       '200':
+ *         description: Blog post successfully censored
+ *       '404':
+ *         description: Blog post not found
+ *       '500':
+ *         description: Internal server error
+ */
+/**
+ * @swagger
+ * /api/moderator/event/{eventId}:
+ *   put:
+ *     summary: Censor an event as a moderator
+ *     tags:
+ *       - Moderator
+ *     parameters:
+ *       - in: path
+ *         name: eventId
+ *         required: true
+ *         description: ID of the event to censor
+ *         schema:
+ *           type: string
+ *         example: 50b415b6-b874-429c-9f31-56db62ff0c18
+ *     responses:
+ *       '204':
+ *         description: Event successfully censored
+ *       '404':
+ *         description: Event not found
+ *       '500':
+ *         description: Internal server error
+ */
 router.post('/api/moderator/login', modController.loginMod);
 router.put('/api/moderator/blog/:blogId', modController.censorBlog);
 router.put('/api/moderator/event/:eventId', modController.censorEvent);
