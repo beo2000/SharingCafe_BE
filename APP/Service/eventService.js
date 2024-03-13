@@ -32,3 +32,7 @@ export async function getNewEvents() {
 export async function getEventsByDate(date) {
   return await eventDAL.getEventsByDate(date);
 }
+
+export async function getEventsByName(dataObj) {
+  return await eventDAL.getEventsByName(dataObj);
+}

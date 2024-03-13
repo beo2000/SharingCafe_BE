@@ -7,6 +7,7 @@ import * as blogController from './APP/Controller/blogController.js';
 import * as matchController from './APP/Controller/matchController.js';
 import * as modController from './APP/Controller/modController.js';
 import uploadCloud from './APP/middleware/uploadCloudImg.js';
+import * as chatController from './APP/Controller/chatController.js'
 const router = express.Router();
 
 /**
@@ -69,6 +70,56 @@ const router = express.Router();
  *                   type: string
  *                   example: Admin not found
  */
+
+/**
+ * @swagger
+ * /api/admin/logins:
+ *   post:
+ *     summary: Admin login only
+ *     tags:
+ *       - Admin section
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 default: johndoe@gmail.com
+ *               password:
+ *                 type: string
+ *                 default: pass
+ *           example:
+ *             email: johndoe@gmail.com
+ *             password: pass
+ *     responses:
+ *       '200':
+ *         description: The details of admin after login
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Login successful
+ *                 token:
+ *                   type: string
+ *                   example: your_access_token
+ *       '404':
+ *         description: Admin not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Admin not found
+ */
+
 /**
  * @swagger
  * /api/admin/statics:
@@ -488,6 +539,48 @@ router.get(
   userController.getBlogsByInterest,
 );
 router.get('/api/user/events/suggest/:userId', userController.getSuggestEvent)
+/**
+ * @swagger
+ * /api/user/events/suggest/{userId}:
+ *   get:
+ *     summary: Get events for user base on interest
+ *     tags:
+ *       - User Events
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         description: ID of the user to retrieve events for
+ *         schema:
+ *           type: string
+ *         example: 6150886b-5920-4884-8e43-d4efb62f89d4
+ *     responses:
+ *       "200":
+ *         description: Successfully retrieved events based on the user ID
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   eventId:
+ *                     type: string
+ *                     description: ID of the event
+ *                     example: 123456
+ *                   eventTitle:
+ *                     type: string
+ *                     description: Title of the event
+ *                     example: Example Event
+ *                   author:
+ *                     type: string
+ *                     description: Author of the event
+ *                     example: John Doe
+ *       "404":
+ *         description: Events not found for the specified user
+ *       "500":
+ *         description: Internal server error
+ */
 /**
  * @swagger
  * /api/interest:
@@ -914,6 +1007,8 @@ router.put('/api/event/:eventId', eventController.updateEvent);
 router.delete('/api/event/:eventId', eventController.deleteEvent);
 router.get('/api/event/new/events', eventController.getNewEvents);
 router.get('/api/event/date/:date', eventController.getEventsByDate);
+router.post('/api/event/search', eventController.getEventsByName);
+
 /**
  * @swagger
  * /api/blog:
@@ -1250,4 +1345,6 @@ router.put('/api/moderator/event/:eventId', modController.censorEvent);
  *         description: Internal Server Error
  */
 router.get('api/auth/matches-interest', matchController.getUserMatchByInterest);
+
+router.post('/api/user/message', chatController.viewMessage);
 export default router;

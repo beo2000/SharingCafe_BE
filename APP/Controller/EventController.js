@@ -95,3 +95,15 @@ export async function getEventsByDate(req, res) {
     res.status(500).send({ error: error.message });
   }
 }
+
+export async function getEventsByName(req, res) {
+  try {
+    const dataObj = req.body;
+    const result = await eventService.getEventsByName(dataObj);
+    res.status(200).send(result);
+    // response code ???
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ error: error.message });
+  }
+}

@@ -131,3 +131,26 @@ export async function getEventsByDate(dateString) {
   });
   return result;
 }
+
+export async function getEventsByName(dataObj) {
+  const name = dataObj.title;
+  const sqlQuery = `
+  select 
+    e.title, e.background_img, e.time_of_event, e.adress, e.participants_count
+  from
+    public."event" e 
+  left join 
+    interest i 
+    on 1=1 
+    and e.interest_id = i.interest_id
+  join
+    "user" u
+    on u.user_id = e.organizer_id
+    where e.title like '%${name}%'
+  `;
+  const result = await SequelizeInstance.query(sqlQuery, {
+    type: SequelizeInstance.QueryTypes.SELECT,
+    raw: true,
+  });
+  return result;
+}
