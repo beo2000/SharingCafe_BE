@@ -1,4 +1,9 @@
-import { Role, User, UserInterest, SequelizeInstance, Event, Blog } from '../utility/DbHelper.js';
+import {
+  Role,
+  User,
+  UserInterest,
+  SequelizeInstance,
+} from '../utility/DbHelper.js';
 
 export async function getUserDetails(email, password) {
   const user = await User.findOne({
@@ -38,8 +43,23 @@ export async function getUser(userId) {
 }
 
 export async function getInterests(userId) {
-  const result = await UserInterest.findAll({
-    where: { user_id: userId },
+  const sqlQuery = `
+  select 
+    q.*, u.user_name, i.name
+  from 
+    user_interest q
+  join 
+    interest i 
+    on 1=1 
+    and q.interest_id = i.interest_id
+  join
+    "user" u
+    on u.user_id = q.user_id
+   where q.user_id = '${userId}'
+  `;
+  const result = await SequelizeInstance.query(sqlQuery, {
+    type: SequelizeInstance.QueryTypes.SELECT,
+    raw: true,
   });
   return result;
 }
@@ -53,7 +73,24 @@ export async function createInterest(userInterestId, userInterestDetails) {
 }
 
 export async function getInterest(userInterestId) {
-  const result = await UserInterest.findByPk(userInterestId);
+  const sqlQuery = `
+  select 
+    q.*, u.user_name, i.name
+  from 
+    user_interest q
+  join 
+    interest i 
+    on 1=1 
+    and q.interest_id = i.interest_id
+  join
+    "user" u
+    on u.user_id = q.user_id
+   where q.user_interest_id  = '${userInterestId}'
+  `;
+  const result = await SequelizeInstance.query(sqlQuery, {
+    type: SequelizeInstance.QueryTypes.SELECT,
+    raw: true,
+  });
   return result;
 }
 
@@ -156,23 +193,92 @@ offset ${offset}
   return userDetails;
 }
 
-export async function getMyEvents(userId){
-  const result = await Event.findAll({
-    where: {organizer_id: userId}
-  })
+export async function getMyEvents(userId) {
+  const sqlQuery = `
+  select 
+    e.title, e.background_img, e.time_of_event, e.adress, e.participants_count
+  from
+    public."event" e 
+  left join 
+    interest i 
+    on 1=1 
+    and e.interest_id = i.interest_id
+  join
+    "user" u
+    on e.organizer_id = u.user_id
+  where e.organizer_id = '${userId}'
+  `;
+  const result = await SequelizeInstance.query(sqlQuery, {
+    type: SequelizeInstance.QueryTypes.SELECT,
+    raw: true,
+  });
   return result;
 }
 
-export async function getEventsByInterest(interestId){
-  const result = await Event.findAll({
-    where: {interest_id: interestId}
-  })
+export async function getEventsByInterest(interestId) {
+  const sqlQuery = `
+  select 
+    e.*, u.user_name, i.name 
+  from
+    public."event" e 
+  left join 
+    interest i 
+    on 1=1 
+    and e.interest_id = i.interest_id
+  join
+    "user" u
+    on e.organizer_id = u.user_id
+  where e.interest_id = '${interestId}'
+  `;
+  const result = await SequelizeInstance.query(sqlQuery, {
+    type: SequelizeInstance.QueryTypes.SELECT,
+    raw: true,
+  });
   return result;
 }
 
-export async function getBlogsByInterest(interestId){
-  const result = await Blog.findAll({
-    where: {interest_id: interestId},
-  })
+export async function getBlogsByInterest(interestId) {
+  const sqlQuery = `
+  select 
+    b.*, u.user_name, i.name
+  from 
+    blog b 
+  join 
+    interest i 
+    on 1=1 
+    and b.interest_id = i.interest_id
+  join
+    "user" u
+    on u.user_id = b.user_id
+   where b.interest_id = '${interestId}'
+  `;
+  const result = await SequelizeInstance.query(sqlQuery, {
+    type: SequelizeInstance.QueryTypes.SELECT,
+    raw: true,
+  });
+  return result;
+}
+
+export async function getSuggestEvent(userId){
+  const sqlQuery = `
+  select 
+    e.title, e.background_img, e.time_of_event, e.adress, e.participants_count
+	from
+		user_interest q
+	join
+		interest i 
+		on q.interest_id = i.interest_id
+	join 
+		"user" u 
+		on u.user_id = q.user_id 
+	join "event" e 
+		on e.interest_id = i.interest_id 
+	where u.user_id = '${userId}'
+  order by e.participants_count desc
+  `;
+  const result = await SequelizeInstance.query(sqlQuery, {
+    type: SequelizeInstance.QueryTypes.SELECT,
+    raw: true,
+  });
   return result;
 }

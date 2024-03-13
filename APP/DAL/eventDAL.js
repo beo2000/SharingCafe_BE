@@ -1,4 +1,5 @@
 import { Event, SequelizeInstance } from '../utility/DbHelper.js';
+
 export async function getEvents() {
   const sqlQuery = `
   select 
@@ -41,7 +42,7 @@ export async function getEvent(eventId) {
   });
   return result;
 }
-export async function createEvent(eventId, dataObj) {
+export async function createEvent(eventId, dataObj, fileData) {
   return await Event.create({
     event_id: eventId,
     organizer_id: dataObj.organizer_id,
@@ -50,9 +51,8 @@ export async function createEvent(eventId, dataObj) {
     time_of_event: dataObj.time_of_event,
     end_of_event: dataObj.end_of_event,
     location: dataObj.location,
-    participants_count: dataObj.participants_count,
-    is_approve: dataObj.is_approve,
-    background_img: dataObj.background_img,
+    adress: dataObj.adress,
+    background_img: fileData?.path,
     is_visible: dataObj.is_visible,
     interest_id: dataObj.interest_id
   });
@@ -82,4 +82,52 @@ export async function deleteEvent(eventId) {
     where: { event_id: eventId },
   });
   return deletedEvent;
+}
+
+export async function getNewEvents() {
+  const date = new Date(Date.now());
+  const sqlQuery = `
+  select 
+    e.title, e.background_img, e.time_of_event, e.adress, e.participants_count
+  from
+    public."event" e 
+  left join 
+    interest i 
+    on 1=1 
+    and e.interest_id = i.interest_id
+  join
+    "user" u
+    on u.user_id = e.organizer_id
+    where e.time_of_event >= '${date.toUTCString()}' or e.end_of_event >= '${date.toUTCString()}'
+  order by e.time_of_event
+  `;
+  const result = await SequelizeInstance.query(sqlQuery, {
+    type: SequelizeInstance.QueryTypes.SELECT,
+    raw: true,
+  });
+  return result;
+}
+
+export async function getEventsByDate(dateString) {
+  const date = new Date(dateString);
+  const sqlQuery = `
+  select 
+    e.title, e.background_img, e.time_of_event, e.adress, e.participants_count
+  from
+    public."event" e 
+  left join 
+    interest i 
+    on 1=1 
+    and e.interest_id = i.interest_id
+  join
+    "user" u
+    on u.user_id = e.organizer_id
+    where e.time_of_event >= '${date.toUTCString()}'
+  order by e.time_of_event
+  `;
+  const result = await SequelizeInstance.query(sqlQuery, {
+    type: SequelizeInstance.QueryTypes.SELECT,
+    raw: true,
+  });
+  return result;
 }

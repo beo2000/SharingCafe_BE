@@ -143,3 +143,14 @@ export async function getBlogsByInterest(req, res) {
     res.status(500).send({ error: error.message });
   }
 }
+
+export async function getSuggestEvent(req, res){
+  try {
+    const userId = req.params.userId;
+    const result = await userService.getSuggestEvent(userId);
+    res.status(200).send(result);
+  } catch (error){
+    console.log(error);
+    res.status(500).send({error: error.message});
+  }
+}

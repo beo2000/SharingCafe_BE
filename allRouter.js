@@ -6,7 +6,7 @@ import * as eventController from './APP/Controller/EventController.js';
 import * as blogController from './APP/Controller/blogController.js';
 import * as matchController from './APP/Controller/matchController.js';
 import * as modController from './APP/Controller/modController.js';
-
+import uploadCloud from './APP/middleware/uploadCloudImg.js';
 const router = express.Router();
 
 /**
@@ -119,7 +119,7 @@ router.get('/api/admin/statics', admController.getStatics);
 
 /**
  * @swagger
- * /api/user/login:
+ * /api/user/auth/login:
  *   post:
  *     summary: Login User
  *     description: Endpoint for user login
@@ -487,6 +487,7 @@ router.get(
   '/api/user/blogs/interest/:interestId',
   userController.getBlogsByInterest,
 );
+router.get('/api/user/events/suggest/:userId', userController.getSuggestEvent)
 /**
  * @swagger
  * /api/interest:
@@ -907,10 +908,12 @@ router.get('/api/admin/user/:userId', admController.getUser);
  *         description: Internal server error
  */
 router.get('/api/event', eventController.getEvents);
-router.post('/api/event', eventController.createEvent);
+router.post('/api/event', uploadCloud.single('background_img'), eventController.createEvent);
 router.get('/api/event/:eventId', eventController.getEvent);
 router.put('/api/event/:eventId', eventController.updateEvent);
 router.delete('/api/event/:eventId', eventController.deleteEvent);
+router.get('/api/event/new/events', eventController.getNewEvents);
+router.get('/api/event/date/:date', eventController.getEventsByDate);
 /**
  * @swagger
  * /api/blog:

@@ -6,6 +6,7 @@ import options from './swagger.js';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import * as userService from './APP/Service/userService.js';
+import jwt from 'jsonwebtoken'
 // Trái tim của app
 /**
  * Source code này đang chia theo mô hình MVC - Service đứng ở giữa để handle logic
