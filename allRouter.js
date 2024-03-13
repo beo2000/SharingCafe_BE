@@ -529,6 +529,49 @@ router.delete('/api/user/interest', userController.deleteInterest);
  *       '500':
  *         description: Internal server error
  */
+/**
+ * @swagger
+ * /api/user/events/suggest/{userId}:
+ *   get:
+ *     summary: Get suggested events for a user
+ *     tags:
+ *       - User Events
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         description: ID of the user to get suggested events for
+ *         schema:
+ *           type: string
+ *         example: 6150886b-5920-4884-8e43-d4efb62f89d4
+ *     responses:
+ *       '200':
+ *         description: Successfully retrieved suggested events for the user
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   eventId:
+ *                     type: string
+ *                     description: ID of the event
+ *                     example: 789012
+ *                   eventName:
+ *                     type: string
+ *                     description: Name of the event
+ *                     example: Example Event
+ *                   eventDate:
+ *                     type: string
+ *                     format: date
+ *                     description: Date of the event
+ *                     example: 2022-12-01
+ *       '404':
+ *         description: Suggested events not found for the specified user
+ *       '500':
+ *         description: Internal server error
+ */
 router.get('/api/user/events/:userId', userController.getMyEvents);
 router.get(
   '/api/user/events/interest/:interestId',
@@ -538,7 +581,7 @@ router.get(
   '/api/user/blogs/interest/:interestId',
   userController.getBlogsByInterest,
 );
-router.get('/api/user/events/suggest/:userId', userController.getSuggestEvent)
+router.get('/api/user/events/suggest/:userId', userController.getSuggestEvent);
 /**
  * @swagger
  * /api/user/events/suggest/{userId}:
@@ -1001,7 +1044,11 @@ router.get('/api/admin/user/:userId', admController.getUser);
  *         description: Internal server error
  */
 router.get('/api/event', eventController.getEvents);
-router.post('/api/event', uploadCloud.single('background_img'), eventController.createEvent);
+router.post(
+  '/api/event',
+  uploadCloud.single('background_img'),
+  eventController.createEvent,
+);
 router.get('/api/event/:eventId', eventController.getEvent);
 router.put('/api/event/:eventId', eventController.updateEvent);
 router.delete('/api/event/:eventId', eventController.deleteEvent);
