@@ -87,7 +87,7 @@ export async function getNewEvents(req, res) {
 
 export async function getEventsByDate(req, res) {
   try {
-    const date = req.params.date;
+    const date = req.body;
     const result = await eventService.getEventsByDate(date);
     res.status(200).send(result);
   } catch (error) {

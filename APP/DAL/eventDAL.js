@@ -88,7 +88,7 @@ export async function getNewEvents() {
   const date = new Date(Date.now());
   const sqlQuery = `
   select 
-    e.title, e.background_img, e.time_of_event, e.adress, e.participants_count
+    e.title, e.background_img, e.time_of_event, e.adress, e.participants_count, e.end_of_event
   from
     public."event" e 
   left join 
@@ -109,7 +109,7 @@ export async function getNewEvents() {
 }
 
 export async function getEventsByDate(dateString) {
-  const date = new Date(dateString);
+  const date = new Date(dateString.date);
   const sqlQuery = `
   select 
     e.title, e.background_img, e.time_of_event, e.adress, e.participants_count
@@ -122,7 +122,7 @@ export async function getEventsByDate(dateString) {
   join
     "user" u
     on u.user_id = e.organizer_id
-    where e.time_of_event >= '${date.toUTCString()}'
+    where e.time_of_event >= '${date.toDateString()}'
   order by e.time_of_event
   `;
   const result = await SequelizeInstance.query(sqlQuery, {

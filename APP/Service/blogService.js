@@ -24,3 +24,9 @@ export async function deleteBlog(blogId) {
     if (!blog) throw new Error('Blog not found !!!');
     return await blogDAL.deleteBlog(blogId);
 }
+
+export async function updateImg(blogId, fileData){
+    const blog = await getBlog(blogId);
+    if (!blog) throw new Error('Blog not found !!!');
+    return await blogDAL.updateImg(blogId, fileData);
+}

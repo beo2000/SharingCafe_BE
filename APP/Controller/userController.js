@@ -4,6 +4,7 @@ import jwt from 'jsonwebtoken';
 import * as userService from '../Service/userService.js';
 import dotenv from 'dotenv';
 import { SequelizeInstance } from '../utility/DbHelper.js';
+import { v2 as cloudinary } from 'cloudinary';
 
 dotenv.config();
 
@@ -152,5 +153,56 @@ export async function getSuggestEvent(req, res){
   } catch (error){
     console.log(error);
     res.status(500).send({error: error.message});
+  }
+}
+
+export async function updateProfile(req, res) {
+  const t = await SequelizeInstance.transaction();
+  try {
+    // const fileData = req.file;
+    // if (fileData === undefined) {
+    //   cloudinary.uploader.destroy(fileData.filename)
+    //   return res.status(400).send({ error: error.message });
+    // }
+    const userId = req.params.userId;
+    const profile = req.body;
+    const user = await userService.updateProfile(userId, profile);
+    res.status(200).send(user);
+    await t.commit();
+  } catch (error) {
+    await t.rollback();
+    console.log(error);
+    res.status(404).send(error);
+  }
+}
+
+export async function updateAvatar(req, res) {
+  const t = await SequelizeInstance.transaction();
+  try {
+    const fileData = req.file;
+    console.log(fileData);
+    if (fileData === undefined) {
+      cloudinary.uploader.destroy(fileData.filename)
+      return res.status(400).send({ error: error.message });
+    }
+    const userId = req.params.userId;
+    const user = await userService.updateAvatar(userId, fileData);
+    res.status(200).send(user);
+    await t.commit();
+  } catch (error) {
+    await t.rollback();
+    console.log(error);
+    res.status(404).send(error);
+  }
+}
+
+export async function register(req, res) {
+  try {
+    const user = req.body;
+    const result = await userService.register(user);
+    res.status(200).send(result);
+  } catch (error) {
+    console.log(error);
+    res.status(400).send(error);
   }
 }

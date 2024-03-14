@@ -79,3 +79,11 @@ export async function deleteBlog(blogId) {
     });
     return deletedBlog;
 }
+
+export async function updateImg(blogId, fileData) {
+  return await Blog.update({
+    image: fileData?.path
+  }, {
+    where: {blog_id: blogId}
+  });
+}

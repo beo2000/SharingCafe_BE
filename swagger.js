@@ -24,7 +24,7 @@ const options = {
       description: 'This is the local development environment',
     },
     {
-      url: 'https://sharing-coffee-be-capstone-com.onrender.com/',
+      url: 'https://sharing-coffee-be-capstone-com.onrender.com',
       description: 'This is the cloud development environment',
     },
   ],

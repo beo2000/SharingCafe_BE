@@ -70,56 +70,6 @@ const router = express.Router();
  *                   type: string
  *                   example: Admin not found
  */
-
-/**
- * @swagger
- * /api/admin/logins:
- *   post:
- *     summary: Admin login only
- *     tags:
- *       - Admin section
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               email:
- *                 type: string
- *                 default: johndoe@gmail.com
- *               password:
- *                 type: string
- *                 default: pass
- *           example:
- *             email: johndoe@gmail.com
- *             password: pass
- *     responses:
- *       '200':
- *         description: The details of admin after login
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: Login successful
- *                 token:
- *                   type: string
- *                   example: your_access_token
- *       '404':
- *         description: Admin not found
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: Admin not found
- */
-
 /**
  * @swagger
  * /api/admin/statics:
@@ -391,15 +341,58 @@ router.get('/api/admin/statics', admController.getStatics);
  *       '500':
  *         description: Internal server error
  */
+/**
+ * @swagger
+ * /api/user/{userId}:
+ *   put:
+ *     summary: Update a user profile
+ *     tags:
+ *       - User Section
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         description: ID of the user profile to be updated
+ *         schema:
+ *           type: string
+ *         example: f6fb30c7-7d61-48ae-8a59-05c53568847c
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               user_name:
+ *                 type: string
+ *                 description: Name of the user to be updated
+ *                 example: John Smith
+ *               password:
+ *                 type: string
+ *                 description: User account password to be updated
+ *                 example: 146759
+ *               Bio:
+ *                 type: json
+ *                 description: User bio to be updated
+ *                 example: I like fishing
+ *     responses:
+ *       '200':
+ *         description: User updated successfully
+ *       '404':
+ *         description: User not found
+ *       '500':
+ *         description: Internal server error
+ */
 router.post('/api/user/login', userController.loginUser);
 router.get('/api/user/:userId', userController.getUser);
-
+router.put('/api/user/:userId', userController.updateProfile);
+router.put('/api/user/avatar/:userId', uploadCloud.single('profile_avatar'), userController.updateAvatar)
 router.post('/api/user/interest', userController.createInterest);
 router.get('/api/user/interests/:userId', userController.getInterests);
 router.get('/api/user/interest/:userInterestId', userController.getInterest);
 router.put('/api/user/interest/:userInterestId', userController.updateInterest);
 router.delete('/api/user/interest', userController.deleteInterest);
-
+router.post('/api/user/register', userController.register);
 /**
  * @swagger
  * /api/user/events/{userId}:
@@ -1043,6 +1036,174 @@ router.get('/api/admin/user/:userId', admController.getUser);
  *       '500':
  *         description: Internal server error
  */
+/**
+ * @openapi
+ * '/api/event/new/events':
+ *   get:
+ *     summary: Get a list of new events
+ *     tags:
+ *      - Event Section
+ *     responses:
+ *       '200':
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             example:
+ *               - eventId: 1
+ *                 title: Sample Event 1
+ *                 content: Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ *               - eventId: 2
+ *                 title: Sample Event 2
+ *                 content: Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.
+ *       '500':
+ *         description: Internal server error
+ */
+/**
+ * @openapi
+ * '/api/event':
+ *  get:
+ *     tags:
+ *     - Event
+ *     summary: Get a list of events
+ *     responses:
+ *       200:
+ *         description: Success
+ *         content:
+ *          application/json:
+ *            schema:
+ *              type: array
+ *              items:
+ *                type: object
+ *                properties:
+ *                  id:
+ *                    type: string
+ *                  title:
+ *                    type: string
+ *       400:
+ *         description: Bad request
+ */
+/**
+ * @swagger
+ * /api/event/{eventId}:
+ *   get:
+ *     summary: Get a specific event by ID
+ *     tags:
+ *      - Event
+ *     parameters:
+ *       - in: path
+ *         name: eventId
+ *         required: true
+ *         description: ID of the event
+ *         schema:
+ *           type: string
+ *         example: 50b415b6-b874-429c-9f31-56db62ff0c12
+ *     responses:
+ *       '200':
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             example:
+ *               eventId: 50b415b6-b874-429c-9f31-56db62ff0c12
+ *               title: Sample Event
+ *               content: Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ *       '404':
+ *         description: Event not found
+ *       '500':
+ *         description: Internal server error
+ */
+/**
+ * @swagger
+ * /api/event/{eventId}:
+ *   delete:
+ *     summary: Delete a specific event by ID
+ *     tags:
+ *       - Event
+ *     parameters:
+ *       - in: path
+ *         name: eventId
+ *         required: true
+ *         description: ID of the event to be deleted
+ *         schema:
+ *           type: string
+ *         example: 50b415b6-b874-429c-9f31-56db62ff0c12
+ *     responses:
+ *       '204':
+ *         description: Event deleted successfully
+ *       '404':
+ *         description: Event not found
+ *       '500':
+ *         description: Internal server error
+ */
+/**
+ * @swagger
+ * '/api/event/date':
+ *  post:
+ *     summary: Get a list of events base on specific date
+ *     tags:
+ *     - Event
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               date:
+ *                 type: string
+ *                 description: Date of starting event
+ *                 example: 3-10-2024
+ *     responses:
+ *       200:
+ *         description: Success
+ *         content:
+ *          application/json:
+ *            schema:
+ *              type: array
+ *              items:
+ *                type: object
+ *                properties:
+ *                  id:
+ *                    type: string
+ *                  title:
+ *                    type: string
+ *       400:
+ *         description: Bad request
+ */
+/**
+ * @swagger
+ * '/api/event/search':
+ *  post:
+ *     summary: Get a list of events base on specific keyword
+ *     tags:
+ *     - Event
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *                 description: Keyword for searching
+ *                 example: competition
+ *     responses:
+ *       200:
+ *         description: Success
+ *         content:
+ *          application/json:
+ *            schema:
+ *              type: array
+ *              items:
+ *                type: object
+ *                properties:
+ *                  id:
+ *                    type: string
+ *                  title:
+ *                    type: string
+ *       400:
+ *         description: Bad request
+ */
 router.get('/api/event', eventController.getEvents);
 router.post(
   '/api/event',
@@ -1053,9 +1214,8 @@ router.get('/api/event/:eventId', eventController.getEvent);
 router.put('/api/event/:eventId', eventController.updateEvent);
 router.delete('/api/event/:eventId', eventController.deleteEvent);
 router.get('/api/event/new/events', eventController.getNewEvents);
-router.get('/api/event/date/:date', eventController.getEventsByDate);
+router.post('/api/event/date', eventController.getEventsByDate);
 router.post('/api/event/search', eventController.getEventsByName);
-
 /**
  * @swagger
  * /api/blog:
@@ -1240,7 +1400,7 @@ router.get('/api/blog/:blogId', blogController.getBlog);
 router.post('/api/blog', blogController.createBlog);
 router.put('/api/blog/:blogId', blogController.updateBlog);
 router.delete('/api/blog/:blogId', blogController.deleteBlog);
-
+router.post('/api/blog/image/blogId', uploadCloud.single('image'), blogController.updateImg);
 /**
  * @swagger
  * /api/moderator/login:

@@ -65,3 +65,23 @@ export async function deleteBlog(req, res) {
     res.status(404).send(error);
   }
 }
+
+export async function updateImg(req, res) {
+  const t = await SequelizeInstance.transaction();
+  try {
+    const fileData = req.file;
+    console.log(fileData);
+    if (fileData === undefined) {
+      cloudinary.uploader.destroy(fileData.filename)
+      return res.status(400).send({ error: error.message });
+    }
+    const blogId = req.params.blogId;
+    const user = await blogService.updateImg(blogId, fileData);
+    res.status(200).send(user);
+    await t.commit();
+  } catch (error) {
+    await t.rollback();
+    console.log(error);
+    res.status(404).send(error);
+  }
+}

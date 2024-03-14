@@ -37,15 +37,67 @@ export async function getUserDetails(email, password) {
   return user;
 }
 
+export async function register(userId, user){
+  return await User.create({
+    user_id: userId,
+    user_name: user.user_name,
+    password: user.password,
+    phone: user.phone,
+    email: user.email,
+    Bio: user.Bio,
+    role_id: "6150886b-5920-4884-8e43-d4efb62f89d3"
+  });
+}
+
+export async function getUserByPhone(phone){
+  const sqlQuery = `
+  select 
+    u.*
+  from 
+    "user" u
+   where u.phone = '${phone}'
+  `;
+  const result = await SequelizeInstance.query(sqlQuery, {
+    type: SequelizeInstance.QueryTypes.SELECT,
+    raw: true,
+  });
+  return result;
+}
+
+export async function getUserByEmail(email){
+  const sqlQuery = `
+  select 
+    u.*
+  from 
+    "user" u
+   where u.email = '${email}'
+  `;
+  const result = await SequelizeInstance.query(sqlQuery, {
+    type: SequelizeInstance.QueryTypes.SELECT,
+    raw: true,
+  });
+  return result;
+}
+
 export async function getUser(userId) {
-  const result = await User.findByPk(userId);
+  const sqlQuery = `
+  select 
+    u."Bio", u.user_name, u.profile_avatar
+  from 
+    "user" u
+   where u.user_id = '${userId}'
+  `;
+  const result = await SequelizeInstance.query(sqlQuery, {
+    type: SequelizeInstance.QueryTypes.SELECT,
+    raw: true,
+  });
   return result;
 }
 
 export async function getInterests(userId) {
   const sqlQuery = `
   select 
-    q.*, u.user_name, i.name
+    i.name
   from 
     user_interest q
   join 
@@ -281,4 +333,24 @@ export async function getSuggestEvent(userId){
     raw: true,
   });
   return result;
+}
+
+export async function updateProfile(userId, profile) {
+  return await User.update({
+    user_name : profile.user_name,
+    phone: profile.phone,
+    email: profile.email,
+    Bio: profile.Bio,
+    password: profile.password,
+  }, {
+    where: {user_id: userId}
+  });
+}
+
+export async function updateAvatar(userId, fileData) {
+  return await User.update({
+    profile_avatar: fileData?.path
+  }, {
+    where: {user_id: userId}
+  });
 }

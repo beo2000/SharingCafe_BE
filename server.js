@@ -7,7 +7,6 @@ import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import * as userService from './APP/Service/userService.js';
 import jwt from 'jsonwebtoken'
-import swaggerAutogen from 'swagger-autogen';
 // Trái tim của app
 /**
  * Source code này đang chia theo mô hình MVC - Service đứng ở giữa để handle logic
@@ -75,33 +74,6 @@ app.use(async (req, res, next) => {
     next();
   }
 });
-
-// const doc = {
-//   info: {
-//     version: '',            // by default: '1.0.0'
-//     title: '',              // by default: 'REST API'
-//     description: ''         // by default: ''
-//   },
-//   host: '',                 // by default: 'localhost:3000'
-//   basePath: '',             // by default: '/'
-//   schemes: [],              // by default: ['http']
-//   consumes: [],             // by default: ['application/json']
-//   produces: [],             // by default: ['application/json']
-//   tags: [                   // by default: empty Array
-//     {
-//       name: '',             // Tag name
-//       description: ''       // Tag description
-//     },
-//     // { ... }
-//   ],
-//   securityDefinitions: {},  // by default: empty object
-//   definitions: {}           // by default: empty object
-// };
-
-// const outputFile = './swagger-output.json';
-// const routes = ['./allRouter.js'];
-// swaggerAutogen(outputFile, routes, doc);
-
 // Routes   -> API :  METHOD + URL
 // METHOD : GET  && URL : /
 app.get('/', (req, res) => {
