@@ -7,7 +7,8 @@ import * as blogController from './APP/Controller/blogController.js';
 import * as matchController from './APP/Controller/matchController.js';
 import * as modController from './APP/Controller/modController.js';
 import uploadCloud from './APP/middleware/uploadCloudImg.js';
-import * as chatController from './APP/Controller/chatController.js'
+import * as chatController from './APP/Controller/chatController.js';
+import * as scheduleController from './APP/Controller/scheduleController.js';
 const router = express.Router();
 
 /**
@@ -565,6 +566,49 @@ router.post('/api/user/register', userController.register);
  *       '500':
  *         description: Internal server error
  */
+/**
+ * @swagger
+ * /api/user/events/{userId}:
+ *   get:
+ *     summary: Get all events created by a user
+ *     tags:
+ *       - User Events
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         description: ID of the user to get all events created by
+ *         schema:
+ *           type: string
+ *         example: 6150886b-5920-4884-8e43-d4efb62f89d5
+ *     responses:
+ *       '200':
+ *         description: Successfully retrieved all events created by the user
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   eventId:
+ *                     type: string
+ *                     description: ID of the event
+ *                     example: 789012
+ *                   eventName:
+ *                     type: string
+ *                     description: Name of the event
+ *                     example: Example Event
+ *                   eventDate:
+ *                     type: string
+ *                     format: date
+ *                     description: Date of the event
+ *                     example: 2022-12-01
+ *       '404':
+ *         description: Suggested events not found for the specified user
+ *       '500':
+ *         description: Internal server error
+ */
 router.get('/api/user/events/:userId', userController.getMyEvents);
 router.get(
   '/api/user/events/interest/:interestId',
@@ -837,6 +881,7 @@ router.get('/api/admin/users', admController.getUsers);
  *         description: Internal server error
  */
 router.get('/api/admin/user/:userId', admController.getUser);
+router.put('/api/admin/user/:userId', admController.updateUserStatus);
 
 // EVENT SECTION
 //  Phân quyền Authorization -> Middleware handle -> Middleware ???
@@ -1059,7 +1104,7 @@ router.get('/api/admin/user/:userId', admController.getUser);
  *         description: Internal server error
  */
 /**
- * @openapi
+ * @swagger
  * '/api/event':
  *  get:
  *     tags:
@@ -1204,6 +1249,30 @@ router.get('/api/admin/user/:userId', admController.getUser);
  *       400:
  *         description: Bad request
  */
+/**
+ * @swagger
+ * '/api/event/popular/events':
+ *  get:
+ *     tags:
+ *     - Event
+ *     summary: Get a list of popular
+ *     responses:
+ *       200:
+ *         description: Success
+ *         content:
+ *          application/json:
+ *            schema:
+ *              type: array
+ *              items:
+ *                type: object
+ *                properties:
+ *                  id:
+ *                    type: string
+ *                  title:
+ *                    type: string
+ *       400:
+ *         description: Bad request
+ */
 router.get('/api/event', eventController.getEvents);
 router.post(
   '/api/event',
@@ -1216,6 +1285,7 @@ router.delete('/api/event/:eventId', eventController.deleteEvent);
 router.get('/api/event/new/events', eventController.getNewEvents);
 router.post('/api/event/date', eventController.getEventsByDate);
 router.post('/api/event/search', eventController.getEventsByName);
+router.get('/api/event/popular/events', eventController.getPopularEvents);
 /**
  * @swagger
  * /api/blog:
@@ -1554,4 +1624,54 @@ router.put('/api/moderator/event/:eventId', modController.censorEvent);
 router.get('api/auth/matches-interest', matchController.getUserMatchByInterest);
 
 router.post('/api/user/message', chatController.viewMessage);
+
+router.post('/api/user/schedule', scheduleController.createSchedule);
+/**
+ * @swagger
+ * tags:
+ *   name: Schedule section
+ *   description: API operations related to meeting schedule
+ */
+/**
+ * @swagger
+ * /api/user/schedule:
+ *   post:
+ *     summary: Create a new meeting schedule
+ *     tags:
+ *      - Schedule section
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               sender_id:
+ *                 type: string
+ *                 description: ID of the user creating the meeting
+ *                 example: "5e615fa6-9a98-4fb4-9c4a-1bacb4692e00"
+ *               receiver_id:
+ *                 type: string
+ *                 description: ID of the user receive the schedule
+ *                 example: "e517f126-4ad9-418d-9462-47829ef58aa3"
+ *               content:
+ *                 type: string
+ *                 description: Content of the meeting
+ *                 example: "Hangout for some coffee"
+ *               location:
+ *                 type: string
+ *                 description: Location of meeting
+ *                 example: "Highland Coffee"
+ *               date:
+ *                 type: string
+ *                 description: Time of meeting
+ *                 example: "3/20/2024"
+ *     responses:
+ *       '201':
+ *         description: Schedule created successfully
+ *       '400':
+ *         description: Bad request, e.g., missing parameters
+ *       '500':
+ *         description: Internal server error
+ */
 export default router;

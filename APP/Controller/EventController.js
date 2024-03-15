@@ -107,3 +107,13 @@ export async function getEventsByName(req, res) {
     res.status(500).send({ error: error.message });
   }
 }
+
+export async function getPopularEvents(req, res) {
+  try {
+    const result = await eventService.getPopularEvents();
+    res.status(200).send(result);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ error: error.message });
+  }
+}

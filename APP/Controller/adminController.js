@@ -3,7 +3,7 @@
 // import express from 'express';
 import jwt from 'jsonwebtoken';
 import * as admService from '../Service/adminService.js';
-
+import { SequelizeInstance } from '../utility/DbHelper.js';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -61,5 +61,20 @@ export async function getUsers(req, res) {
   } catch (error) {
     console.log(error);
     res.status(500).send({ error: error.message });
+  }
+}
+
+export async function updateUserStatus(req, res) {
+  const t = await SequelizeInstance.transaction();
+  try {
+    const userId = req.params.userId;
+    const userDetails = req.body;
+    const user = await admService.updateUserStatus(userId, userDetails);
+    res.status(200).send(user);
+    await t.commit();
+  } catch (error) {
+    await t.rollback();
+    console.log(error);
+    res.status(404).send(error);
   }
 }

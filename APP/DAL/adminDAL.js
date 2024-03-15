@@ -69,3 +69,11 @@ export async function getUser(userId){
   const result = await User.findByPk(userId);
   return result;
 }
+
+export async function updateUserStatus(userId, userDetails){
+  return await User.update({
+    is_available: userDetails.is_available,
+  },{
+    where: {user_id: userId}
+  });
+}

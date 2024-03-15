@@ -101,6 +101,9 @@ const User = sequelize.define(
     role_id: {
       type: DataTypes.UUID,
     },
+    is_available: {
+      type: DataTypes.BOOLEAN,
+    },
   },
   {
     tableName: 'user',
@@ -594,6 +597,44 @@ const UserInterest = sequelize.define(
   },
 );
 
+const Schedule = sequelize.define(
+  'schedule', {
+    schedule_id: {
+      type: DataTypes.UUID,
+      primaryKey: true,
+      defaultValue: DataTypes.UUIDV4,
+    },
+    content: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+    },
+    location: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+    },
+    date: {
+      type: DataTypes.DATE,
+    },
+    is_accept: {
+      type: DataTypes.BOOLEAN,
+    },
+    create_at: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),
+    },
+    sender_id: {
+      type: DataTypes.UUID,
+    },
+    receiver_id: {
+      type: DataTypes.UUID,
+    },
+  },{
+    tableName: 'schedule',
+    timestamps: false,
+  },
+)
+
 User.belongsTo(Role, { foreignKey: 'role_id', as: 'UserRole' });
 
 EventReport.belongsTo(User, { foreignKey: 'reporter_id', as: 'reporter' });
@@ -664,4 +705,5 @@ export {
   Notification,
   Interest,
   UserInterest,
+  Schedule,
 };

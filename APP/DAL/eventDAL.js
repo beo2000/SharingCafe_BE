@@ -154,3 +154,26 @@ export async function getEventsByName(dataObj) {
   });
   return result;
 }
+
+export async function getPopularEvents() {
+  const sqlQuery = `
+  select 
+    e.title, e.background_img, e.time_of_event, e.adress, e.participants_count, u.user_name, i.name 
+  from
+    public."event" e 
+  left join 
+    interest i 
+    on 1=1 
+    and e.interest_id = i.interest_id
+  join
+    "user" u
+    on u.user_id = e.organizer_id
+  order by e.participants_count desc
+  limit 10
+  `;
+  const result = await SequelizeInstance.query(sqlQuery, {
+    type: SequelizeInstance.QueryTypes.SELECT,
+    raw: true,
+  });
+  return result;
+}
