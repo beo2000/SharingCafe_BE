@@ -122,7 +122,7 @@ router.get('/api/admin/statics', admController.getStatics);
 
 /**
  * @swagger
- * /api/user/auth/login:
+ * /api/user/login:
  *   post:
  *     summary: Login User
  *     description: Endpoint for user login
