@@ -50,33 +50,28 @@ export async function getStatics() {
 export async function getUsers() {
   const sqlQuery = `
   SELECT 
-    u.*
-    , json_build_object(
+    u.*,
+    json_build_object(
         'interest_id', ui.primary_interest_id,
         'interest_name', ui.name
     ) AS interest_list
-FROM 
-    public."user" u 
-INNER JOIN 
-    role r ON u.role_id = r.role_id
-LEFT JOIN 
-    (select 
-       ui.interest_id as primary_interest_id
-       ,* 
-     from 
-       user_interest ui 
-     inner join 
-       interest i 
-     ON i.interest_id = ui.interest_id
-     ) ui 
-     ON ui.user_id = u.user_id 
-WHERE 
-    r.role_name = 'USER'
-group by 
-    u.user_id
-    , ui.primary_interest_id
-    , ui.name
-    
+  FROM 
+      public."user" u 
+  INNER JOIN 
+      (SELECT * FROM role WHERE role_name = 'USER') r ON u.role_id = r.role_id
+  LEFT JOIN 
+      (
+        SELECT DISTINCT ON (ui.user_id) 
+            ui.user_id,
+            ui.interest_id AS primary_interest_id,
+            i.name
+        FROM 
+            user_interest ui 
+        INNER JOIN 
+            interest i ON i.interest_id = ui.interest_id
+        ORDER BY 
+            ui.user_id, ui.interest_id  
+      ) ui ON ui.user_id = u.user_id;
   `;
   const result = await SequelizeInstance.query(sqlQuery, {
     type: SequelizeInstance.QueryTypes.SELECT,
