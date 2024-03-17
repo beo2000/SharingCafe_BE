@@ -853,7 +853,7 @@ router.get('/api/user/events/suggest/:userId', userController.getSuggestEvent);
  *     summary: Get All Interests with number of chose
  *     description: Retrieve a list of all interests.
  *     tags:
- *       - Interest Section
+ *       - INTEREST SECTION
  *     responses:
  *       '200':
  *         description: Successful operation
@@ -1145,7 +1145,7 @@ router.put('/api/admin/user/:userId', admController.updateUserStatus);
  *  post:
  *     summary: Get a list of events base on specific keyword
  *     tags:
- *     - Event
+ *     - EVENT SECTION
  *     requestBody:
  *       required: false
  *       content:
@@ -1457,7 +1457,7 @@ router.put(
  *   get:
  *     summary: Get a list of new blogs
  *     tags:
- *      - Blog Section
+ *      - BLOG SECTION
  *     responses:
  *       '200':
  *         description: Successful response
