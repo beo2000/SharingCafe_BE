@@ -30,3 +30,7 @@ export async function updateImg(blogId, fileData){
     if (!blog) throw new Error('Blog not found !!!');
     return await blogDAL.updateImg(blogId, fileData);
 }
+
+export async function getNewBlogs(){
+    return await blogDAL.getNewBlogs();
+}

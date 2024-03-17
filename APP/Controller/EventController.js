@@ -3,7 +3,8 @@ import { SequelizeInstance } from '../utility/DbHelper.js';
 import { v2 as cloudinary } from 'cloudinary';
 export async function getEvents(req, res) {
   try {
-    const result = await eventService.getEvents();
+    const dataObj = req.body;
+    const result = await eventService.getEvents(dataObj);
     res.status(200).send(result);
     // response code ???
   } catch (error) {
@@ -27,13 +28,8 @@ export async function getEvent(req, res) {
 export async function createEvent(req, res) {
   const t = await SequelizeInstance.transaction();
   try {
-    const fileData = req.file;
     const dataObj = req.body;
-    if (fileData === undefined) {
-      cloudinary.uploader.destroy(fileData.filename)
-      return res.status(400).send({ error: error.message });
-    }
-    const result = await eventService.createEvent(dataObj, fileData);
+    const result = await eventService.createEvent(dataObj);
     res.status(200).send(result);
     t.commit();
   } catch (error) {
@@ -115,5 +111,25 @@ export async function getPopularEvents(req, res) {
   } catch (error) {
     console.log(error);
     res.status(500).send({ error: error.message });
+  }
+}
+
+export async function updateEventImage(req, res) {
+  const t = await SequelizeInstance.transaction();
+  try {
+    const fileData = req.file;
+    console.log(fileData);
+    if (fileData === undefined) {
+      cloudinary.uploader.destroy(fileData.filename)
+      return res.status(400).send({ error: error.message });
+    }
+    const eventId = req.params.eventId;
+    const user = await eventService.updateEventImage(eventId, fileData);
+    res.status(200).send(user);
+    await t.commit();
+  } catch (error) {
+    await t.rollback();
+    console.log(error);
+    res.status(404).send(error);
   }
 }

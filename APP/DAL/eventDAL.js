@@ -42,7 +42,7 @@ export async function getEvent(eventId) {
   });
   return result;
 }
-export async function createEvent(eventId, dataObj, fileData) {
+export async function createEvent(eventId, dataObj) {
   return await Event.create({
     event_id: eventId,
     organizer_id: dataObj.organizer_id,
@@ -52,10 +52,19 @@ export async function createEvent(eventId, dataObj, fileData) {
     end_of_event: dataObj.end_of_event,
     location: dataObj.location,
     address: dataObj.address,
-    background_img: fileData?.path,
+    background_img: dataObj.background_img,
     is_visible: dataObj.is_visible,
     interest_id: dataObj.interest_id,
   });
+}
+
+export async function updateEventImage(eventId, fileData) {
+  return await Event.update({
+    background_img: fileData?.path
+  },
+  {
+    where: { event_id: eventId },
+  })
 }
 
 export async function updateEvent(eventId, eventDetails) {
@@ -115,7 +124,7 @@ export async function getEventsByDate(dateString) {
   const date = new Date(dateString.date);
   const sqlQuery = `
   select 
-    e.event_id, e.title, e.background_img, e.time_of_event, e.address, e.participants_count
+    e.event_id, e.title, e.background_img, e.time_of_event, e.address, e.participants_count, e.end_of_event
   from
     public."event" e 
   left join 
@@ -136,10 +145,13 @@ export async function getEventsByDate(dateString) {
 }
 
 export async function getEventsByName(dataObj) {
-  const name = dataObj.title;
+  let name = dataObj.title;
+  if (name == null) {name = ''}
+  let date = new Date(dataObj.date);
+  if (date == 'Invalid Date') {date = new Date('1/1/1000')}
   const sqlQuery = `
   select 
-    e.title, e.background_img, e.time_of_event, e.address, e.participants_count
+    e.*, u.user_name, i."name"
   from
     public."event" e 
   left join 
@@ -149,7 +161,7 @@ export async function getEventsByName(dataObj) {
   join
     "user" u
     on u.user_id = e.organizer_id
-    where e.title like '%${name}%'
+  where (e.time_of_event >= '${date.toUTCString()}' or e.end_of_event <= '${date.toUTCString()}') and e.title  like '%${name}%'
   `;
   const result = await SequelizeInstance.query(sqlQuery, {
     type: SequelizeInstance.QueryTypes.SELECT,
@@ -167,6 +179,7 @@ export async function getPopularEvents() {
     , e.time_of_event
     , e.address
     , e.participants_count
+    , e.end_of_event
     , u.user_name
     , i.name 
   from

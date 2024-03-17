@@ -122,7 +122,7 @@ router.get('/api/admin/statics', admController.getStatics);
 
 /**
  * @swagger
- * /api/user/auth/login:
+ * /api/user/login:
  *   post:
  *     summary: Login User
  *     description: Endpoint for user login
@@ -803,12 +803,43 @@ router.get('/api/user/events/suggest/:userId', userController.getSuggestEvent);
  *       500:
  *         description: Internal Server Error
  */
+/**
+ * @swagger
+ * /api/interests/toppick:
+ *   get:
+ *     summary: Get All Interests with number of chose
+ *     description: Retrieve a list of all interests.
+ *     tags:
+ *       - Interest Section
+ *     responses:
+ *       '200':
+ *         description: Successful operation
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   interest_id:
+ *                     type: string
+ *                     description: The ID of the interest.
+ *                   name:
+ *                     type: string
+ *                     description: The name of the interest.
+ *                   created_at:
+ *                     type: string
+ *                     format: date-time
+ *                     description: The timestamp when the interest was created.
+ *       '500':
+ *         description: Internal Server Error
+ */
 router.get('/api/interest', interestController.getInterests);
 router.post('/api/interest', interestController.createInterest);
 router.get('/api/interest/:interestId', interestController.getInterest);
 router.put('/api/interest/:interestId', interestController.updateInterest);
 router.delete('/api/interest', interestController.deleteInterest);
-
+router.get('/api/interests/toppick', interestController.getToppick);
 router.get('/api/admin/users', admController.getUsers);
 /**
  * @swagger
@@ -847,38 +878,38 @@ router.put('/api/admin/user/:userId', admController.updateUserStatus);
 
 // EVENT SECTION
 //  Phân quyền Authorization -> Middleware handle -> Middleware ???
-/**
- * @swagger
- * tags:
- *   - name: Event Section
- *     description: Operations related to events
- *
- * /api/event:
- *   get:
- *     security:
- *       - BearerAuth: []
- *     summary: Get all events
- *     description: Retrieve a list of all events.
- *     tags:
- *       - Event Section
- *     responses:
- *       200:
- *         description: Successful response
- *         content:
- *           application/json:
- *             example:
- *               message: Success
- *               data:
- *                 events:
- *                   - eventId: 1
- *                     eventName: "Event A"
- *                   - eventId: 2
- *                     eventName: "Event B"
- *       401:
- *         description: Unauthorized - Missing or invalid token
- *       500:
- *         description: Internal server error
- */
+// /**
+//  * @swagger
+//  * tags:
+//  *   - name: Event Section
+//  *     description: Operations related to events
+//  *
+//  * /api/event:
+//  *   get:
+//  *     security:
+//  *       - BearerAuth: []
+//  *     summary: Get all events
+//  *     description: Retrieve a list of all events.
+//  *     tags:
+//  *       - Event Section
+//  *     responses:
+//  *       200:
+//  *         description: Successful response
+//  *         content:
+//  *           application/json:
+//  *             example:
+//  *               message: Success
+//  *               data:
+//  *                 events:
+//  *                   - eventId: 1
+//  *                     eventName: "Event A"
+//  *                   - eventId: 2
+//  *                     eventName: "Event B"
+//  *       401:
+//  *         description: Unauthorized - Missing or invalid token
+//  *       500:
+//  *         description: Internal server error
+//  */
 /**
  * @swagger
  * tags:
@@ -1067,11 +1098,27 @@ router.put('/api/admin/user/:userId', admController.updateUserStatus);
  */
 /**
  * @swagger
- * '/api/event':
- *  get:
+ * '/api/event/search':
+ *  post:
+ *     summary: Get a list of events base on specific keyword
  *     tags:
  *     - Event
- *     summary: Get a list of events
+ *     requestBody:
+ *       required: false
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *                 description: Keyword for searching
+ *                 example: competition
+ *               date:
+ *                 type: string
+ *                 description: Date for searching
+ *                 example: 3/7/2024
+ *                 
  *     responses:
  *       200:
  *         description: Success
@@ -1143,76 +1190,6 @@ router.put('/api/admin/user/:userId', admController.updateUserStatus);
  */
 /**
  * @swagger
- * '/api/event/date':
- *  post:
- *     summary: Get a list of events base on specific date
- *     tags:
- *     - Event
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               date:
- *                 type: string
- *                 description: Date of starting event
- *                 example: 3-10-2024
- *     responses:
- *       200:
- *         description: Success
- *         content:
- *          application/json:
- *            schema:
- *              type: array
- *              items:
- *                type: object
- *                properties:
- *                  id:
- *                    type: string
- *                  title:
- *                    type: string
- *       400:
- *         description: Bad request
- */
-/**
- * @swagger
- * '/api/event/search':
- *  post:
- *     summary: Get a list of events base on specific keyword
- *     tags:
- *     - Event
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               title:
- *                 type: string
- *                 description: Keyword for searching
- *                 example: competition
- *     responses:
- *       200:
- *         description: Success
- *         content:
- *          application/json:
- *            schema:
- *              type: array
- *              items:
- *                type: object
- *                properties:
- *                  id:
- *                    type: string
- *                  title:
- *                    type: string
- *       400:
- *         description: Bad request
- */
-/**
- * @swagger
  * '/api/event/popular/events':
  *  get:
  *     tags:
@@ -1235,19 +1212,23 @@ router.put('/api/admin/user/:userId', admController.updateUserStatus);
  *       400:
  *         description: Bad request
  */
-router.get('/api/event', eventController.getEvents);
+// router.get('/api/event', eventController.getEvents);
+router.post('/api/event/search', eventController.getEventsByName);
 router.post(
   '/api/event',
-  uploadCloud.single('background_img'),
   eventController.createEvent,
 );
 router.get('/api/event/:eventId', eventController.getEvent);
 router.put('/api/event/:eventId', eventController.updateEvent);
 router.delete('/api/event/:eventId', eventController.deleteEvent);
 router.get('/api/event/new/events', eventController.getNewEvents);
-router.post('/api/event/date', eventController.getEventsByDate);
-router.post('/api/event/search', eventController.getEventsByName);
+// router.post('/api/event/date', eventController.getEventsByDate);
 router.get('/api/event/popular/events', eventController.getPopularEvents);
+router.put(
+  '/api/event/image/:eventId',
+  uploadCloud.single('background_img'),
+  eventController.updateEventImage,
+);
 /**
  * @swagger
  * /api/blog:
@@ -1427,16 +1408,39 @@ router.get('/api/event/popular/events', eventController.getPopularEvents);
  *       '500':
  *         description: Internal server error
  */
+/**
+ * @swagger
+ * /api/blog/new/blogs:
+ *   get:
+ *     summary: Get a list of new blogs
+ *     tags:
+ *      - Blog Section
+ *     responses:
+ *       '200':
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             example:
+ *               - blogId: 1
+ *                 title: Sample Blog 1
+ *                 content: Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ *               - blogId: 2
+ *                 title: Sample Blog 2
+ *                 content: Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.
+ *       '500':
+ *         description: Internal server error
+ */
 router.get('/api/blog', blogController.getBlogs);
 router.get('/api/blog/:blogId', blogController.getBlog);
 router.post('/api/blog', blogController.createBlog);
 router.put('/api/blog/:blogId', blogController.updateBlog);
 router.delete('/api/blog/:blogId', blogController.deleteBlog);
-router.post(
-  '/api/blog/image/blogId',
+router.put(
+  '/api/blog/image/:blogId',
   uploadCloud.single('image'),
   blogController.updateImg,
 );
+router.get('/api/blog/new/blogs', blogController.getNewBlogs);
 /**
  * @swagger
  * /api/moderator/login:

@@ -356,7 +356,7 @@ const Event = sequelize.define(
     location: {
       type: DataTypes.TEXT,
     },
-    adress: {
+    address: {
       type: DataTypes.TEXT,
     },
     participants_count: {

@@ -248,7 +248,7 @@ offset ${offset}
 export async function getMyEvents(userId) {
   const sqlQuery = `
   select 
-    e.event_id, e.title, e.background_img, e.time_of_event, e.adress, e.participants_count
+    e.event_id, e.title, e.background_img, e.time_of_event, e.address, e.location, e.participants_count
   from
     public."event" e 
   left join 

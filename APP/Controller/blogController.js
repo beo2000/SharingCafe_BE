@@ -85,3 +85,13 @@ export async function updateImg(req, res) {
     res.status(404).send(error);
   }
 }
+
+export async function getNewBlogs(req, res) {
+  try {
+    const result = await blogService.getNewBlogs();
+    res.status(200).send(result);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ error: error.message });
+  }
+}
