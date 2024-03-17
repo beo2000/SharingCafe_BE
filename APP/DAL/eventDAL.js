@@ -54,27 +54,30 @@ export async function createEvent(eventId, dataObj, fileData) {
     adress: dataObj.adress,
     background_img: fileData?.path,
     is_visible: dataObj.is_visible,
-    interest_id: dataObj.interest_id
+    interest_id: dataObj.interest_id,
   });
 }
 
-export async function updateEvent(eventId, eventDetails){
-   return await Event.update({
-    organizer_id: eventDetails.organizer_id,
-    interest_id: eventDetails.interest_id,
-    title: eventDetails.title,
-    description: eventDetails.description,
-    time_of_event: eventDetails.time_of_event,
-    end_of_event: eventDetails.end_of_event,
-    location: eventDetails.location,
-    participants_count: eventDetails.participants_count,
-    interest_id: eventDetails.interest_id,
-    is_approve: eventDetails.is_approve,
-    background_img: eventDetails.background_img,
-    is_visible: eventDetails.is_visible
-  }, {
-    where: {event_id: eventId}
-  });
+export async function updateEvent(eventId, eventDetails) {
+  return await Event.update(
+    {
+      organizer_id: eventDetails.organizer_id,
+      interest_id: eventDetails.interest_id,
+      title: eventDetails.title,
+      description: eventDetails.description,
+      time_of_event: eventDetails.time_of_event,
+      end_of_event: eventDetails.end_of_event,
+      location: eventDetails.location,
+      participants_count: eventDetails.participants_count,
+      interest_id: eventDetails.interest_id,
+      is_approve: eventDetails.is_approve,
+      background_img: eventDetails.background_img,
+      is_visible: eventDetails.is_visible,
+    },
+    {
+      where: { event_id: eventId },
+    },
+  );
 }
 
 export async function deleteEvent(eventId) {
@@ -158,7 +161,14 @@ export async function getEventsByName(dataObj) {
 export async function getPopularEvents() {
   const sqlQuery = `
   select 
-    e.title, e.background_img, e.time_of_event, e.adress, e.participants_count, u.user_name, i.name 
+	e.event_id 
+    , e.title
+    , e.background_img
+    , e.time_of_event
+    , e.adress
+    , e.participants_count
+    , u.user_name
+    , i.name 
   from
     public."event" e 
   left join 
@@ -168,7 +178,7 @@ export async function getPopularEvents() {
   join
     "user" u
     on u.user_id = e.organizer_id
-  order by e.participants_count desc
+  order by e.time_of_event  desc
   limit 10
   `;
   const result = await SequelizeInstance.query(sqlQuery, {
