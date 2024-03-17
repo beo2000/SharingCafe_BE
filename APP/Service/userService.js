@@ -1,5 +1,6 @@
 import { Error } from 'sequelize';
 import * as userDAL from '../DAL/userDAL.js';
+import * as matchDAL from '../DAL/matchDAL.js';
 import { v4 as uuidv4 } from 'uuid';
 
 export function getUserDetails(email, password) {
@@ -72,7 +73,10 @@ export async function getUserInfoById(userId) {
   const result = await userDAL.getUserDetailsById(userId);
   return result;
 }
-
+export async function getUserInfoByEmail(email) {
+  const result = await userDAL.getUserDetailsByEmail(email);
+  return result;
+}
 export async function getUserMatchByInterest(userId) {
   const result = await userDAL.getUserMatchByInterest(userId);
   return result;
@@ -101,4 +105,16 @@ export async function getBlogsByInterest(interestId) {
 
 export async function getSuggestEvent(userId) {
   return await userDAL.getSuggestEvent(userId);
+}
+export async function updateUserMatchStatus(userId, dataObj) {
+  const [status] = await matchDAL.getMatchStatus(dataObj.status);
+  const [match] = await matchDAL.MatchCouple(userId, dataObj.user_id);
+
+  const user_match_id = match?.user_match_id || uuidv4();
+  return await matchDAL.upsertMatch(
+    user_match_id,
+    userId,
+    dataObj.user_id,
+    status.user_match_status_id,
+  );
 }

@@ -1630,7 +1630,44 @@ router.put('/api/moderator/event/:eventId', modController.censorEvent);
  *       500:
  *         description: Internal Server Error
  */
-router.get('api/auth/matches-interest', matchController.getUserMatchByInterest);
+/**
+ * @swagger
+ * /api/auth/matching-status:
+ *   put:
+ *     summary: Update user match status
+ *     description: Update the match status of a user.
+ *     security:
+ *       - BearerAuth: []
+ *     tags:
+ *       - MATCH SECTION
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               user_id:
+ *                 type: string
+ *                 format: uuid
+ *                 description: The ID of the user whose match status is to be updated.
+ *               status:
+ *                 type: string
+ *                 enum: [Pending, Approved, Rejected]
+ *                 description: The new status to set for the user's match.
+ *     responses:
+ *       200:
+ *         description: Successful update of user match status
+ *       401:
+ *         description: Unauthorized, invalid or missing token
+ *       500:
+ *         description: Internal Server Error
+ */
+router.get(
+  '/api/auth/matches-interest',
+  matchController.getUserMatchByInterest,
+);
+router.put('/api/auth/matching-status', matchController.updateUserMatchStatus);
 
 router.post('/api/user/message', chatController.viewMessage);
 
@@ -1683,28 +1720,28 @@ router.post('/api/user/schedule', scheduleController.createSchedule);
  *       '500':
  *         description: Internal server error
  */
-wss.on('connection', function connection(ws) {
-  console.log('WebSocket connection client connected');
+// wss.on('connection', function connection(ws) {
+//   console.log('WebSocket connection client connected');
 
-  ws.on('message', function incoming(message) {
-    // Handle different types of messages
-    try {
-      const data = JSON.parse(message);
-      switch (data.type) {
-        case 'SEND_MESSAGE':
-          chatController.sendMessage(data.payload);
-          break;
-        default:
-          console.log('Unknown message type');
-      }
-    } catch (error) {
-      console.error('Error parsing message:', error);
-    }
-  });
+//   ws.on('message', function incoming(message) {
+//     // Handle different types of messages
+//     try {
+//       const data = JSON.parse(message);
+//       switch (data.type) {
+//         case 'SEND_MESSAGE':
+//           chatController.sendMessage(data.payload);
+//           break;
+//         default:
+//           console.log('Unknown message type');
+//       }
+//     } catch (error) {
+//       console.error('Error parsing message:', error);
+//     }
+//   });
 
-  ws.on('close', () => {
-    console.log('WebSocket client disconnected');
-  });
-});
+//   ws.on('close', () => {
+//     console.log('WebSocket client disconnected');
+//   });
+// });
 
 export default router;
