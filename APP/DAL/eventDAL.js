@@ -178,7 +178,9 @@ export async function getPopularEvents() {
   join
     "user" u
     on u.user_id = e.organizer_id
-  order by e.time_of_event  desc
+  order by 
+    e.time_of_event desc
+    , e.participants_count desc
   limit 10
   `;
   const result = await SequelizeInstance.query(sqlQuery, {
