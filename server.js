@@ -14,6 +14,7 @@ dotenv.config();
 const specs = swaggerJSDoc(options);
 
 const PORT = process.env.PORT || 5000;
+const SECRET_KEY = process.env.SECRET_KEY;
 
 // Middleware
 app.use(cors()); // Phải tìm hiểu báo cáo lại
@@ -31,8 +32,8 @@ const getUserInfoMiddleware = async (req, res, next) => {
   }
   try {
     const decodedToken = jwt.verify(accessToken, SECRET_KEY);
-    const userId = decodedToken.user_id;
-    const [loginUser] = await userService.getUserInfoById(userId);
+    const email = decodedToken.email;
+    const [loginUser] = await userService.getUserInfoByEmail(email);
     req.loginUser = loginUser;
     next();
   } catch (error) {

@@ -15,7 +15,7 @@ const router = express.Router();
 /**
  * @swagger
  * tags:
- *   - name: Admin section
+ *   - name: ADMIN SECTION
  *     description: API endpoints for admin
  * securityDefinitions:
  *   BearerAuth:
@@ -30,7 +30,7 @@ const router = express.Router();
  *   post:
  *     summary: Admin login only
  *     tags:
- *       - Admin section
+ *       - ADMIN SECTION
  *     requestBody:
  *       required: true
  *       content:
@@ -79,7 +79,7 @@ const router = express.Router();
  *     summary: Get statistics for admin
  *     description: Retrieve statistics data for the admin.
  *     tags:
- *       - Admin section
+ *       - ADMIN SECTION
  *     responses:
  *       200:
  *         description: Successful response
@@ -89,7 +89,7 @@ const router = express.Router();
 /**
  * @swagger
  * tags:
- *   - name: Admin section
+ *   - name: ADMIN SECTION
  *
  * /api/admin/users:
  *   get:
@@ -98,7 +98,7 @@ const router = express.Router();
  *     summary: Get all admin users
  *     description: Retrieve a list of all admin users.
  *     tags:
- *       - Admin section
+ *       - ADMIN SECTION
  *     responses:
  *       200:
  *         description: Successful response
@@ -127,7 +127,7 @@ router.get('/api/admin/statics', admController.getStatics);
  *     summary: Login User
  *     description: Endpoint for user login
  *     tags:
- *       - User section
+ *       - USER SECTION
  *     requestBody:
  *       required: true
  *       content:
@@ -156,7 +156,7 @@ router.get('/api/admin/statics', admController.getStatics);
  *   get:
  *     summary: Get a specific user interest by ID
  *     tags:
- *       - User Section
+ *       - USER SECTION
  *     parameters:
  *       - in: path
  *         name: userInterestId
@@ -185,7 +185,7 @@ router.get('/api/admin/statics', admController.getStatics);
  *   put:
  *     summary: Update a specific user interest by ID
  *     tags:
- *       - User Section
+ *       - USER SECTION
  *     parameters:
  *       - in: path
  *         name: userInterestId
@@ -218,7 +218,7 @@ router.get('/api/admin/statics', admController.getStatics);
  *   get:
  *     summary: Get user information by ID
  *     tags:
- *       - User Section
+ *       - USER SECTION
  *     parameters:
  *       - in: path
  *         name: userId
@@ -250,7 +250,7 @@ router.get('/api/admin/statics', admController.getStatics);
  *   get:
  *     summary: Get user interests by user ID
  *     tags:
- *       - User Section
+ *       - USER SECTION
  *     parameters:
  *       - in: path
  *         name: userId
@@ -284,7 +284,7 @@ router.get('/api/admin/statics', admController.getStatics);
  *   post:
  *     summary: Create a new user interest
  *     tags:
- *       - User Section
+ *       - USER SECTION
  *     requestBody:
  *       required: true
  *       content:
@@ -317,7 +317,7 @@ router.get('/api/admin/statics', admController.getStatics);
  *   get:
  *     summary: Get information about a specific event by ID
  *     tags:
- *       - Event Section
+ *       - EVENT SECTION
  *     parameters:
  *       - in: path
  *         name: eventId
@@ -349,7 +349,7 @@ router.get('/api/admin/statics', admController.getStatics);
  *   put:
  *     summary: Update a user profile
  *     tags:
- *       - User Section
+ *       - USER SECTION
  *     parameters:
  *       - in: path
  *         name: userId
@@ -405,7 +405,7 @@ router.post('/api/user/register', userController.register);
  *   get:
  *     summary: Get events created by specific user by ID
  *     tags:
- *       - User Events
+ *       - USER EVENTS
  *     parameters:
  *       - in: path
  *         name: userId
@@ -416,7 +416,7 @@ router.post('/api/user/register', userController.register);
  *         example: 6150886b-5920-4884-8e43-d4efb62f89d5
  *     responses:
  *       '200':
- *         description: Successfully retrieved user events
+ *         description: Successfully retrieved USER EVENTS
  *         content:
  *           application/json:
  *             schema:
@@ -450,7 +450,7 @@ router.post('/api/user/register', userController.register);
  *   get:
  *     summary: Get events based on user's interest by ID
  *     tags:
- *       - User Events
+ *       - USER EVENTS
  *     parameters:
  *       - in: path
  *         name: interestId
@@ -492,7 +492,7 @@ router.post('/api/user/register', userController.register);
  *   get:
  *     summary: Get blogs based on a specific interest ID
  *     tags:
- *       - User Blogs
+ *       - USER BLOGS
  *     parameters:
  *       - in: path
  *         name: interestId
@@ -534,7 +534,7 @@ router.post('/api/user/register', userController.register);
  *   get:
  *     summary: Get suggested events for a user
  *     tags:
- *       - User Events
+ *       - USER EVENTS
  *     parameters:
  *       - in: path
  *         name: userId
@@ -546,6 +546,49 @@ router.post('/api/user/register', userController.register);
  *     responses:
  *       '200':
  *         description: Successfully retrieved suggested events for the user
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   eventId:
+ *                     type: string
+ *                     description: ID of the event
+ *                     example: 789012
+ *                   eventName:
+ *                     type: string
+ *                     description: Name of the event
+ *                     example: Example Event
+ *                   eventDate:
+ *                     type: string
+ *                     format: date
+ *                     description: Date of the event
+ *                     example: 2022-12-01
+ *       '404':
+ *         description: Suggested events not found for the specified user
+ *       '500':
+ *         description: Internal server error
+ */
+/**
+ * @swagger
+ * /api/user/events/{userId}:
+ *   get:
+ *     summary: Get all events created by a user
+ *     tags:
+ *       - USER EVENTS
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         description: ID of the user to get all events created by
+ *         schema:
+ *           type: string
+ *         example: 6150886b-5920-4884-8e43-d4efb62f89d5
+ *     responses:
+ *       '200':
+ *         description: Successfully retrieved all events created by the user
  *         content:
  *           application/json:
  *             schema:
@@ -587,7 +630,7 @@ router.get('/api/user/events/suggest/:userId', userController.getSuggestEvent);
  *   get:
  *     summary: Get events for user base on interest
  *     tags:
- *       - User Events
+ *       - USER EVENTS
  *     parameters:
  *       - in: path
  *         name: userId
@@ -630,7 +673,7 @@ router.get('/api/user/events/suggest/:userId', userController.getSuggestEvent);
  *     summary: Get All Interests
  *     description: Retrieve a list of all interests.
  *     tags:
- *       - Interest Section
+ *       - INTEREST SECTION
  *     responses:
  *       '200':
  *         description: Successful operation
@@ -657,7 +700,7 @@ router.get('/api/user/events/suggest/:userId', userController.getSuggestEvent);
  *     summary: Create a new interest
  *     description: Create a new interest with the provided details.
  *     tags:
- *       - Interest Section
+ *       - INTEREST SECTION
  *     requestBody:
  *       required: true
  *       content:
@@ -697,7 +740,7 @@ router.get('/api/user/events/suggest/:userId', userController.getSuggestEvent);
  *     summary: Get an interest by ID
  *     description: Retrieve the details of a specific interest by its ID.
  *     tags:
- *       - Interest Section
+ *       - INTEREST SECTION
  *     parameters:
  *       - in: path
  *         name: interestId
@@ -735,7 +778,7 @@ router.get('/api/user/events/suggest/:userId', userController.getSuggestEvent);
  *     summary: Update an interest
  *     description: Update the details of an existing interest.
  *     tags:
- *       - Interest Section
+ *       - INTEREST SECTION
  *     parameters:
  *       - in: path
  *         name: interest_id
@@ -787,7 +830,7 @@ router.get('/api/user/events/suggest/:userId', userController.getSuggestEvent);
  *     summary: Delete interests
  *     description: Deletes interests based on the provided interest IDs.
  *     tags:
- *       - Interest Section
+ *       - INTEREST SECTION
  *     requestBody:
  *       required: true
  *       content:
@@ -847,7 +890,7 @@ router.get('/api/admin/users', admController.getUsers);
  *   get:
  *     summary: Get admin user information by ID
  *     tags:
- *       - Admin section
+ *       - ADMIN SECTION
  *     parameters:
  *       - in: path
  *         name: userId
@@ -878,42 +921,42 @@ router.put('/api/admin/user/:userId', admController.updateUserStatus);
 
 // EVENT SECTION
 //  Phân quyền Authorization -> Middleware handle -> Middleware ???
-// /**
-//  * @swagger
-//  * tags:
-//  *   - name: Event Section
-//  *     description: Operations related to events
-//  *
-//  * /api/event:
-//  *   get:
-//  *     security:
-//  *       - BearerAuth: []
-//  *     summary: Get all events
-//  *     description: Retrieve a list of all events.
-//  *     tags:
-//  *       - Event Section
-//  *     responses:
-//  *       200:
-//  *         description: Successful response
-//  *         content:
-//  *           application/json:
-//  *             example:
-//  *               message: Success
-//  *               data:
-//  *                 events:
-//  *                   - eventId: 1
-//  *                     eventName: "Event A"
-//  *                   - eventId: 2
-//  *                     eventName: "Event B"
-//  *       401:
-//  *         description: Unauthorized - Missing or invalid token
-//  *       500:
-//  *         description: Internal server error
-//  */
 /**
  * @swagger
  * tags:
- *   - name: Event Section
+ *   - name: EVENT SECTION
+ *     description: Operations related to events
+ *
+ * /api/event:
+ *   get:
+ *     security:
+ *       - BearerAuth: []
+ *     summary: Get all events
+ *     description: Retrieve a list of all events.
+ *     tags:
+ *       - EVENT SECTION
+ *     responses:
+ *       200:
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             example:
+ *               message: Success
+ *               data:
+ *                 events:
+ *                   - eventId: 1
+ *                     eventName: "Event A"
+ *                   - eventId: 2
+ *                     eventName: "Event B"
+ *       401:
+ *         description: Unauthorized - Missing or invalid token
+ *       500:
+ *         description: Internal server error
+ */
+/**
+ * @swagger
+ * tags:
+ *   - name: EVENT SECTION
  *     description: Operations related to events
  *
  * /api/event/{eventId}:
@@ -929,7 +972,7 @@ router.put('/api/admin/user/:userId', admController.updateUserStatus);
  *     summary: Get event details
  *     description: Retrieve details for a specific event.
  *     tags:
- *       - Event Section
+ *       - EVENT SECTION
  *     responses:
  *       200:
  *         description: Successful response
@@ -951,7 +994,7 @@ router.put('/api/admin/user/:userId', admController.updateUserStatus);
 /**
  * @swagger
  * tags:
- *   - name: Event Section
+ *   - name: EVENT SECTION
  *     description: Operations related to events
  *
  * /api/event:
@@ -961,7 +1004,7 @@ router.put('/api/admin/user/:userId', admController.updateUserStatus);
  *     summary: Create a new event
  *     description: Create a new event with the specified details.
  *     tags:
- *       - Event Section
+ *       - EVENT SECTION
  *     requestBody:
  *       required: true
  *       content:
@@ -999,7 +1042,7 @@ router.put('/api/admin/user/:userId', admController.updateUserStatus);
  *   put:
  *     summary: Update an event by ID
  *     tags:
- *       - Event
+ *       - EVENT SECTION
  *     parameters:
  *       - in: path
  *         name: eventId
@@ -1080,7 +1123,7 @@ router.put('/api/admin/user/:userId', admController.updateUserStatus);
  *   get:
  *     summary: Get a list of new events
  *     tags:
- *      - Event Section
+ *      - EVENT SECTION
  *     responses:
  *       '200':
  *         description: Successful response
@@ -1142,7 +1185,7 @@ router.put('/api/admin/user/:userId', admController.updateUserStatus);
  *   get:
  *     summary: Get a specific event by ID
  *     tags:
- *      - Event
+ *      - EVENT SECTION
  *     parameters:
  *       - in: path
  *         name: eventId
@@ -1171,7 +1214,7 @@ router.put('/api/admin/user/:userId', admController.updateUserStatus);
  *   delete:
  *     summary: Delete a specific event by ID
  *     tags:
- *       - Event
+ *       - EVENT SECTION
  *     parameters:
  *       - in: path
  *         name: eventId
@@ -1193,7 +1236,7 @@ router.put('/api/admin/user/:userId', admController.updateUserStatus);
  * '/api/event/popular/events':
  *  get:
  *     tags:
- *     - Event
+ *     - EVENT SECTION
  *     summary: Get a list of popular
  *     responses:
  *       200:
@@ -1235,7 +1278,7 @@ router.put(
  *   get:
  *     summary: Get a list of blogs
  *     tags:
- *      - Blog Section
+ *      - BLOG SECTION
  *     responses:
  *       '200':
  *         description: Successful response
@@ -1257,7 +1300,7 @@ router.put(
  *   get:
  *     summary: Get a specific blog by ID
  *     tags:
- *      - Blog Section
+ *      - BLOG SECTION
  *     parameters:
  *       - in: path
  *         name: blogId
@@ -1286,7 +1329,7 @@ router.put(
  *   post:
  *     summary: Create a new blog
  *     tags:
- *      - Blog Section
+ *      - BLOG SECTION
  *     requestBody:
  *       required: true
  *       content:
@@ -1340,7 +1383,7 @@ router.put(
  *   patch:
  *     summary: Update a specific blog by ID
  *     tags:
- *      - Blog Section
+ *      - BLOG SECTION
  *     parameters:
  *       - in: path
  *         name: blogId
@@ -1391,7 +1434,7 @@ router.put(
  *   delete:
  *     summary: Delete a specific blog by ID
  *     tags:
- *       - Blog Section
+ *       - BLOG SECTION
  *     parameters:
  *       - in: path
  *         name: blogId
@@ -1447,7 +1490,7 @@ router.get('/api/blog/new/blogs', blogController.getNewBlogs);
  *   post:
  *     summary: Moderator login
  *     tags:
- *       - Moderator
+ *       - MODERATOR SECTION
  *     consumes:
  *       - application/json
  *     parameters:
@@ -1489,7 +1532,7 @@ router.get('/api/blog/new/blogs', blogController.getNewBlogs);
  *   put:
  *     summary: Censor a blog post by ID
  *     tags:
- *       - Moderator
+ *       - MODERATOR SECTION
  *     parameters:
  *       - in: path
  *         name: blogId
@@ -1523,7 +1566,7 @@ router.get('/api/blog/new/blogs', blogController.getNewBlogs);
  *   put:
  *     summary: Censor an event as a moderator
  *     tags:
- *       - Moderator
+ *       - MODERATOR SECTION
  *     parameters:
  *       - in: path
  *         name: eventId
@@ -1591,7 +1634,44 @@ router.put('/api/moderator/event/:eventId', modController.censorEvent);
  *       500:
  *         description: Internal Server Error
  */
-router.get('api/auth/matches-interest', matchController.getUserMatchByInterest);
+/**
+ * @swagger
+ * /api/auth/matching-status:
+ *   put:
+ *     summary: Update user match status
+ *     description: Update the match status of a user.
+ *     security:
+ *       - BearerAuth: []
+ *     tags:
+ *       - MATCH SECTION
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               user_id:
+ *                 type: string
+ *                 format: uuid
+ *                 description: The ID of the user whose match status is to be updated.
+ *               status:
+ *                 type: string
+ *                 enum: [Pending, Approved, Rejected]
+ *                 description: The new status to set for the user's match.
+ *     responses:
+ *       200:
+ *         description: Successful update of user match status
+ *       401:
+ *         description: Unauthorized, invalid or missing token
+ *       500:
+ *         description: Internal Server Error
+ */
+router.get(
+  '/api/auth/matches-interest',
+  matchController.getUserMatchByInterest,
+);
+router.put('/api/auth/matching-status', matchController.updateUserMatchStatus);
 
 router.post('/api/user/message', chatController.viewMessage);
 
@@ -1599,7 +1679,7 @@ router.post('/api/user/schedule', scheduleController.createSchedule);
 /**
  * @swagger
  * tags:
- *   name: Schedule section
+ *   name: SCHEDULE SECTION
  *   description: API operations related to meeting schedule
  */
 /**
@@ -1608,7 +1688,7 @@ router.post('/api/user/schedule', scheduleController.createSchedule);
  *   post:
  *     summary: Create a new meeting schedule
  *     tags:
- *      - Schedule section
+ *      - SCHEDULE SECTION
  *     requestBody:
  *       required: true
  *       content:
@@ -1644,28 +1724,28 @@ router.post('/api/user/schedule', scheduleController.createSchedule);
  *       '500':
  *         description: Internal server error
  */
-wss.on('connection', function connection(ws) {
-  console.log('WebSocket connection client connected');
+// wss.on('connection', function connection(ws) {
+//   console.log('WebSocket connection client connected');
 
-  ws.on('message', function incoming(message) {
-    // Handle different types of messages
-    try {
-      const data = JSON.parse(message);
-      switch (data.type) {
-        case 'SEND_MESSAGE':
-          chatController.sendMessage(data.payload);
-          break;
-        default:
-          console.log('Unknown message type');
-      }
-    } catch (error) {
-      console.error('Error parsing message:', error);
-    }
-  });
+//   ws.on('message', function incoming(message) {
+//     // Handle different types of messages
+//     try {
+//       const data = JSON.parse(message);
+//       switch (data.type) {
+//         case 'SEND_MESSAGE':
+//           chatController.sendMessage(data.payload);
+//           break;
+//         default:
+//           console.log('Unknown message type');
+//       }
+//     } catch (error) {
+//       console.error('Error parsing message:', error);
+//     }
+//   });
 
-  ws.on('close', () => {
-    console.log('WebSocket client disconnected');
-  });
-});
+//   ws.on('close', () => {
+//     console.log('WebSocket client disconnected');
+//   });
+// });
 
 export default router;

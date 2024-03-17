@@ -159,6 +159,26 @@ export async function deleteInterests(interestIds) {
   });
   return deletedInterest;
 }
+export async function getUserDetailsByEmail(email) {
+  const sqlQuery = `
+    select 
+      user_id
+      , role_name as role
+    from 
+      public."user" u 
+    inner join 
+      role r 
+    on u.role_id = r.role_id
+    where u.email = '${email}'
+  `;
+
+  const userDetails = await SequelizeInstance.query(sqlQuery, {
+    type: SequelizeInstance.QueryTypes.SELECT,
+    raw: true,
+  });
+
+  return userDetails;
+}
 export async function getUserDetailsById(userId) {
   const sqlQuery = `
     select 
