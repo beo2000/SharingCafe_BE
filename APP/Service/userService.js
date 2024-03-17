@@ -20,7 +20,7 @@ export async function register(user){
   const email = await getUserByEmail(user.email);
   if(phone) { throw new Error ('Phone already in use 😕');}
   else if(email) { throw new Error ('Email already in use 😑');}
-  else if(user.password != user.confirmPassword) {throw new Error ('Confirm password is not correct 🤔');}
+  console.log(Error);
   return await userDAL.register(userId, user);
 }
 

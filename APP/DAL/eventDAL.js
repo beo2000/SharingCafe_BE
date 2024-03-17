@@ -88,7 +88,7 @@ export async function getNewEvents() {
   const date = new Date(Date.now());
   const sqlQuery = `
   select 
-    e.title, e.background_img, e.time_of_event, e.adress, e.participants_count, e.end_of_event
+    e.event_id, e.title, e.background_img, e.time_of_event, e.end_of_event, e.adress, e.location, e.participants_count, u.user_name, i.name 
   from
     public."event" e 
   left join 
@@ -112,7 +112,7 @@ export async function getEventsByDate(dateString) {
   const date = new Date(dateString.date);
   const sqlQuery = `
   select 
-    e.title, e.background_img, e.time_of_event, e.adress, e.participants_count
+    e.event_id, e.title, e.background_img, e.time_of_event, e.end_of_event, e.adress, e.location, e.participants_count, u.user_name, i.name 
   from
     public."event" e 
   left join 
@@ -136,7 +136,7 @@ export async function getEventsByName(dataObj) {
   const name = dataObj.title;
   const sqlQuery = `
   select 
-    e.title, e.background_img, e.time_of_event, e.adress, e.participants_count
+    e.event_id, e.title, e.background_img, e.time_of_event, e.end_of_event, e.adress, e.location, e.participants_count, u.user_name, i.name 
   from
     public."event" e 
   left join 
@@ -158,7 +158,7 @@ export async function getEventsByName(dataObj) {
 export async function getPopularEvents() {
   const sqlQuery = `
   select 
-    e.title, e.background_img, e.time_of_event, e.adress, e.participants_count, u.user_name, i.name 
+  e.event_id, e.title, e.background_img, e.time_of_event, e.end_of_event, e.adress, e.location, e.participants_count, u.user_name, i.name 
   from
     public."event" e 
   left join 

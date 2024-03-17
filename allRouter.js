@@ -398,7 +398,7 @@ router.post('/api/user/register', userController.register);
  * @swagger
  * /api/user/events/{userId}:
  *   get:
- *     summary: Get events for a specific user by ID
+ *     summary: Get events created by specific user by ID
  *     tags:
  *       - User Events
  *     parameters:
@@ -408,7 +408,7 @@ router.post('/api/user/register', userController.register);
  *         description: ID of the user to retrieve events for
  *         schema:
  *           type: string
- *         example: a73ca8fb-64a6-4b4a-9d09-620cd3aa11d8
+ *         example: 6150886b-5920-4884-8e43-d4efb62f89d5
  *     responses:
  *       '200':
  *         description: Successfully retrieved user events
@@ -420,7 +420,7 @@ router.post('/api/user/register', userController.register);
  *                 userId:
  *                   type: string
  *                   description: ID of the user
- *                   example: a73ca8fb-64a6-4b4a-9d09-620cd3aa11d8
+ *                   example: 6150886b-5920-4884-8e43-d4efb62f89d5
  *                 events:
  *                   type: array
  *                   items:
@@ -541,49 +541,6 @@ router.post('/api/user/register', userController.register);
  *     responses:
  *       '200':
  *         description: Successfully retrieved suggested events for the user
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 type: object
- *                 properties:
- *                   eventId:
- *                     type: string
- *                     description: ID of the event
- *                     example: 789012
- *                   eventName:
- *                     type: string
- *                     description: Name of the event
- *                     example: Example Event
- *                   eventDate:
- *                     type: string
- *                     format: date
- *                     description: Date of the event
- *                     example: 2022-12-01
- *       '404':
- *         description: Suggested events not found for the specified user
- *       '500':
- *         description: Internal server error
- */
-/**
- * @swagger
- * /api/user/events/{userId}:
- *   get:
- *     summary: Get all events created by a user
- *     tags:
- *       - User Events
- *     parameters:
- *       - in: path
- *         name: userId
- *         required: true
- *         description: ID of the user to get all events created by
- *         schema:
- *           type: string
- *         example: 6150886b-5920-4884-8e43-d4efb62f89d5
- *     responses:
- *       '200':
- *         description: Successfully retrieved all events created by the user
  *         content:
  *           application/json:
  *             schema:
