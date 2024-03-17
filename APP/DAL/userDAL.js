@@ -37,7 +37,7 @@ export async function getUserDetails(email, password) {
   return user;
 }
 
-export async function register(userId, user){
+export async function register(userId, user) {
   return await User.create({
     user_id: userId,
     user_name: user.user_name,
@@ -45,11 +45,11 @@ export async function register(userId, user){
     phone: user.phone,
     email: user.email,
     Bio: user.Bio,
-    role_id: "6150886b-5920-4884-8e43-d4efb62f89d3"
+    role_id: '6150886b-5920-4884-8e43-d4efb62f89d3',
   });
 }
 
-export async function getUserByPhone(phone){
+export async function getUserByPhone(phone) {
   const sqlQuery = `
   select 
     u.*
@@ -64,7 +64,7 @@ export async function getUserByPhone(phone){
   return result;
 }
 
-export async function getUserByEmail(email){
+export async function getUserByEmail(email) {
   const sqlQuery = `
   select 
     u.*
@@ -248,7 +248,7 @@ offset ${offset}
 export async function getMyEvents(userId) {
   const sqlQuery = `
   select 
-    e.title, e.background_img, e.time_of_event, e.adress, e.participants_count
+    e.event_id, e.title, e.background_img, e.time_of_event, e.adress, e.participants_count
   from
     public."event" e 
   left join 
@@ -311,7 +311,7 @@ export async function getBlogsByInterest(interestId) {
   return result;
 }
 
-export async function getSuggestEvent(userId){
+export async function getSuggestEvent(userId) {
   const sqlQuery = `
   select 
     e.title, e.background_img, e.time_of_event, e.adress, e.participants_count
@@ -336,21 +336,27 @@ export async function getSuggestEvent(userId){
 }
 
 export async function updateProfile(userId, profile) {
-  return await User.update({
-    user_name : profile.user_name,
-    phone: profile.phone,
-    email: profile.email,
-    Bio: profile.Bio,
-    password: profile.password,
-  }, {
-    where: {user_id: userId}
-  });
+  return await User.update(
+    {
+      user_name: profile.user_name,
+      phone: profile.phone,
+      email: profile.email,
+      Bio: profile.Bio,
+      password: profile.password,
+    },
+    {
+      where: { user_id: userId },
+    },
+  );
 }
 
 export async function updateAvatar(userId, fileData) {
-  return await User.update({
-    profile_avatar: fileData?.path
-  }, {
-    where: {user_id: userId}
-  });
+  return await User.update(
+    {
+      profile_avatar: fileData?.path,
+    },
+    {
+      where: { user_id: userId },
+    },
+  );
 }

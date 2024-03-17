@@ -51,30 +51,33 @@ export async function createEvent(eventId, dataObj, fileData) {
     time_of_event: dataObj.time_of_event,
     end_of_event: dataObj.end_of_event,
     location: dataObj.location,
-    adress: dataObj.adress,
+    address: dataObj.address,
     background_img: fileData?.path,
     is_visible: dataObj.is_visible,
-    interest_id: dataObj.interest_id
+    interest_id: dataObj.interest_id,
   });
 }
 
-export async function updateEvent(eventId, eventDetails){
-   return await Event.update({
-    organizer_id: eventDetails.organizer_id,
-    interest_id: eventDetails.interest_id,
-    title: eventDetails.title,
-    description: eventDetails.description,
-    time_of_event: eventDetails.time_of_event,
-    end_of_event: eventDetails.end_of_event,
-    location: eventDetails.location,
-    participants_count: eventDetails.participants_count,
-    interest_id: eventDetails.interest_id,
-    is_approve: eventDetails.is_approve,
-    background_img: eventDetails.background_img,
-    is_visible: eventDetails.is_visible
-  }, {
-    where: {event_id: eventId}
-  });
+export async function updateEvent(eventId, eventDetails) {
+  return await Event.update(
+    {
+      organizer_id: eventDetails.organizer_id,
+      interest_id: eventDetails.interest_id,
+      title: eventDetails.title,
+      description: eventDetails.description,
+      time_of_event: eventDetails.time_of_event,
+      end_of_event: eventDetails.end_of_event,
+      location: eventDetails.location,
+      participants_count: eventDetails.participants_count,
+      interest_id: eventDetails.interest_id,
+      is_approve: eventDetails.is_approve,
+      background_img: eventDetails.background_img,
+      is_visible: eventDetails.is_visible,
+    },
+    {
+      where: { event_id: eventId },
+    },
+  );
 }
 
 export async function deleteEvent(eventId) {
@@ -88,7 +91,7 @@ export async function getNewEvents() {
   const date = new Date(Date.now());
   const sqlQuery = `
   select 
-    e.event_id, e.title, e.background_img, e.time_of_event, e.end_of_event, e.adress, e.location, e.participants_count, u.user_name, i.name 
+    e.event_id, e.title, e.background_img, e.time_of_event, e.address, e.participants_count, e.end_of_event
   from
     public."event" e 
   left join 
@@ -112,7 +115,7 @@ export async function getEventsByDate(dateString) {
   const date = new Date(dateString.date);
   const sqlQuery = `
   select 
-    e.event_id, e.title, e.background_img, e.time_of_event, e.end_of_event, e.adress, e.location, e.participants_count, u.user_name, i.name 
+    e.event_id, e.title, e.background_img, e.time_of_event, e.address, e.participants_count
   from
     public."event" e 
   left join 
@@ -136,7 +139,7 @@ export async function getEventsByName(dataObj) {
   const name = dataObj.title;
   const sqlQuery = `
   select 
-    e.event_id, e.title, e.background_img, e.time_of_event, e.end_of_event, e.adress, e.location, e.participants_count, u.user_name, i.name 
+    e.title, e.background_img, e.time_of_event, e.address, e.participants_count
   from
     public."event" e 
   left join 
@@ -158,7 +161,14 @@ export async function getEventsByName(dataObj) {
 export async function getPopularEvents() {
   const sqlQuery = `
   select 
-  e.event_id, e.title, e.background_img, e.time_of_event, e.end_of_event, e.adress, e.location, e.participants_count, u.user_name, i.name 
+	e.event_id 
+    , e.title
+    , e.background_img
+    , e.time_of_event
+    , e.address
+    , e.participants_count
+    , u.user_name
+    , i.name 
   from
     public."event" e 
   left join 
@@ -168,7 +178,9 @@ export async function getPopularEvents() {
   join
     "user" u
     on u.user_id = e.organizer_id
-  order by e.participants_count desc
+  order by 
+    e.time_of_event desc
+    , e.participants_count desc
   limit 10
   `;
   const result = await SequelizeInstance.query(sqlQuery, {

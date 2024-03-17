@@ -9,6 +9,7 @@ import * as modController from './APP/Controller/modController.js';
 import uploadCloud from './APP/middleware/uploadCloudImg.js';
 import * as chatController from './APP/Controller/chatController.js';
 import * as scheduleController from './APP/Controller/scheduleController.js';
+import wss from './websocket.js';
 const router = express.Router();
 
 /**
@@ -387,7 +388,11 @@ router.get('/api/admin/statics', admController.getStatics);
 router.post('/api/user/login', userController.loginUser);
 router.get('/api/user/:userId', userController.getUser);
 router.put('/api/user/:userId', userController.updateProfile);
-router.put('/api/user/avatar/:userId', uploadCloud.single('profile_avatar'), userController.updateAvatar)
+router.put(
+  '/api/user/avatar/:userId',
+  uploadCloud.single('profile_avatar'),
+  userController.updateAvatar,
+);
 router.post('/api/user/interest', userController.createInterest);
 router.get('/api/user/interests/:userId', userController.getInterests);
 router.get('/api/user/interest/:userInterestId', userController.getInterest);
@@ -1427,7 +1432,11 @@ router.get('/api/blog/:blogId', blogController.getBlog);
 router.post('/api/blog', blogController.createBlog);
 router.put('/api/blog/:blogId', blogController.updateBlog);
 router.delete('/api/blog/:blogId', blogController.deleteBlog);
-router.post('/api/blog/image/blogId', uploadCloud.single('image'), blogController.updateImg);
+router.post(
+  '/api/blog/image/blogId',
+  uploadCloud.single('image'),
+  blogController.updateImg,
+);
 /**
  * @swagger
  * /api/moderator/login:
@@ -1631,4 +1640,28 @@ router.post('/api/user/schedule', scheduleController.createSchedule);
  *       '500':
  *         description: Internal server error
  */
+wss.on('connection', function connection(ws) {
+  console.log('WebSocket connection client connected');
+
+  ws.on('message', function incoming(message) {
+    // Handle different types of messages
+    try {
+      const data = JSON.parse(message);
+      switch (data.type) {
+        case 'SEND_MESSAGE':
+          chatController.sendMessage(data.payload);
+          break;
+        default:
+          console.log('Unknown message type');
+      }
+    } catch (error) {
+      console.error('Error parsing message:', error);
+    }
+  });
+
+  ws.on('close', () => {
+    console.log('WebSocket client disconnected');
+  });
+});
+
 export default router;
