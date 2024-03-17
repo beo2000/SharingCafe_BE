@@ -49,14 +49,34 @@ export async function getStatics() {
 }
 export async function getUsers() {
   const sqlQuery = `
-  Select 
-	  *
-  from public."user" u 
-  inner join 
-	  role r
-	  on u.role_id = r.role_id
-  where 
+  SELECT 
+    u.*
+    , json_build_object(
+        'interest_id', ui.primary_interest_id,
+        'interest_name', ui.name
+    ) AS interest_list
+FROM 
+    public."user" u 
+INNER JOIN 
+    role r ON u.role_id = r.role_id
+LEFT JOIN 
+    (select 
+       ui.interest_id as primary_interest_id
+       ,* 
+     from 
+       user_interest ui 
+     inner join 
+       interest i 
+     ON i.interest_id = ui.interest_id
+     ) ui 
+     ON ui.user_id = u.user_id 
+WHERE 
     r.role_name = 'USER'
+group by 
+    u.user_id
+    , ui.primary_interest_id
+    , ui.name
+    
   `;
   const result = await SequelizeInstance.query(sqlQuery, {
     type: SequelizeInstance.QueryTypes.SELECT,
@@ -65,15 +85,18 @@ export async function getUsers() {
   return result;
 }
 
-export async function getUser(userId){
+export async function getUser(userId) {
   const result = await User.findByPk(userId);
   return result;
 }
 
-export async function updateUserStatus(userId, userDetails){
-  return await User.update({
-    is_available: userDetails.is_available,
-  },{
-    where: {user_id: userId}
-  });
+export async function updateUserStatus(userId, userDetails) {
+  return await User.update(
+    {
+      is_available: userDetails.is_available,
+    },
+    {
+      where: { user_id: userId },
+    },
+  );
 }
