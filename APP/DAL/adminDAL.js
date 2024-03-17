@@ -51,27 +51,31 @@ export async function getUsers() {
   const sqlQuery = `
   SELECT 
     u.*,
-    json_build_object(
-        'interest_id', ui.primary_interest_id,
-        'interest_name', ui.name
-    ) AS interest_list
+    json_agg(
+        json_build_object(
+            'interest_id', ui.interest_id,
+            'interest_name', ui.name
+        )
+      ) AS interest_list
   FROM 
       public."user" u 
   INNER JOIN 
       (SELECT * FROM role WHERE role_name = 'USER') r ON u.role_id = r.role_id
   LEFT JOIN 
       (
-        SELECT DISTINCT ON (ui.user_id) 
-            ui.user_id,
-            ui.interest_id AS primary_interest_id,
-            i.name
-        FROM 
-            user_interest ui 
-        INNER JOIN 
-            interest i ON i.interest_id = ui.interest_id
-        ORDER BY 
-            ui.user_id, ui.interest_id  
-      ) ui ON ui.user_id = u.user_id;
+          SELECT 
+              ui.user_id,
+              ui.interest_id,
+              i.name
+          FROM 
+              user_interest ui 
+          INNER JOIN 
+              interest i ON i.interest_id = ui.interest_id
+          ORDER BY 
+              ui.user_id, ui.interest_id  
+      ) ui ON ui.user_id = u.user_id
+  GROUP BY 
+      u.user_id, u.role_id; 
   `;
   const result = await SequelizeInstance.query(sqlQuery, {
     type: SequelizeInstance.QueryTypes.SELECT,
