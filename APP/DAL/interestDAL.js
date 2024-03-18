@@ -60,3 +60,11 @@ export async function getToppick() {
   });
   return result;
 }
+
+export async function updateImage(interestId, fileData) {
+  return await Interest.update({
+    image: fileData?.path
+  }, {
+    where: {interest_id: interestId}
+  });
+}

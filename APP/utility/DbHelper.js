@@ -562,6 +562,9 @@ const Interest = sequelize.define(
       type: DataTypes.UUID,
       allowNull: false,
     },
+    image: {
+      type: DataTypes.TEXT,
+    },
     created_at: {
       type: DataTypes.DATE,
       allowNull: false,

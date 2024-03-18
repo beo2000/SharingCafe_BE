@@ -913,6 +913,7 @@ router.get('/api/interest', interestController.getInterests);
 router.post('/api/interest', interestController.createInterest);
 router.get('/api/interest/:interestId', interestController.getInterest);
 router.put('/api/interest/:interestId', interestController.updateInterest);
+router.put('/api/interest/image/:interestId', uploadCloud.single('image'), interestController.updateImage);
 router.delete('/api/interest', interestController.deleteInterest);
 router.get('/api/interests/toppick', interestController.getToppick);
 router.get('/api/interests/parent', interestController.getParentInterests)
@@ -1288,7 +1289,7 @@ router.put('/api/admin/user/:userId', admController.updateUserStatus);
  *       400:
  *         description: Bad request
  */
-// router.get('/api/event', eventController.getEvents);
+router.get('/api/event', eventController.getEvents);
 router.post('/api/event/search', eventController.getEventsByName);
 router.post(
   '/api/event',
@@ -1413,7 +1414,7 @@ router.put(
 /**
  * @swagger
  * /api/blog/{blogId}:
- *   patch:
+ *   put:
  *     summary: Update a specific blog by ID
  *     tags:
  *      - BLOG SECTION
