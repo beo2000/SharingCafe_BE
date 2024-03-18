@@ -1,6 +1,7 @@
 import { Error } from 'sequelize';
 import * as userDAL from '../DAL/userDAL.js';
 import * as matchDAL from '../DAL/matchDAL.js';
+import * as commonEnum from '../common/CommonEnums.js';
 import { v4 as uuidv4 } from 'uuid';
 
 export function getUserDetails(email, password) {
@@ -19,7 +20,9 @@ export async function register(user) {
   const userId = uuidv4();
   const phone = await getUserByPhone(user.phone);
   const email = await getUserByEmail(user.email);
-  if(phone || email) { throw new Error ('Phone or Email already in use 😕');}
+  if (phone || email) {
+    throw new Error('Phone or Email already in use 😕');
+  }
   return await userDAL.register(userId, user);
 }
 
@@ -73,6 +76,14 @@ export async function getUserMatchByInterest(userId) {
   const result = await userDAL.getUserMatchByInterest(userId);
   return result;
 }
+export async function getUserMatchWithStatus(userId) {
+  const result = await userDAL.getUserMatchWithStatus(userId);
+  return result;
+}
+export async function getUserMatchWithPendingStatus(userId) {
+  const result = await userDAL.getUserMatchWithPendingStatus(userId);
+  return result;
+}
 export async function getUserMatchByInterestPaging(userId, limit, offset) {
   const result = await userDAL.getUserMatchByInterestPaging(
     userId,
@@ -99,8 +110,12 @@ export async function getSuggestEvent(userId) {
   return await userDAL.getSuggestEvent(userId);
 }
 export async function updateUserMatchStatus(userId, dataObj) {
-  const [status] = await matchDAL.getMatchStatus(dataObj.status);
-  const [match] = await matchDAL.MatchCouple(userId, dataObj.user_id);
+  const [status] = await matchDAL.getMatchStatus(
+    commonEnum.MATCH_STATUS.ACCEPTED === dataObj.status
+      ? commonEnum.MATCH_STATUS.MATCHED
+      : dataObj.status,
+  );
+  const [match] = await matchDAL.getMatchCouple(userId, dataObj.user_id);
 
   const user_match_id = match?.user_match_id || uuidv4();
   return await matchDAL.upsertMatch(
