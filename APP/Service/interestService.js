@@ -24,3 +24,7 @@ export async function deleteInterest(interestIds) {
 export async function getToppick(){
   return await interestDAL.getToppick();
 }
+
+export async function getParentInterests(){
+  return await interestDAL.getParentInterests();
+}

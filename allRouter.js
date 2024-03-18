@@ -878,12 +878,44 @@ router.get('/api/user/events/suggest/:userId', userController.getSuggestEvent);
  *       '500':
  *         description: Internal Server Error
  */
+/**
+ * @swagger
+ * /api/interests/parent:
+ *   get:
+ *     summary: Get all parent Interest list
+ *     description: Retrieve a list of all parent interests.
+ *     tags:
+ *       - INTEREST SECTION
+ *     responses:
+ *       '200':
+ *         description: Successful operation
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   interest_id:
+ *                     type: string
+ *                     description: The ID of the interest.
+ *                   name:
+ *                     type: string
+ *                     description: The name of the interest.
+ *                   created_at:
+ *                     type: string
+ *                     format: date-time
+ *                     description: The timestamp when the interest was created.
+ *       '500':
+ *         description: Internal Server Error
+ */
 router.get('/api/interest', interestController.getInterests);
 router.post('/api/interest', interestController.createInterest);
 router.get('/api/interest/:interestId', interestController.getInterest);
 router.put('/api/interest/:interestId', interestController.updateInterest);
 router.delete('/api/interest', interestController.deleteInterest);
 router.get('/api/interests/toppick', interestController.getToppick);
+router.get('/api/interests/parent', interestController.getParentInterests)
 router.get('/api/admin/users', admController.getUsers);
 /**
  * @swagger

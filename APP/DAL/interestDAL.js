@@ -27,6 +27,21 @@ export async function deleteInterests(interestIds) {
   return deletedInterest;
 }
 
+export async function getParentInterests() {
+  const sqlQuery = `
+  select 
+ 	i.interest_id, i."name" ,i.image
+ from
+ 	interest i
+ where i.parent_interest_id is null
+  `;
+  const result = await SequelizeInstance.query(sqlQuery, {
+    type: SequelizeInstance.QueryTypes.SELECT,
+    raw: true,
+  });
+  return result;
+}
+
 export async function getToppick() {
   const sqlQuery = `
   select 

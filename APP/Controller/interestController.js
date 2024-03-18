@@ -78,3 +78,14 @@ export async function getToppick(req, res) {
     res.status(404).send(e);
   }
 }
+
+export async function getParentInterests(req, res){
+  try {
+    const result = await interestService.getParentInterests();
+    console.log(result);
+    res.status(200).send(result);
+  } catch (e){
+    console.log(e);
+    res.sta
+  }
+}
