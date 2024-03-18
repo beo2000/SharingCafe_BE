@@ -715,6 +715,7 @@ router.get('/api/user/events/suggest/:userId', userController.getSuggestEvent);
  *               - name
  *           example:
  *             name: History v2
+ *             parent_interest_id: d637c554-1153-4a40-96fc-893941da1c2e
  *     responses:
  *       '201':
  *         description: Interest created successfully
@@ -850,7 +851,7 @@ router.get('/api/user/events/suggest/:userId', userController.getSuggestEvent);
  * @swagger
  * /api/interests/toppick:
  *   get:
- *     summary: Get All Interests with number of chose
+ *     summary: Get Interest list with number of chose
  *     description: Retrieve a list of all interests.
  *     tags:
  *       - INTEREST SECTION
@@ -1473,6 +1474,28 @@ router.put(
  *       '500':
  *         description: Internal server error
  */
+/**
+ * @swagger
+ * /api/blogs/popular:
+ *   get:
+ *     summary: Get a list of popular blogs
+ *     tags:
+ *      - BLOG SECTION
+ *     responses:
+ *       '200':
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             example:
+ *               - blogId: 1
+ *                 title: Sample Blog 1
+ *                 content: Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ *               - blogId: 2
+ *                 title: Sample Blog 2
+ *                 content: Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.
+ *       '500':
+ *         description: Internal server error
+ */
 router.get('/api/blog', blogController.getBlogs);
 router.get('/api/blog/:blogId', blogController.getBlog);
 router.post('/api/blog', blogController.createBlog);
@@ -1483,6 +1506,7 @@ router.put(
   uploadCloud.single('image'),
   blogController.updateImg,
 );
+router.get('/api/blogs/popular', blogController.getPopularBlogs)
 router.get('/api/blog/new/blogs', blogController.getNewBlogs);
 /**
  * @swagger

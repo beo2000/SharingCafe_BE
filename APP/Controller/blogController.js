@@ -95,3 +95,13 @@ export async function getNewBlogs(req, res) {
     res.status(500).send({ error: error.message });
   }
 }
+
+export async function getPopularBlogs(req, res) {
+  try {
+    const result = await blogService.getPopularBlogs();
+    res.status(200).send(result);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ error: error.message });
+  }
+}

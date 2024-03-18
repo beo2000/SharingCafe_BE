@@ -171,6 +171,7 @@ export async function getEventsByName(dataObj) {
 }
 
 export async function getPopularEvents() {
+  let date = new Date(Date.now());
   const sqlQuery = `
   select 
 	e.event_id 
@@ -194,6 +195,7 @@ export async function getPopularEvents() {
   order by 
     e.time_of_event desc
     , e.participants_count desc
+    where e.time_of_event >= '${date.toUTCString()}' or e.end_of_event <= '${date.toUTCString()}'
   limit 10
   `;
   const result = await SequelizeInstance.query(sqlQuery, {

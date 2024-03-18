@@ -34,3 +34,7 @@ export async function updateImg(blogId, fileData){
 export async function getNewBlogs(){
     return await blogDAL.getNewBlogs();
 }
+
+export async function getPopularBlogs(){
+    return await blogDAL.getPopularBlogs();
+}

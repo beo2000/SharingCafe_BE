@@ -558,6 +558,10 @@ const Interest = sequelize.define(
       type: DataTypes.TEXT,
       allowNull: false,
     },
+    parent_interest_id: {
+      type: DataTypes.UUID,
+      allowNull: false,
+    },
     created_at: {
       type: DataTypes.DATE,
       allowNull: false,
