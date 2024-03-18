@@ -1302,9 +1302,9 @@ router.get('/api/event/new/events', eventController.getNewEvents);
 // router.post('/api/event/date', eventController.getEventsByDate);
 router.get('/api/event/popular/events', eventController.getPopularEvents);
 router.post(
-  '/api/event/image',
+  '/api/image',
   uploadCloud.single('background_img'),
-  eventController.updateEventImage
+  eventController.updateImage
 );
 /**
  * @swagger

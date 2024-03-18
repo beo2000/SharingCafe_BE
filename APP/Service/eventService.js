@@ -41,6 +41,6 @@ export async function getPopularEvents() {
   return await eventDAL.getPopularEvents();
 }
 
-export async function updateEventImage(fileData){
-  return await eventDAL.updateEventImage(fileData);
+export async function updateImage(fileData){
+  return await eventDAL.updateImage(fileData);
 }

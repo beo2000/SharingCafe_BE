@@ -114,7 +114,7 @@ export async function getPopularEvents(req, res) {
   }
 }
 
-export async function updateEventImage(req, res) {
+export async function updateImage(req, res) {
   const t = await SequelizeInstance.transaction();
   try {
     const fileData = req.file;
@@ -123,7 +123,7 @@ export async function updateEventImage(req, res) {
       cloudinary.uploader.destroy(fileData.filename)
       return res.status(400).send({ error: error.message });
     }
-    const user = await eventService.updateEventImage(fileData);
+    const user = await eventService.updateImage(fileData);
     res.status(200).send(user);
     await t.commit();
   } catch (error) {
