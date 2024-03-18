@@ -58,13 +58,10 @@ export async function createEvent(eventId, dataObj) {
   });
 }
 
-export async function updateEventImage(eventId, fileData) {
-  return await Event.update({
+export async function updateImage(fileData) {
+  return await {
     background_img: fileData?.path
-  },
-  {
-    where: { event_id: eventId },
-  })
+  }
 }
 
 export async function updateEvent(eventId, eventDetails) {
@@ -192,7 +189,7 @@ export async function getPopularEvents() {
   join
     "user" u
     on u.user_id = e.organizer_id
-  where e.time_of_event >= '${date.toDateString}' or e.end_of_event <= '${date.toDateString}'
+  where e.time_of_event >= '${date.toISOString()}' or e.end_of_event <= '${date.toISOString()}'
   order by 
     e.time_of_event desc
     , e.participants_count desc

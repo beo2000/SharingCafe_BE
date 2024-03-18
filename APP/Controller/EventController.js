@@ -123,8 +123,7 @@ export async function updateEventImage(req, res) {
       cloudinary.uploader.destroy(fileData.filename)
       return res.status(400).send({ error: error.message });
     }
-    const eventId = req.params.eventId;
-    const user = await eventService.updateEventImage(eventId, fileData);
+    const user = await eventService.updateEventImage(fileData);
     res.status(200).send(user);
     await t.commit();
   } catch (error) {

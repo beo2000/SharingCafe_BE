@@ -41,8 +41,6 @@ export async function getPopularEvents() {
   return await eventDAL.getPopularEvents();
 }
 
-export async function updateEventImage(eventId, fileData){
-  const event = await getEvent(eventId);
-  if (!event) throw new Error('Event not found !!!');
-  return await eventDAL.updateEventImage(eventId, fileData);
+export async function updateEventImage(fileData){
+  return await eventDAL.updateEventImage(fileData);
 }

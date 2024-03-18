@@ -1301,10 +1301,10 @@ router.delete('/api/event/:eventId', eventController.deleteEvent);
 router.get('/api/event/new/events', eventController.getNewEvents);
 // router.post('/api/event/date', eventController.getEventsByDate);
 router.get('/api/event/popular/events', eventController.getPopularEvents);
-router.put(
-  '/api/event/image/:eventId',
+router.post(
+  '/api/event/image',
   uploadCloud.single('background_img'),
-  eventController.updateEventImage,
+  eventController.updateEventImage
 );
 /**
  * @swagger
