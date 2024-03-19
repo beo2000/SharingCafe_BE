@@ -916,10 +916,14 @@ router.get('/api/interest', interestController.getInterests);
 router.post('/api/interest', interestController.createInterest);
 router.get('/api/interest/:interestId', interestController.getInterest);
 router.put('/api/interest/:interestId', interestController.updateInterest);
-router.put('/api/interest/image/:interestId', uploadCloud.single('image'), interestController.updateImage);
+router.put(
+  '/api/interest/image/:interestId',
+  uploadCloud.single('image'),
+  interestController.updateImage,
+);
 router.delete('/api/interest', interestController.deleteInterest);
 router.get('/api/interests/toppick', interestController.getToppick);
-router.get('/api/interests/parent', interestController.getParentInterests)
+router.get('/api/interests/parent', interestController.getParentInterests);
 router.get('/api/admin/users', admController.getUsers);
 /**
  * @swagger
@@ -1198,7 +1202,7 @@ router.put('/api/admin/user/:userId', admController.updateUserStatus);
  *                 type: string
  *                 description: Date for searching
  *                 example: 3/7/2024
- *                 
+ *
  *     responses:
  *       200:
  *         description: Success
@@ -1294,10 +1298,7 @@ router.put('/api/admin/user/:userId', admController.updateUserStatus);
  */
 router.get('/api/event', eventController.getEvents);
 router.post('/api/event/search', eventController.getEventsByName);
-router.post(
-  '/api/event',
-  eventController.createEvent,
-);
+router.post('/api/event', eventController.createEvent);
 router.get('/api/event/:eventId', eventController.getEvent);
 router.put('/api/event/:eventId', eventController.updateEvent);
 router.delete('/api/event/:eventId', eventController.deleteEvent);
@@ -1307,7 +1308,7 @@ router.get('/api/event/popular/events', eventController.getPopularEvents);
 router.post(
   '/api/image',
   uploadCloud.single('background_img'),
-  eventController.updateImage
+  eventController.updateImage,
 );
 /**
  * @swagger
@@ -1542,7 +1543,7 @@ router.put(
   uploadCloud.single('image'),
   blogController.updateImg,
 );
-router.get('/api/blogs/popular', blogController.getPopularBlogs)
+router.get('/api/blogs/popular', blogController.getPopularBlogs);
 router.get('/api/blog/new/blogs', blogController.getNewBlogs);
 router.post('/api/blog/search', blogController.searchByName);
 /**
@@ -1728,10 +1729,54 @@ router.put('/api/moderator/event/:eventId', modController.censorEvent);
  *       500:
  *         description: Internal Server Error
  */
+/**
+ * @swagger
+ * /api/auth/matched:
+ *   get:
+ *     summary: Get user matches with status
+ *     description: Retrieve user matches with their corresponding status.
+ *     security:
+ *       - BearerAuth: []
+ *     tags:
+ *       - MATCH SECTION
+ *     responses:
+ *       200:
+ *         description: Successful response with user matches and their statuses
+ *       401:
+ *         description: Unauthorized, invalid or missing token
+ *       500:
+ *         description: Internal Server Error
+ */
+/**
+ * @swagger
+ * /api/auth/pending-for-matched:
+ *   get:
+ *     summary: Get user matches with pending status
+ *     description: Retrieve user matches with pending status.
+ *     security:
+ *       - BearerAuth: []
+ *     tags:
+ *       - MATCH SECTION
+ *     responses:
+ *       200:
+ *         description: Successful response with user matches and pending status
+ *       401:
+ *         description: Unauthorized, invalid or missing token
+ *       500:
+ *         description: Internal Server Error
+ */
 router.get(
   '/api/auth/matches-interest',
   matchController.getUserMatchByInterest,
 );
+
+router.get('/api/auth/matched', matchController.getUserMatchWithStatus);
+
+router.get(
+  '/api/auth/pending-for-matched',
+  matchController.getUserMatchWithPendingStatus,
+);
+
 router.put('/api/auth/matching-status', matchController.updateUserMatchStatus);
 
 router.post('/api/user/message', chatController.viewMessage);
