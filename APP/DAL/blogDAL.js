@@ -131,3 +131,25 @@ export async function getPopularBlogs() {
   });
   return result;
 }
+
+export async function searchByName(title) {
+  const sqlQuery = `
+  select 
+    b.*, u.user_name, i.name
+  from 
+    blog b 
+  join 
+    interest i 
+    on 1=1 
+    and b.interest_id = i.interest_id
+  join
+    "user" u
+    on u.user_id = b.user_id
+  where b.title like '%${title}%'
+  `;
+  const result = await SequelizeInstance.query(sqlQuery, {
+    type: SequelizeInstance.QueryTypes.SELECT,
+    raw: true,
+  });
+  return result;
+}

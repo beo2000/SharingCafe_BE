@@ -38,3 +38,7 @@ export async function getNewBlogs(){
 export async function getPopularBlogs(){
     return await blogDAL.getPopularBlogs();
 }
+
+export async function searchByName(title){
+    return await blogDAL.searchByName(title);
+}

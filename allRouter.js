@@ -730,6 +730,9 @@ router.get('/api/user/events/suggest/:userId', userController.getSuggestEvent);
  *                 name:
  *                   type: string
  *                   description: The name of the interest.
+ *                 parent_interest_id:
+ *                   type: string
+ *                   description: The ID of the parent interest (optional)
  *                 created_at:
  *                   type: string
  *                   format: date-time
@@ -1541,6 +1544,7 @@ router.put(
 );
 router.get('/api/blogs/popular', blogController.getPopularBlogs)
 router.get('/api/blog/new/blogs', blogController.getNewBlogs);
+router.post('/api/blog/search', blogController.searchByName);
 /**
  * @swagger
  * /api/moderator/login:

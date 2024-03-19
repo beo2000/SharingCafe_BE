@@ -105,3 +105,14 @@ export async function getPopularBlogs(req, res) {
     res.status(500).send({ error: error.message });
   }
 }
+
+export async function searchByName(req, res) {
+  try {
+    const title = req.body.title;
+    const result = await blogService.searchByName(title);
+    res.status(200).send(result);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ error: error.message });
+  }
+}

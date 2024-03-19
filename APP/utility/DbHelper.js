@@ -560,7 +560,6 @@ const Interest = sequelize.define(
     },
     parent_interest_id: {
       type: DataTypes.UUID,
-      allowNull: false,
     },
     image: {
       type: DataTypes.TEXT,
@@ -613,7 +612,6 @@ const Schedule = sequelize.define(
     },
     content: {
       type: DataTypes.TEXT,
-      allowNull: false,
     },
     location: {
       type: DataTypes.TEXT,
@@ -632,6 +630,7 @@ const Schedule = sequelize.define(
     },
     sender_id: {
       type: DataTypes.UUID,
+      allowNull: false,
     },
     receiver_id: {
       type: DataTypes.UUID,
