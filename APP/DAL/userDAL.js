@@ -37,7 +37,7 @@ export async function getUserDetails(email, password) {
   return user;
 }
 
-export async function register(userId, user) {
+export async function register(userId, user){
   return await User.create({
     user_id: userId,
     user_name: user.user_name,
@@ -45,38 +45,45 @@ export async function register(userId, user) {
     phone: user.phone,
     email: user.email,
     Bio: user.Bio,
-    role_id: '6150886b-5920-4884-8e43-d4efb62f89d3',
+    is_available: true,
+    role_id: "6150886b-5920-4884-8e43-d4efb62f89d3"
   });
 }
 
-export async function getUserByPhone(phone) {
-  const sqlQuery = `
-  select 
-    u.*
-  from 
-    "user" u
-   where u.phone = '${phone}'
-  `;
-  const result = await SequelizeInstance.query(sqlQuery, {
-    type: SequelizeInstance.QueryTypes.SELECT,
-    raw: true,
+export async function getUserByPhone(phone){
+  // const sqlQuery = `
+  // select 
+  //   u.*
+  // from 
+  //   "user" u
+  //  where u.phone = '${phone}'
+  // `;
+  // const result = await SequelizeInstance.query(sqlQuery, {
+  //   type: SequelizeInstance.QueryTypes.SELECT,
+  //   raw: true,
+  // });
+  // return result;
+  return await User.findOne({
+    where: {phone: phone}
   });
-  return result;
 }
 
-export async function getUserByEmail(email) {
-  const sqlQuery = `
-  select 
-    u.*
-  from 
-    "user" u
-   where u.email = '${email}'
-  `;
-  const result = await SequelizeInstance.query(sqlQuery, {
-    type: SequelizeInstance.QueryTypes.SELECT,
-    raw: true,
+export async function getUserByEmail(email){
+  // const sqlQuery = `
+  // select 
+  //   u.*
+  // from 
+  //   "user" u
+  //  where u.email = '${email}'
+  // `;
+  // const result = await SequelizeInstance.query(sqlQuery, {
+  //   type: SequelizeInstance.QueryTypes.SELECT,
+  //   raw: true,
+  // });
+  // return result;
+  return await User.findOne({
+    where: {email: email}
   });
-  return result;
 }
 
 export async function getUser(userId) {

@@ -1,6 +1,10 @@
 import { Event, SequelizeInstance } from '../utility/DbHelper.js';
 
-export async function getEvents() {
+export async function getEvents(title, date) {
+  let name = title;
+  if (name == null) {name = ''}
+  let date1 = new Date(date);
+  if (date1 == 'Invalid Date') {date1 = new Date('1/1/1000')}
   const sqlQuery = `
   select 
     e.*, u.user_name, i.name
@@ -13,6 +17,7 @@ export async function getEvents() {
   join
     "user" u
     on u.user_id = e.organizer_id
+  where  e.end_of_event <= '${date1.toUTCString()}' and e.title  like '%${name}%'
   `;
   const result = await SequelizeInstance.query(sqlQuery, {
     type: SequelizeInstance.QueryTypes.SELECT,
@@ -144,8 +149,8 @@ export async function getEventsByDate(dateString) {
 export async function getEventsByName(dataObj) {
   let name = dataObj.title;
   if (name == null) {name = ''}
-  let date = new Date(dataObj.date);
-  if (date == 'Invalid Date') {date = new Date('1/1/1000')}
+  let date1 = new Date(dataObj.date);
+  if (date1 == 'Invalid Date') {date1 = new Date('1/1/1000')}
   const sqlQuery = `
   select 
     e.*, u.user_name, i."name"
@@ -158,7 +163,7 @@ export async function getEventsByName(dataObj) {
   join
     "user" u
     on u.user_id = e.organizer_id
-  where (e.time_of_event >= '${date.toUTCString()}' or e.end_of_event <= '${date.toUTCString()}') and e.title  like '%${name}%'
+  where (e.time_of_event >= '${date1.toUTCString()}' or e.end_of_event <= '${date1.toUTCString()}') and e.title  like '%${name}%'
   `;
   const result = await SequelizeInstance.query(sqlQuery, {
     type: SequelizeInstance.QueryTypes.SELECT,

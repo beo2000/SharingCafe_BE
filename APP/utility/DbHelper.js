@@ -278,9 +278,11 @@ const Comment = sequelize.define(
     },
     blog_id: {
       type: DataTypes.UUID,
+      allowNull: false,
     },
     user_id: {
       type: DataTypes.UUID,
+      allowNull: false,
     },
     content: {
       type: DataTypes.TEXT,

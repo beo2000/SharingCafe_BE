@@ -122,6 +122,45 @@ router.get('/api/admin/statics', admController.getStatics);
 
 /**
  * @swagger
+ * /api/user/register:
+ *   post:
+ *     summary: Register a User account
+ *     description: Create a new User account
+ *     tags:
+ *       - USER SECTION
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *                 example: tienpmse140@gmail.com
+ *               password:
+ *                 type: string
+ *                 example: pass
+ *               user_name:
+ *                 type: string
+ *                 example: Huỳnh Minh Mẫn
+ *               phone:
+ *                 type: string
+ *                 example: 012612375
+ *               Bio:
+ *                 type: Json
+ *                 example: Chưa nghĩ ra được gì hay ho
+ *     responses:
+ *       '200':
+ *         description: Registration successful
+ *       '401':
+ *         description: Registration failed - Invalid credentials
+ *       '500':
+ *         description: Internal Server Error
+ */
+/**
+ * @swagger
  * /api/user/login:
  *   post:
  *     summary: Login User
@@ -799,11 +838,16 @@ router.get('/api/user/events/suggest/:userId', userController.getSuggestEvent);
  *             properties:
  *               name:
  *                 type: string
- *                 description: The new name for the interest.
- *             required:
- *               - name
- *           example:
- *             name: Updated History v2
+ *                 description: Name of the interest
+ *                 example: Văn mẫu
+ *               parent_interest_id:
+ *                 type: string
+ *                 description: Id of the parent interest
+ *                 example: b95bbd38-a3c1-4aa3-818e-55ad0d408bd3
+ *               image:
+ *                 type: string
+ *                 description: Updated image URL associated with the interest
+ *                 example: https://vcdn-vnexpress.vnecdn.net/2023/09/09/VNE-Planet-4768-1694245805.jpg
  *     responses:
  *       '200':
  *         description: Interest updated successfully
@@ -976,6 +1020,19 @@ router.put('/api/admin/user/:userId', admController.updateUserStatus);
  *     description: Retrieve a list of all events.
  *     tags:
  *       - EVENT SECTION
+ *     parameters:
+ *        - in: query
+ *          name: title
+ *          schema:
+ *             type: string
+ *          description: Title of Event
+ *          example: competition
+ *        - in: query
+ *          name: date
+ *          schema:
+ *             type: string
+ *          description: Time of Event
+ *          example: 3/4/2024
  *     responses:
  *       200:
  *         description: Successful response
@@ -1180,46 +1237,46 @@ router.put('/api/admin/user/:userId', admController.updateUserStatus);
  *       '500':
  *         description: Internal server error
  */
-/**
- * @swagger
- * '/api/event/search':
- *  post:
- *     summary: Get a list of events base on specific keyword
- *     tags:
- *     - EVENT SECTION
- *     requestBody:
- *       required: false
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               title:
- *                 type: string
- *                 description: Keyword for searching
- *                 example: competition
- *               date:
- *                 type: string
- *                 description: Date for searching
- *                 example: 3/7/2024
- *
- *     responses:
- *       200:
- *         description: Success
- *         content:
- *          application/json:
- *            schema:
- *              type: array
- *              items:
- *                type: object
- *                properties:
- *                  id:
- *                    type: string
- *                  title:
- *                    type: string
- *       400:
- *         description: Bad request
- */
+// /**
+//  * @swagger
+//  * '/api/event/search':
+//  *  post:
+//  *     summary: Get a list of events base on specific keyword
+//  *     tags:
+//  *     - EVENT SECTION
+//  *     requestBody:
+//  *       required: false
+//  *       content:
+//  *         application/json:
+//  *           schema:
+//  *             type: object
+//  *             properties:
+//  *               title:
+//  *                 type: string
+//  *                 description: Keyword for searching
+//  *                 example: competition
+//  *               date:
+//  *                 type: string
+//  *                 description: Date for searching
+//  *                 example: 3/7/2024
+//  *
+//  *     responses:
+//  *       200:
+//  *         description: Success
+//  *         content:
+//  *          application/json:
+//  *            schema:
+//  *              type: array
+//  *              items:
+//  *                type: object
+//  *                properties:
+//  *                  id:
+//  *                    type: string
+//  *                  title:
+//  *                    type: string
+//  *       400:
+//  *         description: Bad request
+//  */
 /**
  * @swagger
  * /api/event/{eventId}:
@@ -1297,7 +1354,7 @@ router.put('/api/admin/user/:userId', admController.updateUserStatus);
  *         description: Bad request
  */
 router.get('/api/event', eventController.getEvents);
-router.post('/api/event/search', eventController.getEventsByName);
+// router.post('/api/event/search', eventController.getEventsByName);
 router.post('/api/event', eventController.createEvent);
 router.get('/api/event/:eventId', eventController.getEvent);
 router.put('/api/event/:eventId', eventController.updateEvent);
@@ -1317,6 +1374,13 @@ router.post(
  *     summary: Get a list of blogs
  *     tags:
  *      - BLOG SECTION
+ *     parameters:
+ *        - in: query
+ *          name: page
+ *          schema:
+ *            type: integer
+ *          description: The number of page to skip before starting to collect the result set
+ *          example: 1
  *     responses:
  *       '200':
  *         description: Successful response
@@ -1533,6 +1597,138 @@ router.post(
  *       '500':
  *         description: Internal server error
  */
+/**
+ * @swagger
+ * /api/blog/search:
+ *  post:
+ *     summary: Get a list of blogs base on specific keyword
+ *     tags:
+ *     - BLOG SECTION
+ *     requestBody:
+ *       required: false
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *                 description: Keyword for searching
+ *                 example: you
+ *     responses:
+ *       200:
+ *         description: Success
+ *         content:
+ *          application/json:
+ *            schema:
+ *              type: array
+ *              items:
+ *                type: object
+ *                properties:
+ *                  id:
+ *                    type: string
+ *                  title:
+ *                    type: string
+ *       400:
+ *         description: Bad request
+ */
+/**
+ * @swagger
+ * /api/blog/comment/{blogId}:
+ *   get:
+ *     summary: Get list of comment of a blog
+ *     tags:
+ *      - BLOG SECTION
+ *     parameters:
+ *       - in: path
+ *         name: blogId
+ *         required: true
+ *         description: ID of the blog
+ *         schema:
+ *           type: string
+ *         example: ae5b11b2-4e45-4a6d-b669-5ffb3661eda5
+ *     responses:
+ *       '200':
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             example:
+ *               commentId: 20d6bf6a-89f1-404e-975a-3c6d5d6db570
+ *               userId: Sample User
+ *               content: Testing.
+ *       '404':
+ *         description: Blog not found
+ *       '500':
+ *         description: Internal server error
+ */
+/**
+ * @swagger
+ * /api/blog/comment:
+ *   post:
+ *     summary: Create a new comment
+ *     tags:
+ *      - BLOG SECTION
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               userId:
+ *                 type: string
+ *                 description: ID of the user creating the comment
+ *                 example: "7e8ed049-3b92-4fde-b84c-69d60256186f"
+ *               blogId:
+ *                 type: string
+ *                 description: ID of the blog
+ *                 example: "ae5b11b2-4e45-4a6d-b669-5ffb3661eda5"
+ *               content:
+ *                 type: string
+ *                 description: Content of the blog
+ *                 example: "Looking good"
+ *     responses:
+ *       '201':
+ *         description: Comment created successfully
+ *       '400':
+ *         description: Bad request, e.g., missing parameters
+ *       '500':
+ *         description: Internal server error
+ */
+/**
+ * @swagger
+ * /api/blog/comment/{commentId}:
+ *   put:
+ *     summary: Update a comment
+ *     tags:
+ *      - BLOG SECTION
+ *     parameters:
+ *       - in: path
+ *         name: commentId
+ *         required: true
+ *         description: ID of the comment
+ *         schema:
+ *           type: string
+ *         example: a5a8dcbe-824a-480c-9913-a761d585ca09
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               content:
+ *                 type: string
+ *                 description: Content of the blog
+ *                 example: "Looking good"
+ *     responses:
+ *       '201':
+ *         description: Comment created successfully
+ *       '400':
+ *         description: Bad request, e.g., missing parameters
+ *       '500':
+ *         description: Internal server error
+ */
 router.get('/api/blog', blogController.getBlogs);
 router.get('/api/blog/:blogId', blogController.getBlog);
 router.post('/api/blog', blogController.createBlog);
@@ -1546,6 +1742,9 @@ router.put(
 router.get('/api/blogs/popular', blogController.getPopularBlogs);
 router.get('/api/blog/new/blogs', blogController.getNewBlogs);
 router.post('/api/blog/search', blogController.searchByName);
+router.get('/api/blog/comment/:blogId', blogController.getComments);
+router.post('/api/blog/comment', blogController.createComment);
+router.put('/api/blog/comment/:commentId', blogController.updateComment);
 /**
  * @swagger
  * /api/moderator/login:

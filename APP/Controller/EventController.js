@@ -3,8 +3,9 @@ import { SequelizeInstance } from '../utility/DbHelper.js';
 import { v2 as cloudinary } from 'cloudinary';
 export async function getEvents(req, res) {
   try {
-    const dataObj = req.body;
-    const result = await eventService.getEvents(dataObj);
+    const title = req.query.title;
+    const date = req.query.date;
+    const result = await eventService.getEvents(title, date);
     res.status(200).send(result);
     // response code ???
   } catch (error) {
@@ -94,6 +95,8 @@ export async function getEventsByDate(req, res) {
 
 export async function getEventsByName(req, res) {
   try {
+    // const title = req.params.title;
+    // const date = req.params.date;
     const dataObj = req.body;
     const result = await eventService.getEventsByName(dataObj);
     res.status(200).send(result);
