@@ -1033,6 +1033,12 @@ router.put('/api/admin/user/:userId', admController.updateUserStatus);
  *             type: string
  *          description: Time of Event
  *          example: 3/4/2024
+ *        - in: query
+ *          name: page
+ *          schema:
+ *             type: integer
+ *          description: The number of page to skip before starting to collect the result set
+ *          example: 1
  *     responses:
  *       200:
  *         description: Successful response

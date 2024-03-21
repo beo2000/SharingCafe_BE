@@ -1,24 +1,45 @@
 import { Event, SequelizeInstance } from '../utility/DbHelper.js';
 
-export async function getEvents(title, date) {
+export async function getEvents(title, date, page) {
+  let sqlQuery = '';
   let name = title;
   if (name == null) {name = ''}
   let date1 = new Date(date);
   if (date1 == 'Invalid Date') {date1 = new Date('1/1/1000')}
-  const sqlQuery = `
-  select 
-    e.*, u.user_name, i.name
-  from
-    public."event" e 
-  left join 
-    interest i 
-    on 1=1 
-    and e.interest_id = i.interest_id
-  join
-    "user" u
-    on u.user_id = e.organizer_id
-  where  e.end_of_event <= '${date1.toUTCString()}' and e.title  like '%${name}%'
+  console.log(date1.toUTCString());
+  if (page){
+    sqlQuery = `
+    select 
+      e.*, u.user_name, i.name
+    from
+      public."event" e 
+    left join 
+      interest i 
+      on 1=1 
+      and e.interest_id = i.interest_id
+    join
+      "user" u
+      on u.user_id = e.organizer_id
+    where  (e.time_of_event >= '${date1.toUTCString()}' or e.end_of_event <= '${date1.toUTCString()}') and e.title  like '%${name}%'
+    offset ((${page} - 1) * 5) rows 
+ 	  fetch next 5 rows only
   `;
+  } else {
+    sqlQuery = `
+    select 
+      e.*, u.user_name, i.name
+    from
+      public."event" e 
+    left join 
+      interest i 
+      on 1=1 
+      and e.interest_id = i.interest_id
+    join
+      "user" u
+      on u.user_id = e.organizer_id
+      where (e.time_of_event >= '${date1.toUTCString()}' or e.end_of_event >= '${date1.toUTCString()}') and e.title  like '%${name}%'
+    `
+  }
   const result = await SequelizeInstance.query(sqlQuery, {
     type: SequelizeInstance.QueryTypes.SELECT,
     raw: true,
