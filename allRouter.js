@@ -1729,7 +1729,7 @@ router.post(
  *                 example: "Looking good"
  *     responses:
  *       '201':
- *         description: Comment created successfully
+ *         description: Comment update successfully
  *       '400':
  *         description: Bad request, e.g., missing parameters
  *       '500':
@@ -1751,6 +1751,7 @@ router.post('/api/blog/search', blogController.searchByName);
 router.get('/api/blog/comment/:blogId', blogController.getComments);
 router.post('/api/blog/comment', blogController.createComment);
 router.put('/api/blog/comment/:commentId', blogController.updateComment);
+router.post('/api/blog/like', blogController.likeBlog);
 /**
  * @swagger
  * /api/moderator/login:

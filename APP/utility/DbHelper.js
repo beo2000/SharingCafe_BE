@@ -566,6 +566,9 @@ const Interest = sequelize.define(
     image: {
       type: DataTypes.TEXT,
     },
+    is_available: {
+      type: DataTypes.BOOLEAN,
+    },
     created_at: {
       type: DataTypes.DATE,
       allowNull: false,
@@ -643,6 +646,33 @@ const Schedule = sequelize.define(
   },
 )
 
+const LikeBlog = sequelize.define(
+  'like_blog',
+  {
+    like_blog_id: {
+      type: DataTypes.UUID,
+      primaryKey: true,
+      defaultValue: DataTypes.UUIDV4,
+    },
+    blog_id: {
+      type: DataTypes.UUID,
+      allowNull: false,
+    },
+    user_id: {
+      type: DataTypes.UUID,
+      allowNull: false,
+    },
+    created_at: {
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW,
+    },
+  },
+  {
+    tableName: 'user_interest',
+    timestamps: false,
+  },
+);
+
 User.belongsTo(Role, { foreignKey: 'role_id', as: 'UserRole' });
 
 EventReport.belongsTo(User, { foreignKey: 'reporter_id', as: 'reporter' });
@@ -714,4 +744,5 @@ export {
   Interest,
   UserInterest,
   Schedule,
+  LikeBlog,
 };

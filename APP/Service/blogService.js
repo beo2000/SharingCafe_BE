@@ -1,3 +1,4 @@
+import { response } from 'express';
 import * as blogDAL from '../DAL/blogDAL.js';
 import { v4 as uuidv4 } from 'uuid';
 export async function getBlogs(page){
@@ -62,4 +63,14 @@ export async function updateComment(commentId, content){
     const comment = await getComment(commentId);
     if (!comment) throw new Error('Comment not found');
     return await blogDAL.updateComment(commentId, content)
+}
+
+
+
+export async function likeBlog(dataObj){
+    const like_blog_id = uuidv4();
+    const blog = blogDAL.getBlog(dataObj.blog_id);
+    if (!blog) throw new Error('Blog not found !!!');
+    
+    // return await blogDAL.likeBlog(like_blog_id, dataObj);
 }

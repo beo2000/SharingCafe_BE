@@ -18,9 +18,12 @@ export async function getUserByEmail(email) {
 
 export async function register(user){
   const userId = uuidv4();
-  const phone = await getUserByPhone(user.phone);
   const email = await getUserByEmail(user.email);
-  if(phone || email) { throw new Error ('Phone or Email already in use 😕');}
+  let phone = user.phone;
+  if (phone != null) {
+    phone = await getUserByPhone(user.phone);
+  }
+  else if(phone || email) { throw new Error ('Email already in use 😕');}
   return await userDAL.register(userId, user);
 }
 

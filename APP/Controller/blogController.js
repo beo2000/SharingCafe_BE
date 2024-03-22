@@ -157,3 +157,17 @@ export async function updateComment(req, res) {
     res.status(404).send(error);
   }
 }
+
+export async function likeBlog(req, res) {
+  const t = await SequelizeInstance.transaction();
+  try {
+    const dataObj = req.body;
+    const result = await blogService.likeBlog(dataObj);
+    res.status(200).send(result);
+    t.commit();
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ error: error.message });
+    t.rollback();
+  }
+}

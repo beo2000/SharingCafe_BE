@@ -1,4 +1,4 @@
-import { Blog, SequelizeInstance, Comment } from '../utility/DbHelper.js';
+import { Blog, SequelizeInstance, Comment, LikeBlog } from '../utility/DbHelper.js';
 export async function getBlogs(page) {
   let sqlQuery = '';
   if (page){
@@ -229,4 +229,17 @@ export async function updateComment(commentId, content){
   }, {
     where: {comment_id: commentId}
   })
+}
+
+export async function likeBlog(like_blog_id, dataObj){
+  // Blog.update({
+  //   likes_count: blog.likes_count*1 + 1,
+  // }, {
+  //   where: {blog_id: dataObj.blog_id}
+  // });
+  // return await LikeBlog.create({
+  //   like_blog_id: like_blog_id,
+  //   user_id: dataObj.user_id,
+  //   blog_id: dataObj.blog_id,
+  // })
 }

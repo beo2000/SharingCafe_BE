@@ -200,7 +200,18 @@ export async function register(req, res) {
   try {
     const user = req.body;
     const result = await userService.register(user);
-    res.status(200).send(result);
+    const userDetails = result.dataValues;
+    if (userDetails) {
+      const email = userDetails.email;
+      const accessToken = jwt.sign({ email: email }, secret_key, {
+        expiresIn: '30d',
+      });
+      res.header('Authorization', `Bearer ${accessToken}`);
+      userDetails.accessToken = `Bearer ${accessToken}`;
+      res.send(userDetails);
+    } else {
+      res.status(400).send({ message: 'User not found' });
+    }
   } catch (error) {
     console.log(error);
     res.status(400).send(error);

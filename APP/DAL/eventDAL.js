@@ -10,7 +10,7 @@ export async function getEvents(title, date, page) {
   if (page){
     sqlQuery = `
     select 
-      e.*, u.user_name, i.name
+      e.*, u.user_name, i.name, i.is_available
     from
       public."event" e 
     left join 
@@ -27,7 +27,7 @@ export async function getEvents(title, date, page) {
   } else {
     sqlQuery = `
     select 
-      e.*, u.user_name, i.name
+      e.*, u.user_name, i.name, i.is_available
     from
       public."event" e 
     left join 
@@ -50,7 +50,7 @@ export async function getEvents(title, date, page) {
 export async function getEvent(eventId) {
   const sqlQuery = `
   select 
-    e.*, u.user_name, i.name 
+    e.*, u.user_name, i.name
   from
     public."event" e 
   left join 
