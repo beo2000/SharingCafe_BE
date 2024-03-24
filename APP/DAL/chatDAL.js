@@ -33,10 +33,10 @@ SELECT
   message_id
   , sender_id
   , sender.user_name as sender_name
-  , sender.profile_avatar as avatar
+  , sender.profile_avatar as sender_avatar
   , receiver_id
   , receiver.user_name as receiver_name
-  , receiver.profile_avatar as avatar
+  , receiver.profile_avatar as receiver_avatar
   , "content"
   , created_at
 FROM 
