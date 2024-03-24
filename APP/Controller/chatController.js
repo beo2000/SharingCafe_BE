@@ -28,8 +28,9 @@ export async function getChatHistory(req, res) {
     const loginUser = req.loginUser;
     const limit = req.query.limit;
     const offset = req.query.offset;
+    console.log(loginUser);
     const result = await chatService.getChatHistory(
-      loginUser.userId,
+      loginUser.user_id,
       userId,
       limit,
       offset,

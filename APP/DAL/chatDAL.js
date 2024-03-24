@@ -31,10 +31,10 @@ export async function getChatHistory(userIdFrom, userIdTo, limit, offset) {
   const sqlQuery = `
     SELECT message_id, sender_id, receiver_id, "content", created_at, is_read FROM public.message
     WHERE 1 = 0
-    or sender_id = ${userIdFrom}
-    or sender_id = ${userIdFrom}
-    or receiver_id = ${userIdTo}
-    or receiver_id = ${userIdTo}
+    or sender_id = '${userIdFrom}'
+    or sender_id = '${userIdFrom}'
+    or receiver_id = '${userIdTo}'
+    or receiver_id = '${userIdTo}'
     LIMIT ${limit}
     OFFSET ${offset}
     `;
