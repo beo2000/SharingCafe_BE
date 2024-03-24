@@ -49,11 +49,15 @@ inner join
   public."user" receiver
   on 1 = 1
    and receiver.user_id = m.receiver_id
-    WHERE 1 = 0
-    or sender_id = '${userIdFrom}'
-    or sender_id = '${userIdFrom}'
-    or receiver_id = '${userIdTo}'
-    or receiver_id = '${userIdTo}'
+    WHERE 1 = 1
+    and( 
+      or sender_id = '${userIdFrom}'
+      or sender_id = '${userIdFrom}'
+    )
+    and (
+      or receiver_id = '${userIdTo}'
+      or receiver_id = '${userIdTo}'
+    )
 ORDER BY 
   created_at
     LIMIT ${limit}
