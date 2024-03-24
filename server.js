@@ -109,8 +109,8 @@ io.on('connection', (socket) => {
     console.log('Received data:', data);
     // Add your handling logic here
     await chatController.saveMessage(data);
+    io.emit('message', data);
   });
-  io.emit('message', 'Hello Server');
 });
 // Start the HTTP server
 server.listen(PORT, () => {
