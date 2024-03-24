@@ -107,9 +107,9 @@ io.on('connection', (socket) => {
   console.log('Authorization header:', accessToken);
   socket.on('message', async (data) => {
     console.log('Received data:', data);
-    // Add your handling logic here
-    await chatController.saveMessage(data);
-    io.emit('message', data);
+    const messageId = await chatController.saveMessage(data);
+    const message = await chatController.getMessage(messageId);
+    io.emit('message', message);
   });
 });
 // Start the HTTP server

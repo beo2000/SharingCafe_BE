@@ -65,3 +65,34 @@ ORDER BY
   });
   return result;
 }
+export async function getMessage(messageId) {
+  const sqlQuery = `
+SELECT 
+  message_id
+  , sender_id
+  , sender.user_name as sender_name
+  , sender.profile_avatar as sender_avatar
+  , receiver_id
+  , receiver.user_name as receiver_name
+  , receiver.profile_avatar as receiver_avatar
+  , "content"
+  , created_at
+FROM 
+  public.message m
+inner join 
+  public."user" sender
+  on 1 = 1
+    and sender.user_id = m.sender_id
+inner join 
+  public."user" receiver
+  on 1 = 1
+   and receiver.user_id = m.receiver_id
+    WHERE 1 = 1
+    and message_id = '${messageId}'
+    `;
+  const result = await SequelizeInstance.query(sqlQuery, {
+    type: SequelizeInstance.QueryTypes.SELECT,
+    raw: true,
+  });
+  return result;
+}

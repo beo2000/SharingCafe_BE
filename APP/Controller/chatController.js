@@ -15,11 +15,20 @@ export async function viewMessage(req, res) {
 export async function saveMessage(messageData) {
   const t = await SequelizeInstance.transaction();
   try {
-    await chatService.saveMessage(messageData);
+    const messageId = await chatService.saveMessage(messageData);
+    return messageId;
     t.commit();
   } catch (error) {
     console.error('Error sending message:', error);
     t.rollback();
+  }
+}
+export async function getMessage(messageId) {
+  try {
+    const message = await chatService.getMessage(messageId);
+    return message;
+  } catch (error) {
+    console.error('Error sending message:', error);
   }
 }
 export async function getChatHistory(req, res) {
