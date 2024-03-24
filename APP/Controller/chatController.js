@@ -16,8 +16,8 @@ export async function saveMessage(messageData) {
   const t = await SequelizeInstance.transaction();
   try {
     const messageId = await chatService.saveMessage(messageData);
-    return messageId;
     t.commit();
+    return messageId;
   } catch (error) {
     console.error('Error sending message:', error);
     t.rollback();
@@ -25,7 +25,7 @@ export async function saveMessage(messageData) {
 }
 export async function getMessage(messageId) {
   try {
-    const message = await chatService.getMessage(messageId);
+    const [message] = await chatService.getMessage(messageId);
     return message;
   } catch (error) {
     console.error('Error sending message:', error);
