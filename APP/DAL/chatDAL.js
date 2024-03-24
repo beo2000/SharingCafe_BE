@@ -54,6 +54,8 @@ inner join
     or sender_id = '${userIdFrom}'
     or receiver_id = '${userIdTo}'
     or receiver_id = '${userIdTo}'
+ORDER BY 
+  created_at
     LIMIT ${limit}
     OFFSET ${offset}
     `;
