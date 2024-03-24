@@ -16,6 +16,7 @@ export async function saveMessage(messageData) {
   const t = await SequelizeInstance.transaction();
   try {
     const messageId = await chatService.saveMessage(messageData);
+    console.log(messageId);
     t.commit();
     return messageId;
   } catch (error) {
@@ -25,6 +26,7 @@ export async function saveMessage(messageData) {
 }
 export async function getMessage(messageId) {
   try {
+    console.log(messageId);
     const [message] = await chatService.getMessage(messageId);
     return message;
   } catch (error) {

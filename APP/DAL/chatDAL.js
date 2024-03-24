@@ -14,18 +14,16 @@ export async function viewMessage(dataObj) {
 }
 
 export async function saveMessage(messageId, messageData) {
-  const { from, to, message, timestamp } = messageData;
-
-  const savedMessage = await Message.create({
-    message_id: messageId,
-    sender_id: from,
-    receiver_id: to,
-    content: message,
-    created_at: timestamp,
-    is_read: false,
+  const { from, to, message } = messageData;
+  const sqlQuery = `
+    INSERT INTO public.message (message_id, sender_id, receiver_id, "content", created_at, is_read) 
+    VALUES('${messageId}', '${from}','${to}', '${message}', now(), false);
+    `;
+  const result = await SequelizeInstance.query(sqlQuery, {
+    type: SequelizeInstance.QueryTypes.INSERT,
+    raw: true,
   });
-
-  return savedMessage;
+  return result;
 }
 export async function getChatHistory(userIdFrom, userIdTo, limit, offset) {
   const sqlQuery = `
