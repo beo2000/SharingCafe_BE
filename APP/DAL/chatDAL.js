@@ -29,7 +29,26 @@ export async function saveMessage(messageId, messageData) {
 }
 export async function getChatHistory(userIdFrom, userIdTo, limit, offset) {
   const sqlQuery = `
-    SELECT message_id, sender_id, receiver_id, "content", created_at, is_read FROM public.message
+SELECT 
+  message_id
+  , sender_id
+  , sender.user_name as sender_name
+  , sender.profile_avatar as avatar
+  , receiver_id
+  , receiver.user_name as receiver_name
+  , receiver.profile_avatar as avatar
+  , "content"
+  , created_at
+FROM 
+  public.message m
+inner join 
+  public."user" sender
+  on 1 = 1
+    and sender.user_id = m.sender_id
+inner join 
+  public."user" receiver
+  on 1 = 1
+   and receiver.user_id = m.sender_id
     WHERE 1 = 0
     or sender_id = '${userIdFrom}'
     or sender_id = '${userIdFrom}'
