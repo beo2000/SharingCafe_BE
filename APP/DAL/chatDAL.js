@@ -48,7 +48,7 @@ inner join
 inner join 
   public."user" receiver
   on 1 = 1
-   and receiver.user_id = m.sender_id
+   and receiver.user_id = m.receiver_id
     WHERE 1 = 0
     or sender_id = '${userIdFrom}'
     or sender_id = '${userIdFrom}'
