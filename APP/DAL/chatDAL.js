@@ -13,17 +13,34 @@ export async function viewMessage(dataObj) {
   return result;
 }
 
-export async function saveMessage(messageData, is_read) {
-  const { sender_id, receiver_id, content } = messageData;
-  const created_at = new Date();
+export async function saveMessage(messageId, messageData) {
+  const { from, to, message, timestamp } = messageData;
 
   const savedMessage = await Message.create({
-    sender_id,
-    receiver_id,
-    content,
-    created_at,
-    is_read,
+    message_id: messageId,
+    sender_id: from,
+    receiver_id: to,
+    content: message,
+    created_at: timestamp,
+    is_read: false,
   });
 
   return savedMessage;
+}
+export async function getChatHistory(userIdFrom, userIdTo, limit, offset) {
+  const sqlQuery = `
+    SELECT message_id, sender_id, receiver_id, "content", created_at, is_read FROM public.message
+    WHERE 1 = 0
+    or sender_id = ${userIdFrom}
+    or sender_id = ${userIdFrom}
+    or receiver_id = ${userIdTo}
+    or receiver_id = ${userIdTo}
+    LIMIT ${limit}
+    OFFSET ${offset}
+    `;
+  const result = await SequelizeInstance.query(sqlQuery, {
+    type: SequelizeInstance.QueryTypes.SELECT,
+    raw: true,
+  });
+  return result;
 }

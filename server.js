@@ -10,7 +10,7 @@ import { Server } from 'socket.io';
 import allRouter from './allRouter.js';
 import options from './swagger.js';
 import * as userService from './APP/Service/userService.js';
-
+import * as chatController from './APP/Controller/chatController.js';
 const app = express();
 dotenv.config();
 
@@ -105,9 +105,10 @@ io.on('connection', (socket) => {
 
   // Log the header value
   console.log('Authorization header:', accessToken);
-  socket.on('message', (data) => {
+  socket.on('message', async (data) => {
     console.log('Received data:', data);
     // Add your handling logic here
+    await chatController.saveMessage(data);
   });
   io.emit('message', 'Hello Server');
 });
