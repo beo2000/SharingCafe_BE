@@ -6,7 +6,6 @@ import dotenv from 'dotenv';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import { Server } from 'socket.io';
-
 import allRouter from './allRouter.js';
 import options from './swagger.js';
 import * as userService from './APP/Service/userService.js';

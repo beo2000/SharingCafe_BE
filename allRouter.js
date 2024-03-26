@@ -9,6 +9,8 @@ import * as modController from './APP/Controller/modController.js';
 import uploadCloud from './APP/middleware/uploadCloudImg.js';
 import * as chatController from './APP/Controller/chatController.js';
 import * as scheduleController from './APP/Controller/scheduleController.js';
+import * as reportController from './APP/Controller/reportController.js';
+import * as locationController from './APP/Controller/locationController.js';
 const router = express.Router();
 
 /**
@@ -1031,6 +1033,7 @@ router.get('/api/interest/count/blog', interestController.countBlogByInterest);
  */
 router.get('/api/admin/user/:userId', admController.getUser);
 router.put('/api/admin/user/:userId', admController.updateUserStatus);
+router.get('api/');
 
 // EVENT SECTION
 //  Phân quyền Authorization -> Middleware handle -> Middleware ???
@@ -1763,6 +1766,249 @@ router.post(
  *       '500':
  *         description: Internal server error
  */
+
+/**
+ * @swagger
+ * /api/blog/comment/{commentId}:
+ *   delete:
+ *     summary: Delete a specific comment by ID
+ *     tags:
+ *       - BLOG SECTION
+ *     parameters:
+ *       - in: path
+ *         name: commentId
+ *         required: true
+ *         description: ID of the comment to be deleted
+ *         schema:
+ *           type: string
+ *     responses:
+ *       '204':
+ *         description: Comment deleted successfully
+ *       '404':
+ *         description: Comment not found
+ *       '500':
+ *         description: Internal server error
+ */
+
+/**
+ * @swagger
+ * /api/blogs/like:
+ *   post:
+ *     summary: Like a blog
+ *     tags:
+ *      - BLOG SECTION
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               user_id:
+ *                 type: string
+ *                 description: ID of the user creating the comment
+ *                 example: "6ee3437a-8a2d-4769-8d89-cca128a6a086"
+ *               blogId:
+ *                 type: string
+ *                 description: ID of the blog
+ *                 example: "81a695ef-114c-4c4f-9a5e-5245ddeb75ae"
+ *     responses:
+ *       '201':
+ *         description: Successfully like blog
+ *       '400':
+ *         description: Bad request, e.g., missing parameters
+ *       '500':
+ *         description: Internal server error
+ */
+
+/**
+ * @swagger
+ * /api/blogs/like:
+ *   put:
+ *     summary: Unlike a blog
+ *     tags:
+ *      - BLOG SECTION
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               like_blog_id:
+ *                 type: string
+ *                 description: ID
+ *                 example: "19b18d03-83db-4840-b836-a8ab15ec5e44"
+ *               blog_id:
+ *                 type: string
+ *                 description: ID of the blog
+ *                 example: "6b0883ba-23c4-40a6-8e22-bda8011c4add"
+ *     responses:
+ *       '201':
+ *         description: Successfully unlike blog
+ *       '400':
+ *         description: Bad request, e.g., missing parameters
+ *       '500':
+ *         description: Internal server error
+ */
+
+/**
+ * @swagger
+ * /api/blogs/report:
+ *   get:
+ *     summary: Get a list of blog report
+ *     tags:
+ *      - REPORT SECTION
+ *     responses:
+ *       '200':
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             example:
+ *               - blogId: 1
+ *                 title: Sample Blog 1
+ *               - blogId: 2
+ *                 title: Sample Blog 2
+ *       '500':
+ *         description: Internal server error
+ */
+
+/**
+ * @swagger
+ * /api/blogs/report:
+ *   post:
+ *     summary: Create a blog report
+ *     tags:
+ *      - REPORT SECTION
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               reporter_id:
+ *                 type: string
+ *                 description: ID of the user sending report
+ *                 example: "11893856-610c-40e2-bd33-e8410cfc3dc2"
+ *               blog_id:
+ *                 type: string
+ *                 description: ID of the blog
+ *                 example: "9d47a0e3-9f5c-4108-9985-ba52d467a6c2"
+ *               report_status_id:
+ *                 type: string
+ *                 description: ID of the report status
+ *                 example: "6fff783e-d216-48a1-95ca-8d7ae9e1dbc5"
+ *     responses:
+ *       '201':
+ *         description: blog report create successfully
+ *       '400':
+ *         description: Bad request, e.g., missing parameters
+ *       '500':
+ *         description: Internal server error
+ */
+
+/**
+ * @swagger
+ * /api/blogs/report/{reportId}:
+ *   delete:
+ *     summary: Delete a specific report by ID
+ *     tags:
+ *       - REPORT SECTION
+ *     parameters:
+ *       - in: path
+ *         name: reportId
+ *         required: true
+ *         description: ID of the report to be deleted
+ *         schema:
+ *           type: string
+ *     responses:
+ *       '204':
+ *         description: Report deleted successfully
+ *       '404':
+ *         description: Report not found
+ *       '500':
+ *         description: Internal server error
+ */
+
+/**
+ * @swagger
+ * /api/events/report:
+ *   get:
+ *     summary: Get a list of event report
+ *     tags:
+ *      - REPORT SECTION
+ *     responses:
+ *       '200':
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             example:
+ *               - eventId: 1
+ *                 title: Sample Event 1
+ *               - eventId: 2
+ *                 title: Sample Event 2
+ *       '500':
+ *         description: Internal server error
+ */
+
+/**
+ * @swagger
+ * /api/events/report:
+ *   post:
+ *     summary: Create a blog report
+ *     tags:
+ *      - REPORT SECTION
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               reporter_id:
+ *                 type: string
+ *                 description: ID of the user sending report
+ *                 example: "11893856-610c-40e2-bd33-e8410cfc3dc2"
+ *               event_id:
+ *                 type: string
+ *                 description: ID of the blog
+ *                 example: "50b415b6-b874-429c-9f31-56db62ff0c13"
+ *               report_status_id:
+ *                 type: string
+ *                 description: ID of the report status
+ *                 example: "6fff783e-d216-48a1-95ca-8d7ae9e1dbc5"
+ *     responses:
+ *       '201':
+ *         description: Event report create successfully
+ *       '400':
+ *         description: Bad request, e.g., missing parameters
+ *       '500':
+ *         description: Internal server error
+ */
+
+/**
+ * @swagger
+ * /api/events/report/{reportId}:
+ *   delete:
+ *     summary: Delete a specific event report by ID
+ *     tags:
+ *       - REPORT SECTION
+ *     parameters:
+ *       - in: path
+ *         name: reportId
+ *         required: true
+ *         description: ID of the report to be deleted
+ *         schema:
+ *           type: string
+ *     responses:
+ *       '204':
+ *         description: Report deleted successfully
+ *       '404':
+ *         description: Report not found
+ *       '500':
+ *         description: Internal server error
+ */
 router.get('/api/blog', blogController.getBlogs);
 router.get('/api/blog/:blogId', blogController.getBlog);
 router.post('/api/blog', blogController.createBlog);
@@ -1776,10 +2022,25 @@ router.put(
 router.get('/api/blogs/popular', blogController.getPopularBlogs);
 router.get('/api/blog/new/blogs', blogController.getNewBlogs);
 router.post('/api/blog/search', blogController.searchByName);
+
 router.get('/api/blog/comment/:blogId', blogController.getComments);
 router.post('/api/blog/comment', blogController.createComment);
 router.put('/api/blog/comment/:commentId', blogController.updateComment);
-router.post('/api/blog/like', blogController.likeBlog);
+router.delete('/api/blog/comment/:commentId', blogController.deleteComment);
+
+router.post('/api/blogs/like', blogController.likeBlog);
+router.put('/api/blogs/like', blogController.unLikeBlog);
+
+router.get('/api/blogs/report', reportController.getAllBlogReport);
+router.post('/api/blogs/report', reportController.createBlogReport);
+router.delete('/api/blogs/report/:reportId', reportController.deleteBlogReport);
+
+router.get('/api/events/report', reportController.getAllEventReport);
+router.post('/api/events/report', reportController.createEventReport);
+router.delete(
+  '/api/events/report/:reportId',
+  reportController.deleteEventReport,
+);
 /**
  * @swagger
  * /api/moderator/login:
@@ -2102,4 +2363,84 @@ router.post('/api/user/schedule', scheduleController.createSchedule);
  */
 router.get('/api/auth/chat-history', chatController.getChatHistory);
 
+router.get('/api/location/search', locationController.getLocation);
+router.get('/api/location/distance', locationController.getDistance);
+router.get('/api/location/recommend', locationController.getRecommend);
+/**
+ * @swagger
+ * /api/location/search:
+ *   get:
+ *     summary: Get Highland Coffee store location
+ *     description: Retrieve Highland Coffee store location based on current location
+ *     tags:
+ *      - LOCATION SECTION
+ *     parameters:
+ *       - in: query
+ *         name: lat
+ *         required: true
+ *         description: Latitude of current location
+ *         example: 10.841743
+ *         schema:
+ *           type: string
+ *       - in: query
+ *         name: lng
+ *         required: true
+ *         description: Longtitude of current location
+ *         example: 106.792377
+ *         schema:
+ *           type: string
+ *     responses:
+ *       '200':
+ *         description: Successfully retrieved chat history.
+ *       '400':
+ *         description: Bad request. Invalid parameters provided.
+ *       '500':
+ *         description: An internal server error occurred.
+ */
+
+/**
+ * @swagger
+ * /api/location/distance:
+ *   get:
+ *     summary: Get distance between 2 location
+ *     description: Retrieve distance between 2 location
+ *     tags:
+ *      - LOCATION SECTION
+ *     parameters:
+ *       - in: query
+ *         name: originsLAT
+ *         required: true
+ *         description: Latitude of current location
+ *         example: 20.981971
+ *         schema:
+ *           type: string
+ *       - in: query
+ *         name: originsLNG
+ *         required: true
+ *         description: Longtitude of current location
+ *         example: 105.864323
+ *         schema:
+ *           type: string
+ *       - in: query
+ *         name: destinationsLAT
+ *         required: true
+ *         description: Latitude of destination location
+ *         example: 21.031011
+ *         schema:
+ *           type: string
+ *       - in: query
+ *         name: destinationsLNG
+ *         required: true
+ *         description: Longtitude of destination location
+ *         example: 105.783206
+ *         schema:
+ *           type: string
+ *     responses:
+ *       '200':
+ *         description: Successfully retrieved chat history.
+ *       '400':
+ *         description: Bad request. Invalid parameters provided.
+ *       '500':
+ *         description: An internal server error occurred.
+ */
 export default router;

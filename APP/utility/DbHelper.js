@@ -101,6 +101,12 @@ const User = sequelize.define(
     role_id: {
       type: DataTypes.UUID,
     },
+    gender: {
+      type: DataTypes.BOOLEAN,
+    },
+    age: {
+      type: DataTypes.TEXT,
+    },
     is_available: {
       type: DataTypes.BOOLEAN,
     },
@@ -286,6 +292,9 @@ const Comment = sequelize.define(
     },
     content: {
       type: DataTypes.TEXT,
+    },
+    parent_comment_id: {
+      type: DataTypes.UUID,
     },
     created_at: {
       type: DataTypes.DATE,
@@ -628,7 +637,7 @@ const Schedule = sequelize.define(
     is_accept: {
       type: DataTypes.BOOLEAN,
     },
-    create_at: {
+    created_at: {
       type: DataTypes.DATE,
       allowNull: false,
       defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),
@@ -668,7 +677,7 @@ const LikeBlog = sequelize.define(
     },
   },
   {
-    tableName: 'user_interest',
+    tableName: 'like_blog',
     timestamps: false,
   },
 );
