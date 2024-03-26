@@ -955,6 +955,34 @@ router.get('/api/user/events/suggest/:userId', userController.getSuggestEvent);
  *       '500':
  *         description: Internal Server Error
  */
+/**
+ * @swagger
+ * tags:
+ *   - name: INTEREST SECTION
+ *     description: Operations related to interests
+ *
+ * /api/interest/count/blog:
+ *   get:
+ *     summary: Count blogs by interest
+ *     description: Retrieve the count of blogs associated with each interest.
+ *     tags:
+ *       - INTEREST SECTION
+ *     responses:
+ *       200:
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             example:
+ *               data:
+ *                 - interest_id: 1
+ *                   parent_id: null
+ *                   blog_count: 10
+ *                 - interest_id: 2
+ *                   parent_id: 1
+ *                   blog_count: 5
+ *       500:
+ *         description: Internal server error
+ */
 router.get('/api/interest', interestController.getInterests);
 router.post('/api/interest', interestController.createInterest);
 router.get('/api/interest/:interestId', interestController.getInterest);
@@ -968,6 +996,7 @@ router.delete('/api/interest', interestController.deleteInterest);
 router.get('/api/interests/toppick', interestController.getToppick);
 router.get('/api/interests/parent', interestController.getParentInterests);
 router.get('/api/admin/users', admController.getUsers);
+router.get('/api/interest/count/blog', interestController.countBlogByInterest);
 /**
  * @swagger
  * /api/admin/user/{userId}:
@@ -2072,4 +2101,5 @@ router.post('/api/user/schedule', scheduleController.createSchedule);
  *         description: An internal server error occurred.
  */
 router.get('/api/auth/chat-history', chatController.getChatHistory);
+
 export default router;
