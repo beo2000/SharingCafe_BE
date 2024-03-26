@@ -10,7 +10,7 @@ import uploadCloud from './APP/middleware/uploadCloudImg.js';
 import * as chatController from './APP/Controller/chatController.js';
 import * as scheduleController from './APP/Controller/scheduleController.js';
 import * as reportController from './APP/Controller/reportController.js';
-import wss from './websocket.js';
+
 const router = express.Router();
 
 /**
@@ -2292,29 +2292,42 @@ router.post('/api/user/schedule', scheduleController.createSchedule);
  *       '500':
  *         description: Internal server error
  */
-
-// wss.on('connection', function connection(ws) {
-//   console.log('WebSocket connection client connected');
-
-//   ws.on('message', function incoming(message) {
-//     // Handle different types of messages
-//     try {
-//       const data = JSON.parse(message);
-//       switch (data.type) {
-//         case 'SEND_MESSAGE':
-//           chatController.sendMessage(data.payload);
-//           break;
-//         default:
-//           console.log('Unknown message type');
-//       }
-//     } catch (error) {
-//       console.error('Error parsing message:', error);
-//     }
-//   });
-
-//   ws.on('close', () => {
-//     console.log('WebSocket client disconnected');
-//   });
-// });
+// CHAT SECTION
+/**
+ * @swagger
+ * /api/auth/chat-history:
+ *   get:
+ *     summary: Get chat history
+ *     description: Retrieve chat history based on userId, with pagination using limit and offset.
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: userId
+ *         required: true
+ *         description: ID of the user to retrieve chat history for.
+ *         schema:
+ *           type: string
+ *       - in: query
+ *         name: limit
+ *         required: true
+ *         description: Maximum number of messages to retrieve.
+ *         schema:
+ *           type: integer
+ *       - in: query
+ *         name: offset
+ *         required: true
+ *         description: Offset for pagination.
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       '200':
+ *         description: Successfully retrieved chat history.
+ *       '400':
+ *         description: Bad request. Invalid parameters provided.
+ *       '500':
+ *         description: An internal server error occurred.
+ */
+router.get('/api/auth/chat-history', chatController.getChatHistory);
 
 export default router;
