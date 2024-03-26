@@ -40,7 +40,14 @@ export async function getStatics() {
     FROM blog
     UNION
     SELECT 'Event' AS entity_type, COUNT(*) AS entity_count
-    FROM event;`;
+    FROM event
+    union 
+   	select 'Total Matched' as entity_type, count(um.user_match_id) 
+   	from user_match um 
+   	join user_match_status ums 
+   	 on um.user_match_status_id = ums.user_match_status_id
+   	where ums.user_match_status = 'Accepted'
+    `;
   const statics = await SequelizeInstance.query(sqlQuery, {
     type: SequelizeInstance.QueryTypes.SELECT,
     raw: true,

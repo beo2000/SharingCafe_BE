@@ -45,6 +45,8 @@ export async function register(userId, user){
     phone: user.phone,
     email: user.email,
     Bio: user.Bio,
+    gender: user.gender,
+    age: user.age,
     is_available: true,
     role_id: "6150886b-5920-4884-8e43-d4efb62f89d3"
   });
@@ -89,7 +91,7 @@ export async function getUserByEmail(email){
 export async function getUser(userId) {
   const sqlQuery = `
   select 
-    u."Bio", u.user_name, u.profile_avatar
+    u.user_id, u."Bio", u.user_name, u.profile_avatar, u.email, u.phone
   from 
     "user" u
    where u.user_id = '${userId}'
@@ -404,6 +406,9 @@ export async function updateProfile(userId, profile) {
       email: profile.email,
       Bio: profile.Bio,
       password: profile.password,
+      profile_avatar: profile.profile_avatar,
+      gender: profile.gender,
+      age: profile.age,
     },
     {
       where: { user_id: userId },

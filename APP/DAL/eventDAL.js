@@ -5,7 +5,7 @@ export async function getEvents(title, date, page) {
   let name = title;
   if (name == null) {name = ''}
   let date1 = new Date(date);
-  if (date1 == 'Invalid Date') {date1 = new Date('1/1/1000')}
+  if (date1 == 'Invalid Date') {date1 = new Date(Date.now())}
   console.log(date1.toUTCString());
   if (page){
     sqlQuery = `
