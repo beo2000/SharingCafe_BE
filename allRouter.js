@@ -2332,6 +2332,8 @@ router.post('/api/user/schedule', scheduleController.createSchedule);
 router.get('/api/auth/chat-history', chatController.getChatHistory);
 
 router.get('/api/location/search', locationController.getLocation);
+router.get('/api/location/distance', locationController.getDistance);
+router.get('/api/location/recommend', locationController.getRecommend);
 /**
  * @swagger
  * /api/location/search:
@@ -2353,6 +2355,52 @@ router.get('/api/location/search', locationController.getLocation);
  *         required: true
  *         description: Longtitude of current location
  *         example: 106.792377
+ *         schema:
+ *           type: string
+ *     responses:
+ *       '200':
+ *         description: Successfully retrieved chat history.
+ *       '400':
+ *         description: Bad request. Invalid parameters provided.
+ *       '500':
+ *         description: An internal server error occurred.
+ */
+
+/**
+ * @swagger
+ * /api/location/distance:
+ *   get:
+ *     summary: Get distance between 2 location
+ *     description: Retrieve distance between 2 location
+ *     tags:
+ *      - LOCATION SECTION
+ *     parameters:
+ *       - in: query
+ *         name: originsLAT
+ *         required: true
+ *         description: Latitude of current location
+ *         example: 20.981971
+ *         schema:
+ *           type: string
+ *       - in: query
+ *         name: originsLNG
+ *         required: true
+ *         description: Longtitude of current location
+ *         example: 105.864323
+ *         schema:
+ *           type: string
+ *       - in: query
+ *         name: destinationsLAT
+ *         required: true
+ *         description: Latitude of destination location
+ *         example: 21.031011
+ *         schema:
+ *           type: string
+ *       - in: query
+ *         name: destinationsLNG
+ *         required: true
+ *         description: Longtitude of destination location
+ *         example: 105.783206
  *         schema:
  *           type: string
  *     responses:
