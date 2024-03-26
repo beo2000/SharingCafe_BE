@@ -16,14 +16,15 @@ export async function getUserByEmail(email) {
   return await userDAL.getUserByEmail(email);
 }
 
-export async function register(user){
+export async function register(user) {
   const userId = uuidv4();
   const email = await getUserByEmail(user.email);
   let phone = user.phone;
   if (phone != null) {
     phone = await getUserByPhone(user.phone);
+  } else if (phone || email) {
+    throw new Error('Email already in use 😕');
   }
-  else if(phone || email) { throw new Error ('Email already in use 😕');}
   return await userDAL.register(userId, user);
 }
 
@@ -81,6 +82,12 @@ export async function getUserMatchWithStatus(userId) {
   const result = await userDAL.getUserMatchWithStatus(userId);
   return result;
 }
+
+export async function countUserByStatus() {
+  const result = await matchDAL.countUserByStatus();
+  return result;
+}
+
 export async function getUserMatchWithPendingStatus(userId) {
   const result = await userDAL.getUserMatchWithPendingStatus(userId);
   return result;

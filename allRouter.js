@@ -439,6 +439,7 @@ router.get('/api/user/interest/:userInterestId', userController.getInterest);
 router.put('/api/user/interest/:userInterestId', userController.updateInterest);
 router.delete('/api/user/interest', userController.deleteInterest);
 router.post('/api/user/register', userController.register);
+
 /**
  * @swagger
  * /api/user/events/{userId}:
@@ -2260,6 +2261,33 @@ router.put('/api/moderator/event/:eventId', modController.censorEvent);
  *       500:
  *         description: Internal Server Error
  */
+/**
+ * @swagger
+ * tags:
+ *   - name: MATCH SECTION
+ *     description: Operations related to matches
+ *
+ * /api/match/user-status/count:
+ *   get:
+ *     summary: Count users by status
+ *     description: Retrieve the count of users based on their match status.
+ *     tags:
+ *       - MATCH SECTION
+ *     responses:
+ *       200:
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             example:
+ *               data:
+ *                 - user_match_status: "liked"
+ *                   status_count: 10
+ *                 - user_match_status: "matched"
+ *                   status_count: 5
+ *       500:
+ *         description: Internal server error
+ */
+router.get('/api/match/user-status/count', matchController.countUserByStatus);
 router.get(
   '/api/auth/matches-interest',
   matchController.getUserMatchByInterest,
