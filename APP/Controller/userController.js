@@ -33,18 +33,18 @@ export async function loginUser(req, res) {
   }
 }
 
-export async function getUser(req, res){
+export async function getUser(req, res) {
   try {
     const userId = req.params.userId;
     const result = await userService.getUser(userId);
     res.status(200).send(result);
-  } catch (error){
+  } catch (error) {
     console.log(error);
     res.status(500).send({ error: error.message });
   }
 }
 
-export async function createInterest (req, res){
+export async function createInterest(req, res) {
   const t = await SequelizeInstance.transaction();
   try {
     const interestDetails = req.body;
@@ -63,7 +63,7 @@ export async function getInterests(req, res) {
     const userId = req.params.userId;
     const result = await userService.getInterests(userId);
     res.status(200).send(result);
-  } catch (error){
+  } catch (error) {
     console.log(error);
     res.status(500).send({ error: error.message });
   }
@@ -74,38 +74,38 @@ export async function getInterest(req, res) {
     const interestId = req.params.userInterestId;
     const result = await userService.getInterest(interestId);
     res.status(200).send(result);
-  } catch (error){
+  } catch (error) {
     console.log(error);
     res.status(500).send({ error: error.message });
   }
 }
 
-export async function updateInterest(req, res){
+export async function updateInterest(req, res) {
   const t = await SequelizeInstance.transaction();
-    try{
-        const userInterestId = req.params.userInterestId;
-        const userInterestDetails = req.body;
-        const userInterest = await userService.updateInterest(
-            userInterestId,
-            userInterestDetails
-        );
-        res.status(200).send(userInterest);
-        await t.commit();
-    } catch (error){
-        await t.rollback();
-        console.log(error);
-        res.status(404).send(error);
-    }
+  try {
+    const userInterestId = req.params.userInterestId;
+    const userInterestDetails = req.body;
+    const userInterest = await userService.updateInterest(
+      userInterestId,
+      userInterestDetails,
+    );
+    res.status(200).send(userInterest);
+    await t.commit();
+  } catch (error) {
+    await t.rollback();
+    console.log(error);
+    res.status(404).send(error);
+  }
 }
 
-export async function deleteInterest(req, res){
+export async function deleteInterest(req, res) {
   const t = await SequelizeInstance.transaction();
   try {
     const interestIds = req.body;
     const interest = await userService.deleteInterest(interestIds);
-    res.status(200).send({interest});
+    res.status(200).send({ interest });
     await t.commit();
-  } catch (error){
+  } catch (error) {
     await t.rollback();
     console.log(error);
     res.status(404).send(error);
@@ -117,7 +117,7 @@ export async function getMyEvents(req, res) {
     const userId = req.params.userId;
     const result = await userService.getMyEvents(userId);
     res.status(200).send(result);
-  } catch (error){
+  } catch (error) {
     console.log(error);
     res.status(500).send({ error: error.message });
   }
@@ -128,7 +128,7 @@ export async function getEventsByInterest(req, res) {
     const interestId = req.params.interestId;
     const result = await userService.getEventsByInterest(interestId);
     res.status(200).send(result);
-  } catch (error){
+  } catch (error) {
     console.log(error);
     res.status(500).send({ error: error.message });
   }
@@ -139,20 +139,20 @@ export async function getBlogsByInterest(req, res) {
     const interestId = req.params.interestId;
     const result = await userService.getBlogsByInterest(interestId);
     res.status(200).send(result);
-  } catch (error){
+  } catch (error) {
     console.log(error);
     res.status(500).send({ error: error.message });
   }
 }
 
-export async function getSuggestEvent(req, res){
+export async function getSuggestEvent(req, res) {
   try {
     const userId = req.params.userId;
     const result = await userService.getSuggestEvent(userId);
     res.status(200).send(result);
-  } catch (error){
+  } catch (error) {
     console.log(error);
-    res.status(500).send({error: error.message});
+    res.status(500).send({ error: error.message });
   }
 }
 
@@ -175,6 +175,20 @@ export async function updateProfile(req, res) {
     res.status(404).send(error);
   }
 }
+export async function upsertInterests(req, res) {
+  const t = await SequelizeInstance.transaction();
+  try {
+    const userId = req.loginUser.user_id;
+    const interests = req.body;
+    const user = await userService.upsertInterests(userId, interests);
+    res.status(200).send(user);
+    await t.commit();
+  } catch (error) {
+    await t.rollback();
+    console.log(error);
+    res.status(404).send(error);
+  }
+}
 
 export async function updateAvatar(req, res) {
   const t = await SequelizeInstance.transaction();
@@ -182,7 +196,7 @@ export async function updateAvatar(req, res) {
     const fileData = req.file;
     console.log(fileData);
     if (fileData === undefined) {
-      cloudinary.uploader.destroy(fileData.filename)
+      cloudinary.uploader.destroy(fileData.filename);
       return res.status(400).send({ error: error.message });
     }
     const userId = req.params.userId;

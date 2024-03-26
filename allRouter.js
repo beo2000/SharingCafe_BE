@@ -425,6 +425,42 @@ router.get('/api/admin/statics', admController.getStatics);
  *       '500':
  *         description: Internal server error
  */
+/**
+ * @swagger
+ * tags:
+ *   - name: USER SECTION
+ *     description: Operations related to user authentication
+ *
+ * /api/auth/user/update-interests:
+ *   put:
+ *     summary: Update user interests
+ *     description: Update or insert user interests based on the provided data.
+ *     tags:
+ *       - USER SECTION
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               interests:
+ *                 type: array
+ *                 items:
+ *                   type: object
+ *                   properties:
+ *                     interest_id:
+ *                       type: string
+ *                       description: ID of the interest
+ *     responses:
+ *       200:
+ *         description: Interests updated successfully
+ *       400:
+ *         description: Bad request - Invalid request body
+ *       500:
+ *         description: Internal server error
+ */
+router.put('/api/auth/user/update-interests', userController.upsertInterests);
 router.post('/api/user/login', userController.loginUser);
 router.get('/api/user/:userId', userController.getUser);
 router.put('/api/user/:userId', userController.updateProfile);

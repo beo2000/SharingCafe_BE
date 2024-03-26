@@ -37,6 +37,16 @@ export async function updateProfile(userId, profile) {
   if (!user) throw new Error('User not found');
   return await userDAL.updateProfile(userId, profile);
 }
+export async function upsertInterests(userId, interests) {
+  await userDAL.deleteUserInterests(userId);
+  const data = interests.map((interest) => ({
+    user_id: userId,
+    interest_id: interest.interest_id,
+  }));
+  for (const user of data) {
+    return await userDAL.upsertInterests(user);
+  }
+}
 
 export async function updateAvatar(userId, fileData) {
   const user = await getUser(userId);

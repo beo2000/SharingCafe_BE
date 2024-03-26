@@ -443,3 +443,28 @@ export async function updateAvatar(userId, fileData) {
     },
   );
 }
+export async function deleteUserInterests(userId) {
+  const sqlQuery = `
+  DELETE FROM public.user_interest
+  WHERE user_id = :userId
+  `;
+  const result = await SequelizeInstance.query(sqlQuery, {
+    replacements: userId,
+    type: SequelizeInstance.QueryTypes.DELETE,
+    raw: true,
+  });
+  return result;
+}
+
+export async function upsertInterests(data) {
+  const sqlQuery = `
+  INSERT INTO public.user_interest (user_interest_id, interest_id, user_id, created_at) 
+  VALUES(gen_random_uuid(), :interest_id, :user_id, now()));
+  `;
+  const result = await SequelizeInstance.query(sqlQuery, {
+    replacements: data,
+    type: SequelizeInstance.QueryTypes.SELECT,
+    raw: true,
+  });
+  return result;
+}
