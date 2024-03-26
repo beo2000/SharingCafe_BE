@@ -10,7 +10,7 @@ import uploadCloud from './APP/middleware/uploadCloudImg.js';
 import * as chatController from './APP/Controller/chatController.js';
 import * as scheduleController from './APP/Controller/scheduleController.js';
 import * as reportController from './APP/Controller/reportController.js';
-
+import * as locationController from './APP/Controller/locationController.js';
 const router = express.Router();
 
 /**
@@ -1004,6 +1004,7 @@ router.get('/api/admin/users', admController.getUsers);
  */
 router.get('/api/admin/user/:userId', admController.getUser);
 router.put('/api/admin/user/:userId', admController.updateUserStatus);
+router.get('api/')
 
 // EVENT SECTION
 //  Phân quyền Authorization -> Middleware handle -> Middleware ???
@@ -2330,4 +2331,36 @@ router.post('/api/user/schedule', scheduleController.createSchedule);
  */
 router.get('/api/auth/chat-history', chatController.getChatHistory);
 
+router.get('/api/location/search', locationController.getLocation);
+/**
+ * @swagger
+ * /api/location/search:
+ *   get:
+ *     summary: Get Highland Coffee store location
+ *     description: Retrieve Highland Coffee store location based on current location
+ *     tags:
+ *      - LOCATION SECTION
+ *     parameters:
+ *       - in: query
+ *         name: lat
+ *         required: true
+ *         description: Latitude of current location
+ *         example: 10.841743
+ *         schema:
+ *           type: string
+ *       - in: query
+ *         name: lng
+ *         required: true
+ *         description: Longtitude of current location
+ *         example: 106.792377
+ *         schema:
+ *           type: string
+ *     responses:
+ *       '200':
+ *         description: Successfully retrieved chat history.
+ *       '400':
+ *         description: Bad request. Invalid parameters provided.
+ *       '500':
+ *         description: An internal server error occurred.
+ */
 export default router;

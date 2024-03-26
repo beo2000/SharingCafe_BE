@@ -28,7 +28,7 @@ export async function register(user){
 }
 
 export async function getUser(userId) {
-  return await userDAL.getUser(userId);
+  return await userDAL.getUserDetailsById(userId);
 }
 
 export async function updateProfile(userId, profile) {

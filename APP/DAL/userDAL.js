@@ -37,7 +37,7 @@ export async function getUserDetails(email, password) {
   return user;
 }
 
-export async function register(userId, user){
+export async function register(userId, user) {
   return await User.create({
     user_id: userId,
     user_name: user.user_name,
@@ -48,15 +48,15 @@ export async function register(userId, user){
     gender: user.gender,
     age: user.age,
     is_available: true,
-    role_id: "6150886b-5920-4884-8e43-d4efb62f89d3"
+    role_id: '6150886b-5920-4884-8e43-d4efb62f89d3',
   });
 }
 
-export async function getUserByPhone(phone){
+export async function getUserByPhone(phone) {
   // const sqlQuery = `
-  // select 
+  // select
   //   u.*
-  // from 
+  // from
   //   "user" u
   //  where u.phone = '${phone}'
   // `;
@@ -66,15 +66,15 @@ export async function getUserByPhone(phone){
   // });
   // return result;
   return await User.findOne({
-    where: {phone: phone}
+    where: { phone: phone },
   });
 }
 
-export async function getUserByEmail(email){
+export async function getUserByEmail(email) {
   // const sqlQuery = `
-  // select 
+  // select
   //   u.*
-  // from 
+  // from
   //   "user" u
   //  where u.email = '${email}'
   // `;
@@ -84,7 +84,7 @@ export async function getUserByEmail(email){
   // });
   // return result;
   return await User.findOne({
-    where: {email: email}
+    where: { email: email },
   });
 }
 
@@ -190,22 +190,39 @@ export async function getUserDetailsByEmail(email) {
 }
 export async function getUserDetailsById(userId) {
   const sqlQuery = `
-    select 
-      user_id
-      , role_name as role
-    from 
-      public."user" u 
-    inner join 
-      role r 
-    on u.role_id = r.role_id
-    where user_id = '${userId}'
+  SELECT 
+  u.*,
+  json_agg(
+      json_build_object(
+          'interest_id', ui.interest_id,
+          'interest_name', ui.name
+      )
+    ) AS interest_list
+  FROM 
+    public."user" u 
+  INNER JOIN 
+    (SELECT * FROM role WHERE role_name = 'USER') r ON u.role_id = r.role_id
+  LEFT JOIN 
+    (
+        SELECT 
+            ui.user_id,
+            ui.interest_id,
+            i.name
+        FROM 
+            user_interest ui 
+        INNER JOIN 
+            interest i ON i.interest_id = ui.interest_id
+        ORDER BY 
+            ui.user_id, ui.interest_id  
+    ) ui ON ui.user_id = u.user_id
+    where u.user_id = '${userId}'
+  GROUP BY 
+    u.user_id, u.role_id;  
   `;
-
   const userDetails = await SequelizeInstance.query(sqlQuery, {
     type: SequelizeInstance.QueryTypes.SELECT,
     raw: true,
   });
-
   return userDetails;
 }
 export async function getUserMatchByInterest(userId) {
