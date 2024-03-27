@@ -64,14 +64,15 @@ function tinhDiemGiuaCuaKhoangCach(lat1, lon1, lat2, lon2) {
 
 export async function getMiddlePoint(req, res) {
   try {
-    const originsLAT = req.query.originsLAT * 1;
-    const originsLNG = req.query.originsLNG * 1;
-    const destinationsLAT = req.query.destinationsLAT * 1;
-    const destinationsLNG = req.query.destinationsLNG * 1;
-
-    const { lat, lng } = tinhDiemGiuaCuaKhoangCach(originsLAT, originsLNG, destinationsLAT, destinationsLNG);
-
-    res.status(200).json({ lat, lng });
+    const originsLAT = req.query.originsLAT;
+    const originsLNG = req.query.originsLNG;
+    const destinationsLAT = req.query.destinationsLAT;
+    const destinationsLNG = req.query.destinationsLNG;
+    
+    // Tính tọa độ trung điểm
+    const lat = (parseFloat(originsLAT) + parseFloat(destinationsLAT)) / 2;
+    const lng = (parseFloat(originsLNG) + parseFloat(destinationsLNG)) / 2;
+    return { lat, lng }; // Trả về đối tượng chứa lat và lng
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal server error' });
@@ -81,7 +82,13 @@ export async function getMiddlePoint(req, res) {
 export async function getRecommendCafe(req, res) {
   try {
     // Gọi hàm getMiddlePoint và nhận kết quả trả về
-    const { lat, lng } = await getMiddlePoint(req, res);
+    const middlePoint = await getMiddlePoint(req, res);
+
+    if (!middlePoint || !middlePoint.lat || !middlePoint.lng) { // Kiểm tra xem kết quả trả về có hợp lệ hay không
+      return res.status(500).json({ error: 'Invalid middle point coordinates' });
+    }
+
+    const { lat, lng } = middlePoint; // Sử dụng destructuring để lấy lat và lng từ kết quả trả về
 
     const name = req.query.name;
     let radius = 5; // Khởi tạo bán kính mặc định là 5 km
@@ -89,19 +96,18 @@ export async function getRecommendCafe(req, res) {
 
     // Lặp cho đến khi nhận được kết quả hoặc đạt tới giới hạn bán kính
     while (!response && radius <= 10) {
-      response = await axios.get(`https://rsapi.goong.io/Place/AutoComplete?input=Highland&location=lat%2C%20lng&limit=200&radius=${radius}&api_key=KnB6OOmQcQpYSTnqzYhjqUmcGSBKUob1cDF9oOPw`);
-
+      response = await axios.get(`https://rsapi.goong.io/Place/AutoComplete?input=Highland&location=${lat},${lng}&limit=200&radius=${radius}&api_key=KnB6OOmQcQpYSTnqzYhjqUmcGSBKUob1cDF9oOPw`);
       // Nếu không nhận được kết quả, tăng radius lên 1 đơn vị km
-      if (!response.data || !response.data.length) {
+      if (!response.data) {
         radius += 1;
+      } else {
+        // Nếu nhận được kết quả, gửi phản hồi và dừng vòng lặp
+        return res.status(200).json(response.data);
       }
     }
 
-    if (response && response.data) {
-      res.status(200).json(response.data);
-    } else {
-      res.status(404).json({ message: 'No results found within the search radius.' });
-    }
+    // Nếu vòng lặp kết thúc mà không có kết quả
+    res.status(404).json({ message: 'No results found within the search radius.' });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal server error' });
