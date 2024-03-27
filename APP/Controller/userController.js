@@ -190,6 +190,66 @@ export async function upsertInterests(req, res) {
   }
 }
 
+export async function upsertUnlikeTopics(req, res) {
+  const t = await SequelizeInstance.transaction();
+  try {
+    const userId = req.loginUser.user_id;
+    const unlike_topics = req.body;
+    const user = await userService.upsertUnlikeTopics(userId, unlike_topics);
+    res.status(200).send(user);
+    await t.commit();
+  } catch (error) {
+    await t.rollback();
+    console.log(error);
+    res.status(404).send(error);
+  }
+}
+
+export async function upsertPersonalProblems(req, res) {
+  const t = await SequelizeInstance.transaction();
+  try {
+    const userId = req.loginUser.user_id;
+    const personal_problems = req.body;
+    const user = await userService.upsertPersonalProblems(userId, personal_problems);
+    res.status(200).send(user);
+    await t.commit();
+  } catch (error) {
+    await t.rollback();
+    console.log(error);
+    res.status(404).send(error);
+  }
+}
+
+export async function upsertFavoriteDrinks(req, res) {
+  const t = await SequelizeInstance.transaction();
+  try {
+    const userId = req.loginUser.user_id;
+    const favorite_drinks = req.body;
+    const user = await userService.upsertFavoriteDrinks(userId, favorite_drinks);
+    res.status(200).send(user);
+    await t.commit();
+  } catch (error) {
+    await t.rollback();
+    console.log(error);
+    res.status(404).send(error);
+  }
+}
+
+export async function upsertFreeTimes(req, res) {
+  const t = await SequelizeInstance.transaction();
+  try {
+    const userId = req.loginUser.user_id;
+    const free_times = req.body;
+    const user = await userService.upsertFreeTimes(userId, free_times);
+    res.status(200).send(user);
+    await t.commit();
+  } catch (error) {
+    await t.rollback();
+    console.log(error);
+    res.status(404).send(error);
+  }
+}
+
 export async function updateAvatar(req, res) {
   const t = await SequelizeInstance.transaction();
   try {

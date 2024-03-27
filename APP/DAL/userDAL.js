@@ -535,3 +535,107 @@ export async function upsertInterests(data) {
   });
   return result;
 }
+
+export async function deleteUnlikeTopics(userId) {
+  const sqlQuery = `
+  DELETE FROM public.unlike_topic
+  WHERE user_id = :userId
+  `;
+  const result = await SequelizeInstance.query(sqlQuery, {
+    replacements: userId,
+    type: SequelizeInstance.QueryTypes.DELETE,
+    raw: true,
+  });
+  return result;
+}
+
+export async function upsertUnlikeTopics(data) {
+  const sqlQuery = `
+  INSERT INTO public.unlike_topic (unlike_topic_id, user_id, topic, created_at) 
+  VALUES(gen_random_uuid(), :user_id, :topic, now()));
+  `;
+  const result = await SequelizeInstance.query(sqlQuery, {
+    replacements: data,
+    type: SequelizeInstance.QueryTypes.SELECT,
+    raw: true,
+  });
+  return result;
+}
+
+export async function deletePersonalProblems(userId) {
+  const sqlQuery = `
+  DELETE FROM public.personal_problem
+  WHERE user_id = :userId
+  `;
+  const result = await SequelizeInstance.query(sqlQuery, {
+    replacements: userId,
+    type: SequelizeInstance.QueryTypes.DELETE,
+    raw: true,
+  });
+  return result;
+}
+
+export async function upsertPersonalProblems(data) {
+  const sqlQuery = `
+  INSERT INTO public.personal_problem (personal_problem_id, user_id, problem, created_at) 
+  VALUES(gen_random_uuid(), :user_id, :problem, now()));
+  `;
+  const result = await SequelizeInstance.query(sqlQuery, {
+    replacements: data,
+    type: SequelizeInstance.QueryTypes.SELECT,
+    raw: true,
+  });
+  return result;
+}
+
+export async function deleteFavoriteDrinks(userId) {
+  const sqlQuery = `
+  DELETE FROM public.favorite_drink
+  WHERE user_id = :userId
+  `;
+  const result = await SequelizeInstance.query(sqlQuery, {
+    replacements: userId,
+    type: SequelizeInstance.QueryTypes.DELETE,
+    raw: true,
+  });
+  return result;
+}
+
+export async function upsertFavoriteDrinks(data) {
+  const sqlQuery = `
+  INSERT INTO public.favorite_drink (favorite_drink_id, user_id, favorite_drink, created_at) 
+  VALUES(gen_random_uuid(), :user_id, :favorite_drink, now()));
+  `;
+  const result = await SequelizeInstance.query(sqlQuery, {
+    replacements: data,
+    type: SequelizeInstance.QueryTypes.SELECT,
+    raw: true,
+  });
+  return result;
+}
+
+export async function deleteFreeTimes(userId) {
+  const sqlQuery = `
+  DELETE FROM public.free_time
+  WHERE user_id = :userId
+  `;
+  const result = await SequelizeInstance.query(sqlQuery, {
+    replacements: userId,
+    type: SequelizeInstance.QueryTypes.DELETE,
+    raw: true,
+  });
+  return result;
+}
+
+export async function upsertFreeTimes(data) {
+  const sqlQuery = `
+  INSERT INTO public.free_time (free_time_id, user_id, free_time, created_at) 
+  VALUES(gen_random_uuid(), :user_id, :free_time, now()));
+  `;
+  const result = await SequelizeInstance.query(sqlQuery, {
+    replacements: data,
+    type: SequelizeInstance.QueryTypes.SELECT,
+    raw: true,
+  });
+  return result;
+}

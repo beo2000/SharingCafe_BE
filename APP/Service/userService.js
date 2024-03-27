@@ -48,6 +48,50 @@ export async function upsertInterests(userId, interests) {
   }
 }
 
+export async function upsertUnlikeTopics(userId, unlike_topics) {
+  await userDAL.deleteUnlikeTopics(userId);
+  const data = unlike_topics.map((unlike_topic) => ({
+    user_id: userId,
+    unlike_topic_id: unlike_topic.unlike_topic_id,
+  }));
+  for (const user of data) {
+    return await userDAL.upsertUnlikeTopics(user);
+  }
+}
+
+export async function upsertPersonalProblems(userId, personal_problems) {
+  await userDAL.deletePersonalProblems(userId);
+  const data = personal_problems.map((personal_problem) => ({
+    user_id: userId,
+    personal_problem_id: personal_problem.personal_problem_id,
+  }));
+  for (const user of data) {
+    return await userDAL.upsertPersonalProblems(user);
+  }
+}
+
+export async function upsertFavoriteDrinks(userId, favorite_drinks) {
+  await userDAL.deleteFavoriteDrinks(userId);
+  const data = favorite_drinks.map((favorite_drink) => ({
+    user_id: userId,
+    favorite_drink_id: favorite_drink.favorite_drink_id,
+  }));
+  for (const user of data) {
+    return await userDAL.upsertFavoriteDrinks(user);
+  }
+}
+
+export async function upsertFreeTimes(userId, free_times) {
+  await userDAL.deleteFreeTimes(userId);
+  const data = free_times.map((free_time) => ({
+    user_id: userId,
+    free_time_id: free_time.free_time_id,
+  }));
+  for (const user of data) {
+    return await userDAL.upsertFreeTimes(user);
+  }
+}
+
 export async function updateAvatar(userId, fileData) {
   const user = await getUser(userId);
   if (!user) throw new Error('User not found');

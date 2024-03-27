@@ -9,8 +9,12 @@ export async function getAdmDetails(email, password) {
       'phone',
       'email',
       'profile_avatar',
-      'Bio',
+      'story',
       'registration',
+      'gender',
+      'age',
+      'purpose',
+      'favorite_location',
     ],
     include: [
       {

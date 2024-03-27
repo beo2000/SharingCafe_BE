@@ -461,6 +461,11 @@ router.get('/api/admin/statics', admController.getStatics);
  *         description: Internal server error
  */
 router.put('/api/auth/user/update-interests', userController.upsertInterests);
+router.put('/api/auth/user/update-unlike-topic', userController.upsertUnlikeTopics);
+router.put('/api/auth/user/update-personal-problem', userController.upsertPersonalProblems);
+router.put('/api/auth/user/update-favorite-drink', userController.upsertFavoriteDrinks);
+router.put('/api/auth/user/update-free-time', userController.upsertFreeTimes);
+
 router.post('/api/user/login', userController.loginUser);
 router.get('/api/user/:userId', userController.getUser);
 router.put('/api/user/:userId', userController.updateProfile);
