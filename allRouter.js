@@ -178,10 +178,10 @@ router.get('/api/admin/statics', admController.getStatics);
  *               email:
  *                 type: string
  *                 format: email
- *                 example: janedoe@gmail.com
+ *                 example: trongtp.user@gmail.com
  *               password:
  *                 type: string
- *                 example: pass
+ *                 example: User@123
  *     responses:
  *       '200':
  *         description: Successful login
@@ -2429,27 +2429,73 @@ router.get('/api/auth/chat-history', chatController.getChatHistory);
 
 router.get('/api/location/distance', locationController.getDistance);
 router.get('/api/location/getRecommendCafe', locationController.getRecommendCafe);
+// /**
+//  * @swagger
+//  * /api/location/search:
+//  *   get:
+//  *     summary: Get Highland Coffee store location
+//  *     description: Retrieve Highland Coffee store location based on current location
+//  *     tags:
+//  *      - LOCATION SECTION
+//  *     parameters:
+//  *       - in: query
+//  *         name: lat
+//  *         required: true
+//  *         description: Latitude of current location
+//  *         example: 10.841743
+//  *         schema:
+//  *           type: string
+//  *       - in: query
+//  *         name: lng
+//  *         required: true
+//  *         description: Longtitude of current location
+//  *         example: 106.792377
+//  *         schema:
+//  *           type: string
+//  *     responses:
+//  *       '200':
+//  *         description: Successfully retrieved chat history.
+//  *       '400':
+//  *         description: Bad request. Invalid parameters provided.
+//  *       '500':
+//  *         description: An internal server error occurred.
+//  */
+
 /**
  * @swagger
- * /api/location/search:
+ * /api/location/getRecommendCafe:
  *   get:
- *     summary: Get Highland Coffee store location
- *     description: Retrieve Highland Coffee store location based on current location
+ *     summary: Get Recomment Cafe store between 2 location
+ *     description: Retrieve Recomment Cafe store between 2 location
  *     tags:
  *      - LOCATION SECTION
  *     parameters:
  *       - in: query
- *         name: lat
+ *         name: originsLAT
  *         required: true
  *         description: Latitude of current location
- *         example: 10.841743
+ *         example: 10.855287291321535
  *         schema:
  *           type: string
  *       - in: query
- *         name: lng
+ *         name: originsLNG
  *         required: true
  *         description: Longtitude of current location
- *         example: 106.792377
+ *         example: 106.6513152333054
+ *         schema:
+ *           type: string
+ *       - in: query
+ *         name: destinationsLAT
+ *         required: string
+ *         description: Latitude of destination location
+ *         example: 10.838551192432636
+ *         schema:
+ *           type: string
+ *       - in: query
+ *         name: destinationsLNG
+ *         required: true
+ *         description: Longtitude of destination location
+ *         example: 106.78081128616805
  *         schema:
  *           type: string
  *     responses:

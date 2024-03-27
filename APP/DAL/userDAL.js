@@ -14,8 +14,12 @@ export async function getUserDetails(email, password) {
       'phone',
       'email',
       'profile_avatar',
-      'Bio',
+      'story',
       'registration',
+      'gender',
+      'age',
+      'purpose',
+      'favorite_location',
     ],
     include: [
       {
@@ -219,7 +223,70 @@ export async function getUserDetailsById(userId) {
   GROUP BY 
     u.user_id, u.role_id;  
   `;
-  const userDetails = await SequelizeInstance.query(sqlQuery, {
+
+  const sqlQuery1 = `
+  SELECT 
+  u.*,
+  json_agg(
+      json_build_object(
+          'interest_id', ui.interest_id,
+          'interest_name', ui.name
+      )
+    ) AS interest_list,
+    json_agg(
+        json_build_object(
+            'personal_problem_id', pp.personal_problem_id ,
+            'personal_proplem', pp.problem 
+        )
+      ) AS personal_problem,
+    json_agg(
+        json_build_object(
+            'unlike_topic_id', ut.unlike_topic_id  ,
+            'unlike_topic', ut.topic  
+        )
+      ) AS unlike_topic,
+    json_agg(
+        json_build_object(
+            'favorite_drink_id', fd.favorite_drink_id  ,
+            'favorite_drink', fd.favorite_drink  
+        )
+      ) AS favorite_drink ,
+      json_agg(
+        json_build_object(
+            'free_time_id', ft.free_time_id  ,
+            'free_time', ft.free_time  
+        )
+      ) AS free_time
+  FROM 
+    public."user" u 
+  INNER JOIN 
+    (SELECT * FROM role WHERE role_name = 'USER') r ON u.role_id = r.role_id
+  full join personal_problem pp
+  	on u.user_id = pp.user_id 
+  full join unlike_topic ut 
+ 	  on u.user_id = ut.user_id 
+  full join favorite_drink fd 
+  	on fd.user_id = u.user_id 
+  full join free_time ft 
+  	on ft.user_id = u.user_id 
+  LEFT JOIN 
+    (
+        SELECT 
+            ui.user_id,
+            ui.interest_id,
+            i.name
+        FROM 
+            user_interest ui 
+        INNER JOIN 
+            interest i ON i.interest_id = ui.interest_id
+        ORDER BY 
+            ui.user_id, ui.interest_id  
+    ) ui ON ui.user_id = u.user_id
+    where u.user_id = '${userId}'
+  GROUP BY 
+    u.user_id
+  `;
+  const userDetails = await SequelizeInstance.query(sqlQuery1, {
     type: SequelizeInstance.QueryTypes.SELECT,
     raw: true,
   });

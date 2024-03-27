@@ -92,11 +92,17 @@ const User = sequelize.define(
     profile_avatar: {
       type: DataTypes.TEXT,
     },
-    Bio: {
-      type: DataTypes.JSON,
+    story: {
+      type: DataTypes.TEXT,
     },
     registration: {
       type: DataTypes.DATE,
+    },
+    purpose: {
+      type: DataTypes.TEXT,
+    },
+    favorite_location: {
+      type: DataTypes.TEXT,
     },
     role_id: {
       type: DataTypes.UUID,
@@ -116,6 +122,103 @@ const User = sequelize.define(
     timestamps: false,
   },
 );
+
+const PersonalProblem = sequelize.define(
+  'PersonalProblem',
+  {
+    personal_problem_id: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true,
+    },
+    user_id: {
+      type: DataTypes.UUID,
+    },
+    problem: {
+      type: DataTypes.TEXT,
+    },
+    created_at: {
+      type: DataTypes.DATE,
+    },
+  },
+  {
+    tableName: 'personal_problem',
+    timestamps: false,
+  },
+);
+
+const UnlikeTopic = sequelize.define(
+  'UnlikeTopic',
+  {
+    personal_problem_id: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true,
+    },
+    user_id: {
+      type: DataTypes.UUID,
+    },
+    topic: {
+      type: DataTypes.TEXT,
+    },
+    created_at: {
+      type: DataTypes.DATE,
+    },
+  },
+  {
+    tableName: 'unlike_topic',
+    timestamps: false,
+  },
+);
+
+const FavoriteDrink = sequelize.define(
+  'FavoriteDrink',
+  {
+    favorite_drink_id: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true,
+    },
+    user_id: {
+      type: DataTypes.UUID,
+    },
+    favorite_drink: {
+      type: DataTypes.TEXT,
+    },
+    created_at: {
+      type: DataTypes.DATE,
+    },
+  },
+  {
+    tableName: 'favorite_drink',
+    timestamps: false,
+  },
+);
+
+const FreeTime = sequelize.define(
+  'FreeTime',
+  {
+    personal_problem_id: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true,
+    },
+    user_id: {
+      type: DataTypes.UUID,
+    },
+    topic: {
+      type: DataTypes.TEXT,
+    },
+    created_at: {
+      type: DataTypes.DATE,
+    },
+  },
+  {
+    tableName: 'free_time',
+    timestamps: false,
+  },
+);
+
 const Role = sequelize.define(
   'Role',
   {
@@ -754,4 +857,8 @@ export {
   UserInterest,
   Schedule,
   LikeBlog,
+  PersonalProblem,
+  UnlikeTopic,
+  FreeTime,
+  FavoriteDrink,
 };
