@@ -2427,9 +2427,8 @@ router.post('/api/user/schedule', scheduleController.createSchedule);
  */
 router.get('/api/auth/chat-history', chatController.getChatHistory);
 
-router.get('/api/location/search', locationController.getLocation);
 router.get('/api/location/distance', locationController.getDistance);
-router.get('/api/location/recommend', locationController.getRecommend);
+router.get('/api/location/getRecommendCafe', locationController.getRecommendCafe);
 /**
  * @swagger
  * /api/location/search:
