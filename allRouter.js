@@ -182,6 +182,9 @@ router.get('/api/admin/statics', admController.getStatics);
  *               password:
  *                 type: string
  *                 example: User@123
+ *               notificationToken:
+ *                 type: string
+ *                 example: 1sad12bahsbda2131
  *     responses:
  *       '200':
  *         description: Successful login
