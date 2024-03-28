@@ -2410,17 +2410,23 @@ router.put('/api/moderator/event/:eventId', modController.censorEvent);
  */
 /**
  * @swagger
- * /api/auth/pending-for-matched:
+ * /api/auth/matched:
  *   get:
- *     summary: Get user matches with pending status
- *     description: Retrieve user matches with pending status.
+ *     summary: Get user matches with status
+ *     description: Retrieve user matches with their corresponding status.
  *     security:
  *       - BearerAuth: []
  *     tags:
  *       - MATCH SECTION
+ *     parameters:
+ *       - in: query
+ *         name: status
+ *         schema:
+ *           type: string
+ *         description: Status of the user matches
  *     responses:
  *       200:
- *         description: Successful response with user matches and pending status
+ *         description: Successful response with user matches and their statuses
  *       401:
  *         description: Unauthorized, invalid or missing token
  *       500:
@@ -2556,25 +2562,15 @@ router.post('/api/user/schedule', scheduleController.createSchedule);
  */
 router.get('/api/auth/chat-history', chatController.getChatHistory);
 
-router.get(
-  '/api/location/getCurrentLocation',
-  locationController.getCurrentLocation,
-);
-router.get('/api/location/distance', locationController.getDistance);
-
-router.get('/api/location/getRecommendCafe', locationController.getRecommendCafe);
-router.put('/api/location/updateLocation', locationController.updateLocation);
-router.get(
-  '/api/location/getRecommendCafe',
-  locationController.getRecommendCafe,
-);
-
+router.put('/api/location/updateCurrentLocation', locationController.updateCurrentLocation,);
+router.get('/api/location/getDistance', locationController.getDistance);
+router.get('/api/location/getRecommendCafe',locationController.getRecommendCafe,);
 /**
  * @swagger
- * /api/location/getCurrentLocation:
- *   get:
- *     summary: Get current location
- *     description: Retrieve current location based on latitude and longitude
+ * /api/location/updateCurrentLocation:
+ *   put:
+ *     summary: Put current location
+ *     description: Update current location based on latitude and longitude
  *     tags:
  *      - LOCATION SECTION
  *     parameters:

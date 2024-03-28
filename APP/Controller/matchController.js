@@ -22,7 +22,11 @@ export async function getUserMatchByInterest(req, res, next) {
 export async function getUserMatchWithStatus(req, res, next) {
   try {
     const loginUser = req.loginUser;
-    const result = await userService.getUserMatchWithStatus(loginUser.user_id);
+    const status = req.query.status || '';
+    const result = await userService.getUserMatchWithStatus(
+      loginUser.user_id,
+      status,
+    );
     res.status(200).send(result);
   } catch (error) {
     console.log(error);

@@ -134,8 +134,8 @@ export async function getUserMatchByInterest(userId) {
   const result = await userDAL.getUserMatchByInterest(userId);
   return result;
 }
-export async function getUserMatchWithStatus(userId) {
-  const result = await userDAL.getUserMatchWithStatus(userId);
+export async function getUserMatchWithStatus(userId, status) {
+  const result = await userDAL.getUserMatchWithStatus(userId, status);
   return result;
 }
 
