@@ -417,7 +417,7 @@ export async function getMyEvents(userId) {
 export async function getEventsByInterest(interestId) {
   const sqlQuery = `
   select 
-    e.*, u.user_name, i.name 
+    e.*, u.user_name, i.name, u.profile_avatar
   from
     public."event" e 
   left join 
@@ -439,7 +439,7 @@ export async function getEventsByInterest(interestId) {
 export async function getBlogsByInterest(interestId) {
   const sqlQuery = `
   select 
-    b.*, u.user_name, i.name
+    b.*, u.user_name, i.name, u.profile_avatar
   from 
     blog b 
   join 
@@ -488,11 +488,13 @@ export async function updateProfile(userId, profile) {
       user_name: profile.user_name,
       phone: profile.phone,
       email: profile.email,
-      Bio: profile.Bio,
+      story: profile.story,
       password: profile.password,
       profile_avatar: profile.profile_avatar,
       gender: profile.gender,
       age: profile.age,
+      purpose: profile.purpose,
+      favorite_location: profile.favorite_location
     },
     {
       where: { user_id: userId },
@@ -513,10 +515,9 @@ export async function updateAvatar(userId, fileData) {
 export async function deleteUserInterests(userId) {
   const sqlQuery = `
   DELETE FROM public.user_interest
-  WHERE user_id = :userId
+  WHERE user_id = '${userId}'
   `;
   const result = await SequelizeInstance.query(sqlQuery, {
-    replacements: userId,
     type: SequelizeInstance.QueryTypes.DELETE,
     raw: true,
   });
@@ -539,10 +540,9 @@ export async function upsertInterests(data) {
 export async function deleteUnlikeTopics(userId) {
   const sqlQuery = `
   DELETE FROM public.unlike_topic
-  WHERE user_id = :userId
+  WHERE user_id = '${userId}'
   `;
   const result = await SequelizeInstance.query(sqlQuery, {
-    replacements: userId,
     type: SequelizeInstance.QueryTypes.DELETE,
     raw: true,
   });
@@ -552,7 +552,7 @@ export async function deleteUnlikeTopics(userId) {
 export async function upsertUnlikeTopics(data) {
   const sqlQuery = `
   INSERT INTO public.unlike_topic (unlike_topic_id, user_id, topic, created_at) 
-  VALUES(gen_random_uuid(), :user_id, :topic, now()));
+  VALUES(gen_random_uuid(), :user_id, :unlike_topic, now()));
   `;
   const result = await SequelizeInstance.query(sqlQuery, {
     replacements: data,
@@ -565,10 +565,9 @@ export async function upsertUnlikeTopics(data) {
 export async function deletePersonalProblems(userId) {
   const sqlQuery = `
   DELETE FROM public.personal_problem
-  WHERE user_id = :userId
+  WHERE user_id = ${userId}
   `;
   const result = await SequelizeInstance.query(sqlQuery, {
-    replacements: userId,
     type: SequelizeInstance.QueryTypes.DELETE,
     raw: true,
   });

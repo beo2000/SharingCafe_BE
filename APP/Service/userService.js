@@ -37,6 +37,7 @@ export async function updateProfile(userId, profile) {
   if (!user) throw new Error('User not found');
   return await userDAL.updateProfile(userId, profile);
 }
+
 export async function upsertInterests(userId, interests) {
   await userDAL.deleteUserInterests(userId);
   const data = interests.map((interest) => ({
@@ -52,8 +53,9 @@ export async function upsertUnlikeTopics(userId, unlike_topics) {
   await userDAL.deleteUnlikeTopics(userId);
   const data = unlike_topics.map((unlike_topic) => ({
     user_id: userId,
-    unlike_topic_id: unlike_topic.unlike_topic_id,
+    unlike_topic: unlike_topic.unlike_topic,
   }));
+  console.log(data);
   for (const user of data) {
     return await userDAL.upsertUnlikeTopics(user);
   }

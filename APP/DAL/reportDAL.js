@@ -5,12 +5,13 @@ export async function getAllBlogReport(page) {
     sqlQuery = `
         select 
             br.blog_id,
-            b.title, b.image ,
+            b.title, b.image , b.is_approve,
             jsonb_agg(
                 jsonb_build_object(
                 'report_id', br.report_id ,
                 'reporter_id', br.reporter_id ,
                 'reporter', u.user_name,
+                'profile_avatar', u.profile_avatar ,
                 'report_status', rs.report_status,
                 'created_at', br.created_at 
                 ) 
@@ -23,19 +24,20 @@ export async function getAllBlogReport(page) {
         on u.user_id = br.reporter_id
         join blog b 
         on br.blog_id = b.blog_id 
-        group by br.blog_id, b.title, b.image
+        group by br.blog_id, b.title, b.image, b.is_approve
         offset ((${page} - 1 ) * 10) rows 
         fetch next 10 rows only`;
   } else {
     sqlQuery = `
       select 
   	    br.blog_id,
-  	    b.title, b.image ,
+  	    b.title, b.image, b.is_approve,
   	    jsonb_agg(
   		    jsonb_build_object(
   			    'report_id', br.report_id ,
   			    'reporter_id', br.reporter_id ,
   			    'reporter', u.user_name,
+            'profile_avatar', u.profile_avatar ,
   			    'report_status', rs.report_status,
             'created_at', br.created_at 
   		    ) 
@@ -48,7 +50,7 @@ export async function getAllBlogReport(page) {
     on u.user_id = br.reporter_id
     join blog b 
     on br.blog_id = b.blog_id 
-    group by br.blog_id, b.title, b.image
+    group by br.blog_id, b.title, b.image, b.is_approve
     `;
   }
   const result = await SequelizeInstance.query(sqlQuery, {
@@ -80,12 +82,13 @@ export async function getAllEventReport(page) {
   if (page) {
     sqlQuery = `
     select 
-      e.event_id ,e.title , e.background_img ,
+      e.event_id ,e.title , e.background_img , e.is_approve,
       jsonb_agg(
         jsonb_build_object(
           'report_id', er.report_id ,
           'reporter_id', er.reporter_id ,
           'reporter', u.user_name ,
+          'profile_avatar', u.profile_avatar ,
           'report_status', rs.report_status,
           'created_at', er.created_at 
         ) 
@@ -104,12 +107,13 @@ export async function getAllEventReport(page) {
   } else {
     sqlQuery = `
     select 
-      e.event_id ,e.title , e.background_img ,
+      e.event_id ,e.title , e.background_img , e.is_approve,
       jsonb_agg(
         jsonb_build_object(
           'report_id', er.report_id ,
           'reporter_id', er.reporter_id ,
           'reporter', u.user_name ,
+          'profile_avatar', u.profile_avatar ,
           'report_status', rs.report_status,
           'created_at', er.created_at 
         ) 

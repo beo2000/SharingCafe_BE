@@ -11,7 +11,7 @@ export async function getBlogs(page, title) {
   if (page) {
     sqlQuery = `
     select 
-      b.*, u.user_name, i.name
+      b.*, u.user_name, i.name, u.profile_avatar
     from 
       blog b 
     join 
@@ -28,7 +28,7 @@ export async function getBlogs(page, title) {
   } else {
     sqlQuery = `
     select 
-      b.*, u.user_name, i.name
+      b.*, u.user_name, i.name, u.profile_avatar
     from 
       blog b 
     join 
@@ -127,7 +127,7 @@ export async function getNewBlogs(page) {
   if (page) {
     sqlQuery = `
     select 
-      b.*, u.user_name, i.name
+      b.*, u.user_name, i.name, u.profile_avatar
     from 
       blog b 
     join 
