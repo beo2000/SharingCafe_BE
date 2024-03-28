@@ -2548,6 +2548,7 @@ router.post('/api/user/schedule', scheduleController.createSchedule);
  */
 router.get('/api/auth/chat-history', chatController.getChatHistory);
 
+router.put('/api/location/getCurrentLocation', locationController.getCurrentLocation);
 router.get('/api/location/distance', locationController.getDistance);
 router.get('/api/location/getRecommendCafe', locationController.getRecommendCafe);
 // /**
