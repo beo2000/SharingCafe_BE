@@ -2551,6 +2551,7 @@ router.get('/api/auth/chat-history', chatController.getChatHistory);
 router.get('/api/location/getCurrentLocation', locationController.getCurrentLocation);
 router.get('/api/location/distance', locationController.getDistance);
 router.get('/api/location/getRecommendCafe', locationController.getRecommendCafe);
+router.put('/api/location/updateLocation', locationController.updateLocation);
 /**
  * @swagger
  * /api/location/getCurrentLocation:

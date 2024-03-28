@@ -1,6 +1,7 @@
 // const express = require('express');
 import axios from 'axios';
 import { json } from 'sequelize';
+import * as userService from '../Service/userService.js';
 
 // const app = express();
 // const PORT = process.env.PORT || 3000;
@@ -129,5 +130,18 @@ export async function getRecommendCafe(req, res) {
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal server error' });
+  }
+}
+
+export async function updateLocation(req, res) {
+  try {
+    const lat = req.query.lat;
+    const lng = req.query.lng;
+    const userId = req.query.userId;
+    const result = await userService.updateLocation(userId, lat, lng);
+    res.status(200).send(result);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ error: error.message });
   }
 }
