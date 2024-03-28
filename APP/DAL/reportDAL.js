@@ -1,4 +1,24 @@
-import { BlogReport, EventReport, SequelizeInstance } from '../utility/DbHelper.js';
+import { BlogReport, EventReport, UserReport, SequelizeInstance } from '../utility/DbHelper.js';
+
+export async function getAllReportStatus(page) {
+  let sqlQuery = '';
+  if (page) {
+    sqlQuery = `
+      select * from report_status rs 
+      offset ((${page} - 1 ) * 10) rows 
+      fetch next 10 rows only`;
+  } else {
+    sqlQuery = `
+    select * from report_status rs 
+    `;
+  }
+  const result = await SequelizeInstance.query(sqlQuery, {
+    type: SequelizeInstance.QueryTypes.SELECT,
+    raw: true,
+  });
+  return result;
+}
+
 export async function getAllBlogReport(page) {
   let sqlQuery = '';
   if (page) {
@@ -151,4 +171,78 @@ export async function deleteEventReport(reportId) {
     where: { report_id: reportId },
   });
   return deletedEventReport;
+}
+
+export async function getAllUserReport(page) {
+  let sqlQuery = '';
+  if (page) {
+    sqlQuery = `
+    select 
+    u2.user_id  ,u2.user_name  , u2.profile_avatar  ,
+    jsonb_agg(
+        jsonb_build_object(
+          'report_id', ur.report_id ,
+          'reporter_id', ur.reporter_id ,
+          'reporter', u.user_name ,
+          'report_status', rs.report_status,
+          'created_at', ur.created_at 
+        ) 
+      ) as user_report
+    from
+      user_report ur 
+    inner join report_status rs 
+    on rs.report_status_id = ur.report_status_id 
+    join "user" u
+    on u.user_id = ur.reporter_id 
+    join "user" u2 
+     on u2.user_id = ur.user_id 
+    group by u2.user_id
+    offset ((${page} - 1 ) * 10) rows 
+    fetch next 10 rows only`;
+  } else {
+    sqlQuery = `
+    select 
+    u2.user_id  ,u2.user_name  , u2.profile_avatar  ,
+    jsonb_agg(
+        jsonb_build_object(
+          'report_id', ur.report_id ,
+          'reporter_id', ur.reporter_id ,
+          'reporter', u.user_name ,
+          'report_status', rs.report_status,
+          'created_at', ur.created_at 
+        ) 
+      ) as user_report
+    from
+      user_report ur 
+    inner join report_status rs 
+    on rs.report_status_id = ur.report_status_id 
+    join "user" u
+    on u.user_id = ur.reporter_id 
+    join "user" u2 
+     on u2.user_id = ur.user_id 
+    group by u2.user_id
+    `;
+  }
+  const result = await SequelizeInstance.query(sqlQuery, {
+    type: SequelizeInstance.QueryTypes.SELECT,
+    raw: true,
+  });
+  return result;
+}
+
+export async function createUserReport(report_id, dataObj) {
+  return await UserReport.create({
+    report_id: report_id,
+    reporter_id: dataObj.reporter_id,
+    user_id: dataObj.user_id,
+    content: dataObj.content,
+    report_status_id: dataObj.report_status_id,
+  })
+}
+
+export async function deleteUserReport(reportId) {
+  const deletedUserReport = await UserReport.destroy({
+    where: { report_id: reportId },
+  });
+  return deletedUserReport;
 }

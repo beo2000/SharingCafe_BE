@@ -1899,6 +1899,34 @@ router.post(
 
 /**
  * @swagger
+ * /api/report:
+ *   get:
+ *     summary: Get a list of report status
+ *     tags:
+ *      - REPORT SECTION
+ *     parameters:
+ *        - in: query
+ *          name: page
+ *          schema:
+ *            type: integer
+ *          description: The number of page to skip before starting to collect the result set
+ *          example: 1
+ *     responses:
+ *       '200':
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             example:
+ *               - report_status_id: 1
+ *                 title: Sample Report status 1
+ *               - report_status_id: 2
+ *                 title: Sample Report status 2
+ *       '500':
+ *         description: Internal server error
+ */
+
+/**
+ * @swagger
  * /api/blogs/report:
  *   get:
  *     summary: Get a list of blog report
@@ -2001,7 +2029,7 @@ router.post(
  * @swagger
  * /api/events/report:
  *   post:
- *     summary: Create a blog report
+ *     summary: Create a event report
  *     tags:
  *      - REPORT SECTION
  *     requestBody:
@@ -2017,7 +2045,7 @@ router.post(
  *                 example: "11893856-610c-40e2-bd33-e8410cfc3dc2"
  *               event_id:
  *                 type: string
- *                 description: ID of the blog
+ *                 description: ID of the event
  *                 example: "50b415b6-b874-429c-9f31-56db62ff0c13"
  *               report_status_id:
  *                 type: string
@@ -2037,6 +2065,85 @@ router.post(
  * /api/events/report/{reportId}:
  *   delete:
  *     summary: Delete a specific event report by ID
+ *     tags:
+ *       - REPORT SECTION
+ *     parameters:
+ *       - in: path
+ *         name: reportId
+ *         required: true
+ *         description: ID of the report to be deleted
+ *         schema:
+ *           type: string
+ *     responses:
+ *       '204':
+ *         description: Report deleted successfully
+ *       '404':
+ *         description: Report not found
+ *       '500':
+ *         description: Internal server error
+ */
+
+/**
+ * @swagger
+ * /api/users/report:
+ *   get:
+ *     summary: Get a list of user report
+ *     tags:
+ *      - REPORT SECTION
+ *     responses:
+ *       '200':
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             example:
+ *               - user_id: 1
+ *                 user_name: Sample User 1
+ *               - user_id: 2
+ *                 user_name: Sample User 2
+ *       '500':
+ *         description: Internal server error
+ */
+
+/**
+ * @swagger
+ * /api/users/report:
+ *   post:
+ *     summary: Create a user report
+ *     tags:
+ *      - REPORT SECTION
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               reporter_id:
+ *                 type: string
+ *                 description: ID of the user sending report
+ *                 example: "33a43d47-52e2-43c0-acb7-b445a7989e8a"
+ *               user_id:
+ *                 type: string
+ *                 description: ID of the user
+ *                 example: "716ab41a-a01e-46ac-a907-f0c1419f212f"
+ *               report_status_id:
+ *                 type: string
+ *                 description: ID of the report status
+ *                 example: "01872afc-23b5-4890-85d2-b3f0a9d3ce0a"
+ *     responses:
+ *       '201':
+ *         description: User report create successfully
+ *       '400':
+ *         description: Bad request, e.g., missing parameters
+ *       '500':
+ *         description: Internal server error
+ */
+
+/**
+ * @swagger
+ * /api/users/report/{reportId}:
+ *   delete:
+ *     summary: Delete a specific user report by ID
  *     tags:
  *       - REPORT SECTION
  *     parameters:
@@ -2076,6 +2183,8 @@ router.delete('/api/blog/comment/:commentId', blogController.deleteComment);
 router.post('/api/blogs/like', blogController.likeBlog);
 router.put('/api/blogs/like', blogController.unLikeBlog);
 
+router.get('/api/report', reportController.getAllReportStatus);
+
 router.get('/api/blogs/report', reportController.getAllBlogReport);
 router.post('/api/blogs/report', reportController.createBlogReport);
 router.delete('/api/blogs/report/:reportId', reportController.deleteBlogReport);
@@ -2085,6 +2194,13 @@ router.post('/api/events/report', reportController.createEventReport);
 router.delete(
   '/api/events/report/:reportId',
   reportController.deleteEventReport,
+);
+
+router.get('/api/users/report', reportController.getAllUserReport);
+router.post('/api/users/report', reportController.createUserReport);
+router.delete(
+  '/api/users/report/:reportId',
+  reportController.deleteUserReport
 );
 /**
  * @swagger
@@ -2435,40 +2551,40 @@ router.post('/api/user/schedule', scheduleController.createSchedule);
  */
 router.get('/api/auth/chat-history', chatController.getChatHistory);
 
-router.put('/api/location/getCurrentLocation', locationController.getCurrentLocation);
+router.get('/api/location/getCurrentLocation', locationController.getCurrentLocation);
 router.get('/api/location/distance', locationController.getDistance);
 router.get('/api/location/getRecommendCafe', locationController.getRecommendCafe);
-// /**
-//  * @swagger
-//  * /api/location/search:
-//  *   get:
-//  *     summary: Get Highland Coffee store location
-//  *     description: Retrieve Highland Coffee store location based on current location
-//  *     tags:
-//  *      - LOCATION SECTION
-//  *     parameters:
-//  *       - in: query
-//  *         name: lat
-//  *         required: true
-//  *         description: Latitude of current location
-//  *         example: 10.841743
-//  *         schema:
-//  *           type: string
-//  *       - in: query
-//  *         name: lng
-//  *         required: true
-//  *         description: Longtitude of current location
-//  *         example: 106.792377
-//  *         schema:
-//  *           type: string
-//  *     responses:
-//  *       '200':
-//  *         description: Successfully retrieved chat history.
-//  *       '400':
-//  *         description: Bad request. Invalid parameters provided.
-//  *       '500':
-//  *         description: An internal server error occurred.
-//  */
+/**
+ * @swagger
+ * /api/location/getCurrentLocation:
+ *   get:
+ *     summary: Get current location
+ *     description: Retrieve current location based on latitude and longitude
+ *     tags:
+ *      - LOCATION SECTION
+ *     parameters:
+ *       - in: query
+ *         name: lat
+ *         required: true
+ *         description: Latitude of current location
+ *         example: 10.841743
+ *         schema:
+ *           type: string
+ *       - in: query
+ *         name: lng
+ *         required: true
+ *         description: Longtitude of current location
+ *         example: 106.792377
+ *         schema:
+ *           type: string
+ *     responses:
+ *       '200':
+ *         description: Successfully retrieved location.
+ *       '400':
+ *         description: Bad request. Invalid parameters provided.
+ *       '500':
+ *         description: An internal server error occurred.
+ */
 
 /**
  * @swagger

@@ -113,6 +113,12 @@ const User = sequelize.define(
     age: {
       type: DataTypes.TEXT,
     },
+    lat: {
+      type: DataTypes.TEXT,
+    },
+    lng: {
+      type: DataTypes.TEXT,
+    },
     is_available: {
       type: DataTypes.BOOLEAN,
     },
@@ -642,6 +648,37 @@ const EventReport = sequelize.define(
     timestamps: false,
   },
 );
+const UserReport = sequelize.define(
+  'UserReport',
+  {
+    report_id: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true,
+    },
+    reporter_id: {
+      type: DataTypes.UUID,
+    },
+    user_id: {
+      type: DataTypes.UUID,
+    },
+    content: {
+      type: DataTypes.TEXT,
+    },
+    created_at: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),
+    },
+    report_status_id: {
+      type: DataTypes.UUID,
+    },
+  },
+  {
+    tableName: 'user_report',
+    timestamps: false,
+  },
+);
 const ReportStatus = sequelize.define(
   'ReportStatus',
   {
@@ -861,4 +898,5 @@ export {
   UnlikeTopic,
   FreeTime,
   FavoriteDrink,
+  UserReport,
 };

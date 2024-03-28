@@ -20,6 +20,8 @@ export async function getUserDetails(email, password) {
       'age',
       'purpose',
       'favorite_location',
+      'lat',
+      'lng',
     ],
     include: [
       {
@@ -494,7 +496,9 @@ export async function updateProfile(userId, profile) {
       gender: profile.gender,
       age: profile.age,
       purpose: profile.purpose,
-      favorite_location: profile.favorite_location
+      favorite_location: profile.favorite_location,
+      lat: profile.lat,
+      lng: profile.lng,
     },
     {
       where: { user_id: userId },

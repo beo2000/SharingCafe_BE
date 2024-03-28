@@ -15,6 +15,8 @@ export async function getAdmDetails(email, password) {
       'age',
       'purpose',
       'favorite_location',
+      'lat',
+      'lng',
     ],
     include: [
       {
