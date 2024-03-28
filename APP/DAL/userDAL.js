@@ -320,20 +320,25 @@ export async function getUserMatchByInterest(userId) {
   return userDetails;
 }
 
-export async function getUserMatchWithStatus(userId) {
-  const sqlQuery = `
-    select 
+export async function getUserMatchWithStatus(userId, status) {
+  let sqlQuery = `
+    SELECT 
       *
-    from 
+    FROM 
       public.user u
-    inner join 
+    INNER JOIN 
       user_match um
-      on um.user_id_liked = u.user_id 
-    inner join 
+      ON um.user_id_liked = u.user_id 
+    INNER JOIN 
       user_match_status ums 
-      on um.user_match_status_id  = ums.user_match_status_id 
-    where um.current_user_id  = '${userId}'
-      `;
+      ON um.user_match_status_id = ums.user_match_status_id 
+    WHERE um.current_user_id = '${userId}'
+  `;
+
+  if (status) {
+    sqlQuery += ` AND ums.user_match_status = '${status}'`;
+  }
+
   const userDetails = await SequelizeInstance.query(sqlQuery, {
     type: SequelizeInstance.QueryTypes.SELECT,
     raw: true,
