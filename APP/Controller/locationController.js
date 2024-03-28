@@ -23,6 +23,24 @@ import { json } from 'sequelize';
 // });
 const apiKey = 'KnB6OOmQcQpYSTnqzYhjqUmcGSBKUob1cDF9oOPw';
 
+// pages/api/getCurrentLocation.js
+
+export async function getCurrentLocation(req, res) {
+  if (req.method === 'PUT') {
+    const { lat, lng } = req.body;
+    // Thực hiện xử lý với dữ liệu vị trí ở đây
+    console.log('Received location data - Latitude:', lat, 'Longitude:', lng);
+
+    // Phản hồi với dữ liệu đã nhận được
+    res.status(200).json({ message: 'Location data received successfully' });
+  } else {
+    // Nếu không phải là phương thức PUT, trả về lỗi "Method Not Allowed"
+    res.setHeader('Allow', ['PUT']);
+    res.status(405).end(`Method ${req.method} Not Allowed`);
+  }
+}
+
+
 export async function getDistance(req, res) {
   try {
     const originsLAT = req.query.originsLAT;
