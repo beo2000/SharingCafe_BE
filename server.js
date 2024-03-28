@@ -10,6 +10,8 @@ import allRouter from './allRouter.js';
 import options from './swagger.js';
 import * as userService from './APP/Service/userService.js';
 import * as chatController from './APP/Controller/chatController.js';
+import admin from 'firebase-admin';
+import serviceAccount from './serviceAccountKey.json' with { "type": "json" };
 const app = express();
 dotenv.config();
 
@@ -111,6 +113,12 @@ io.on('connection', (socket) => {
     io.emit('message', message);
   });
 });
+
+// Initialize Firebase
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount)
+});
+
 // Start the HTTP server
 server.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);

@@ -22,6 +22,7 @@ export async function getUserDetails(email, password) {
       'favorite_location',
       'lat',
       'lng',
+      'address',
     ],
     include: [
       {

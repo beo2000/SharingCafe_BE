@@ -17,6 +17,7 @@ export async function getAdmDetails(email, password) {
       'favorite_location',
       'lat',
       'lng',
+      'address',
     ],
     include: [
       {

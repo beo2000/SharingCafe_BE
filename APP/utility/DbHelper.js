@@ -119,6 +119,9 @@ const User = sequelize.define(
     lng: {
       type: DataTypes.TEXT,
     },
+    address: {
+      type: DataTypes.TEXT,
+    },
     is_available: {
       type: DataTypes.BOOLEAN,
     },

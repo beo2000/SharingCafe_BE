@@ -435,6 +435,8 @@ router.get('/api/admin/statics', admController.getStatics);
  *   put:
  *     summary: Update user interests
  *     description: Update or insert user interests based on the provided data.
+ *     security:
+ *       - BearerAuth: []
  *     tags:
  *       - USER SECTION
  *     requestBody:
@@ -461,9 +463,18 @@ router.get('/api/admin/statics', admController.getStatics);
  *         description: Internal server error
  */
 router.put('/api/auth/user/update-interests', userController.upsertInterests);
-router.put('/api/auth/user/update-unlike-topic', userController.upsertUnlikeTopics);
-router.put('/api/auth/user/update-personal-problem', userController.upsertPersonalProblems);
-router.put('/api/auth/user/update-favorite-drink', userController.upsertFavoriteDrinks);
+router.put(
+  '/api/auth/user/update-unlike-topic',
+  userController.upsertUnlikeTopics,
+);
+router.put(
+  '/api/auth/user/update-personal-problem',
+  userController.upsertPersonalProblems,
+);
+router.put(
+  '/api/auth/user/update-favorite-drink',
+  userController.upsertFavoriteDrinks,
+);
 router.put('/api/auth/user/update-free-time', userController.upsertFreeTimes);
 
 router.post('/api/user/login', userController.loginUser);
@@ -2195,10 +2206,7 @@ router.delete(
 
 router.get('/api/users/report', reportController.getAllUserReport);
 router.post('/api/users/report', reportController.createUserReport);
-router.delete(
-  '/api/users/report/:reportId',
-  reportController.deleteUserReport
-);
+router.delete('/api/users/report/:reportId', reportController.deleteUserReport);
 /**
  * @swagger
  * /api/moderator/login:
@@ -2548,10 +2556,19 @@ router.post('/api/user/schedule', scheduleController.createSchedule);
  */
 router.get('/api/auth/chat-history', chatController.getChatHistory);
 
-router.get('/api/location/getCurrentLocation', locationController.getCurrentLocation);
+router.get(
+  '/api/location/getCurrentLocation',
+  locationController.getCurrentLocation,
+);
 router.get('/api/location/distance', locationController.getDistance);
+
 router.get('/api/location/getRecommendCafe', locationController.getRecommendCafe);
 router.put('/api/location/updateLocation', locationController.updateLocation);
+router.get(
+  '/api/location/getRecommendCafe',
+  locationController.getRecommendCafe,
+);
+
 /**
  * @swagger
  * /api/location/getCurrentLocation:
