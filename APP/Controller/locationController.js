@@ -25,8 +25,8 @@ const apiKey = 'KnB6OOmQcQpYSTnqzYhjqUmcGSBKUob1cDF9oOPw';
 
 // pages/api/getCurrentLocation.js
 
-export async function getCurrentLocation(req, res) {
-  if (req.method === 'GET') {
+export async function updateCurrentLocation(req, res) {//sửa thành phương thức update 
+  if (req.method === 'PUT') {
     const { lat, lng } = req.query;
     // Thực hiện xử lý với dữ liệu vị trí ở đây
     console.log('Received location data - Latitude:', lat, 'Longitude:', lng);
@@ -35,13 +35,13 @@ export async function getCurrentLocation(req, res) {
     res.status(200).json({ message: 'Location data received successfully' });
   } else {
     // Nếu không phải là phương thức PUT, trả về lỗi "Method Not Allowed"
-    res.setHeader('Allow', ['GET']);
+    res.setHeader('Allow', ['PUT']);
     res.status(405).end(`Method ${req.method} Not Allowed`);
   }
 }
 
 
-export async function getDistance(req, res) {
+export async function getDistance(req, res) { // sửa thành db
   try {
     const originsLAT = req.query.originsLAT;
     const originsLNG = req.query.originsLNG;
