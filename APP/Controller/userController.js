@@ -14,7 +14,7 @@ const secret_key = process.env.SECRET_KEY;
 
 export async function loginUser(req, res) {
   try {
-    const { email, password, notificationToken } = req.body;
+    const { email, password } = req.body;
     const result = await userService.getUserDetails(email, password);
     const userDetails = result.dataValues;
     if (userDetails) {
@@ -22,18 +22,18 @@ export async function loginUser(req, res) {
       const accessToken = jwt.sign({ email: email }, secret_key, {
         expiresIn: '30d',
       });
-      console.log(notificationToken)
-      const token = notificationToken;
-      const title = 'Xin chao';
-      const body = 'You have a new message!';
+      // console.log(notificationToken)
+      // const token = notificationToken;
+      // const title = 'Xin chao';
+      // const body = 'You have a new message!';
 
-      firebaseHelper.sendNotification(token, title, body)
-        .then(response => {
-          console.log('Notification sent successfully:', response);
-        })
-        .catch(error => {
-          console.error('Error sending notification:', error);
-        });
+      // firebaseHelper.sendNotification(token, title, body)
+      //   .then(response => {
+      //     console.log('Notification sent successfully:', response);
+      //   })
+      //   .catch(error => {
+      //     console.error('Error sending notification:', error);
+      //   });
 
       res.header('Authorization', `Bearer ${accessToken}`);
       userDetails.accessToken = `Bearer ${accessToken}`;
