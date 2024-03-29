@@ -683,3 +683,16 @@ export async function getLocationByUserId(userId) {
     },
   });
 }
+
+// update lat,lng of user
+export async function updateLocation(userId, lat, lng) {
+  return await User.update(
+    {
+      lat: lat,
+      lng: lng,
+    },
+    {
+      where: { user_id: userId },
+    },
+  );
+}

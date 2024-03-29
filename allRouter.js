@@ -2708,9 +2708,18 @@ router.get('/api/location/getRecommendCafe',locationController.getRecommendCafe,
  *   put:
  *     summary: Put current location
  *     description: Update current location based on latitude and longitude
+ *     security:
+ *       - BearerAuth: []
  *     tags:
  *      - LOCATION SECTION
  *     parameters:
+ *       - in: query
+ *         name: userId
+ *         required: true
+ *         description: ID of the user
+ *         schema:
+ *           type: string
+ *         example: b43cc80d-9c56-40c0-b170-4950b8cb702e
  *       - in: query
  *         name: lat
  *         required: true
