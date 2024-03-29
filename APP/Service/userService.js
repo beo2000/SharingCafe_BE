@@ -3,6 +3,7 @@ import * as userDAL from '../DAL/userDAL.js';
 import * as matchDAL from '../DAL/matchDAL.js';
 import * as commonEnum from '../common/CommonEnums.js';
 import { v4 as uuidv4 } from 'uuid';
+import axios from 'axios';
 
 export function getUserDetails(email, password) {
   return userDAL.getUserDetails(email, password);
@@ -204,8 +205,18 @@ export async function getLocation(userId) {
   return await userDAL.getLocationByUserId(userId);
 }
 
+export async function getDistance(originsLAT, originsLNG, destinationsLAT, destinationsLNG) {
+  const apiKey = 'KnB6OOmQcQpYSTnqzYhjqUmcGSBKUob1cDF9oOPw';
+  const response = await axios.get(`https://rsapi.goong.io/DistanceMatrix?origins=${originsLAT},${originsLNG}&destinations=${destinationsLAT},${destinationsLNG}&vehicle=bike&api_key=${apiKey}`);
+  return response;
+}
+
 //get profile
-export async function getProfile(userId) {
+export async function getProfile(userId, currentUserId) {
+  var currentUserLocation = await userDAL.getLocationByUserId(currentUserId);
+  var userLocation = await userDAL.getLocationByUserId(userId);
+  var distanceRes = await getDistance(userLocation.lat, userLocation.lng, currentUserLocation.lat, currentUserLocation.lng);
+  var distance = distanceRes.data.rows[0].elements[0].distance.text;
   var rawResult = await userDAL.getProfile(userId);
   let userProfile = {
     user_id: userId,
@@ -217,6 +228,7 @@ export async function getProfile(userId) {
     purpose: '',
     favorite_location: '',
     address: '',
+    distance: distance,
     interest: [],
     problem: [],
     unlike_topic: [],

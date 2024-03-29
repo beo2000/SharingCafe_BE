@@ -541,6 +541,12 @@ router.post('/api/user/register', userController.register);
  *         description: ID of the user to retrieve profile for
  *         schema:
  *           type: string
+ *         example: d7e9d0ec-0b17-4e8b-8504-118d6d25004d
+ *       - in: query
+ *         name: currentUserId
+ *         description: ID of the current user logged
+ *         schema:
+ *           type: string
  *         example: 05492fcb-8aa6-4851-8456-8954fa3f23d3
  *     responses:
  *       '200':

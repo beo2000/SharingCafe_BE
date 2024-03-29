@@ -320,7 +320,8 @@ export async function getTokenId(req, res) {
 export async function getProfile(req, res) {
   try {
     const userId = req.params.userId;
-    const result = await userService.getProfile(userId);
+    const currentUserId = req.query.currentUserId;
+    const result = await userService.getProfile(userId, currentUserId);
     res.status(200).send(result);
   } catch (error) {
     console.log(error);
