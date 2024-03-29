@@ -384,23 +384,34 @@ export async function getUserMatchWithPendingStatus(userId) {
 
 export async function getUserMatchByInterestPaging(userId, limit, offset) {
   const sqlQuery = `
-  SELECT 
-    u.*
-  FROM 
-    public."user" u
-  inner JOIN 
-    user_interest ui ON u.user_id = ui.user_id
-  WHERE 
-    u.user_id != '${userId}'
-    AND ui.interest_id IN (
-    select 
-      interest_id
-    from 
-      user_interest
-    where user_id = '${userId}')
-  limit ${limit}
-  offset ${offset}
-  `;
+  select
+	userMatch.*
+from
+	(
+	select
+		distinct 
+	u.*
+	from
+		public."user" u
+--	inner join 
+--    user_interest ui on
+--		u.user_id = ui.user_id
+--	where
+--		u.user_id != '${userId}'
+--		and ui.interest_id in (
+--		select
+--			interest_id
+--		from
+--			user_interest
+--		where
+--			user_id = '${userId}')
+			) as userMatch
+left join public.user_match um on
+	um.user_id_liked = userMatch.user_id
+where
+	um.user_id_liked is null
+limit ${limit} 
+  offset ${offset}`;
 
   const userDetails = await SequelizeInstance.query(sqlQuery, {
     type: SequelizeInstance.QueryTypes.SELECT,
