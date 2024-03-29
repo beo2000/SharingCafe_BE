@@ -23,6 +23,7 @@ export async function getUserDetails(email, password) {
       'lat',
       'lng',
       'address',
+      'token_id',
     ],
     include: [
       {
@@ -229,7 +230,8 @@ export async function getUserDetailsById(userId) {
 
   const sqlQuery1 = `
   SELECT 
-  u.*,
+  u.*, count(ums.user_match_status) filter (where ums.user_match_status = 'Accepted') as matched_successed,
+  count(ums.user_match_status) filter (where ums.user_match_status = 'Failed') as matched_failed,
   json_agg(
       json_build_object(
           'interest_id', ui.interest_id,
@@ -285,7 +287,15 @@ export async function getUserDetailsById(userId) {
         ORDER BY 
             ui.user_id, ui.interest_id  
     ) ui ON ui.user_id = u.user_id
-    where u.user_id = '${userId}'
+  full join user_match um 
+  	on um.current_user_id = u.user_id 
+  full join user_match_status ums 
+  	on um.user_match_status_id = ums.user_match_status_id 
+  full join user_match um2 
+  	on um2.user_id_liked = u.user_id 
+  full join user_match_status ums2 
+  	on um2.user_match_status_id = ums2.user_match_status_id 
+  where u.user_id = '${userId}'
   GROUP BY 
     u.user_id
   `;
@@ -505,6 +515,8 @@ export async function updateProfile(userId, profile) {
       favorite_location: profile.favorite_location,
       lat: profile.lat,
       lng: profile.lng,
+      address: profile.address,
+      token_id: profile.token_id,
     },
     {
       where: { user_id: userId },
@@ -647,4 +659,15 @@ export async function upsertFreeTimes(data) {
     raw: true,
   });
   return result;
+}
+
+export async function getTokenId (userId) {
+  return await User.findOne({
+    attributes: [
+      'token_id',
+    ],
+    where: {
+      user_id:  userId,
+    }
+  })
 }

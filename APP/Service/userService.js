@@ -195,3 +195,7 @@ export async function updateLocation(userId, lat, lng) {
   if (!user) throw new Error('User not found');
   return await userDAL.updateLocation(userId, lat, lng);
 }
+
+export async function getTokenId(userId) {
+  return await userDAL.getTokenId(userId);
+}

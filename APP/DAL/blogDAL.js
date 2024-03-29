@@ -80,7 +80,7 @@ export async function createBlog(blogId, dataObj) {
     likes_count: dataObj.likes_count,
     comments_count: dataObj.comments_count,
     is_approve: dataObj.is_approve,
-    is_visible: dataObj.is_visible,
+    is_visible: true,
     interest_id: dataObj.interest_id,
   });
 }
@@ -94,7 +94,6 @@ export async function updateBlog(blogId, blogDetails) {
       image: blogDetails.image,
       likes_count: blogDetails.likes_count,
       comments_count: blogDetails.comments_count,
-      is_approve: blogDetails.is_approve,
       is_visible: blogDetails.is_visible,
       interest_id: blogDetails.interest_id,
     },

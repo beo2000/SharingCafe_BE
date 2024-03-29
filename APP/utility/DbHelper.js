@@ -122,6 +122,9 @@ const User = sequelize.define(
     address: {
       type: DataTypes.TEXT,
     },
+    token_id: {
+      type: DataTypes.TEXT,
+    },
     is_available: {
       type: DataTypes.BOOLEAN,
     },

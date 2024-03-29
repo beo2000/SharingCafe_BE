@@ -1,4 +1,4 @@
-import { Role, SequelizeInstance, User } from '../utility/DbHelper.js';
+import { Role, SequelizeInstance, User, Blog, Event } from '../utility/DbHelper.js';
 
 export async function getAdmDetails(email, password) {
   const user = await User.findOne({
@@ -18,6 +18,7 @@ export async function getAdmDetails(email, password) {
       'lat',
       'lng',
       'address',
+      'token_id',
     ],
     include: [
       {
@@ -115,6 +116,28 @@ export async function updateUserStatus(userId, userDetails) {
     },
     {
       where: { user_id: userId },
+    },
+  );
+}
+
+export async function updateBlogStatus(blogId, blogDetails) {
+  return await Blog.update(
+    {
+      is_approve: blogDetails.is_approve,
+    },
+    {
+      where: { blog_id: blogId },
+    },
+  );
+}
+
+export async function updateEventStatus(eventId, eventDetails) {
+  return await Event.update(
+    {
+      is_approve: eventDetails.is_approve,
+    },
+    {
+      where: { event_id: eventId },
     },
   );
 }

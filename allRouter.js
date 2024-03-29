@@ -413,9 +413,9 @@ router.get('/api/admin/statics', admController.getStatics);
  *                 type: string
  *                 description: User account password to be updated
  *                 example: 146759
- *               Bio:
+ *               story:
  *                 type: json
- *                 description: User bio to be updated
+ *                 description: User story to be updated
  *                 example: I like fishing
  *     responses:
  *       '200':
@@ -462,6 +462,38 @@ router.get('/api/admin/statics', admController.getStatics);
  *       500:
  *         description: Internal server error
  */
+
+/**
+ * @swagger
+ * /api/user/token/{userId}:
+ *   get:
+ *     summary: Get device id buy specific user ID
+ *     tags:
+ *       - USER SECTION
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         description: ID of the user to retrieve
+ *         schema:
+ *           type: string
+ *         example: 68ef7af9-28c1-46df-b2e8-df7657c7264b
+ *     responses:
+ *       '200':
+ *         description: Successfully retrieved device id information
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 token_id:
+ *                   type: string
+ *                   description: ID of the device
+ *       '404':
+ *         description: User not found
+ *       '500':
+ *         description: Internal server error
+ */
 router.put('/api/auth/user/update-interests', userController.upsertInterests);
 router.put(
   '/api/auth/user/update-unlike-topic',
@@ -476,6 +508,8 @@ router.put(
   userController.upsertFavoriteDrinks,
 );
 router.put('/api/auth/user/update-free-time', userController.upsertFreeTimes);
+
+router.get('/api/user/token/:userId', userController.getTokenId);
 
 router.post('/api/user/login', userController.loginUser);
 router.get('/api/user/:userId', userController.getUser);
@@ -1084,10 +1118,113 @@ router.get('/api/interest/count/blog', interestController.countBlogByInterest);
  *       '500':
  *         description: Internal server error
  */
+
+/**
+ * @swagger
+ * /api/admin/user/{userId}:
+ *   put:
+ *     summary: Ban a user
+ *     description: Ban a user from system.
+ *     tags:
+ *       - ADMIN SECTION
+ *     parameters:
+ *       - in: path
+ *         name: user_id
+ *         required: true
+ *         description: The ID of the user to ban.
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               is_available:
+ *                 type: bool
+ *                 description: Account status
+ *                 example: false
+ *     responses:
+ *       '200':
+ *         description: User banned successfully
+ *       '404':
+ *         description: User not found
+ *       '500':
+ *         description: Internal Server Error
+ */
+/**
+ * @swagger
+ * /api/admin/blog/{blogId}:
+ *   put:
+ *     summary: Ban a blog
+ *     description: Ban a blog from system.
+ *     tags:
+ *       - ADMIN SECTION
+ *     parameters:
+ *       - in: path
+ *         name: blog_id
+ *         required: true
+ *         description: The ID of the blog to ban.
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               is_approve:
+ *                 type: bool
+ *                 description: Account status
+ *                 example: false
+ *     responses:
+ *       '200':
+ *         description: Blog banned successfully
+ *       '404':
+ *         description: Blog not found
+ *       '500':
+ *         description: Internal Server Error
+ */
+/**
+ * @swagger
+ * /api/admin/event/{eventId}:
+ *   put:
+ *     summary: Ban a blog
+ *     description: Ban a blog from system.
+ *     tags:
+ *       - ADMIN SECTION
+ *     parameters:
+ *       - in: path
+ *         name: event_id
+ *         required: true
+ *         description: The ID of the blog to ban.
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               is_approve:
+ *                 type: bool
+ *                 description: Account status
+ *                 example: false
+ *     responses:
+ *       '200':
+ *         description: Event banned successfully
+ *       '404':
+ *         description: Event not found
+ *       '500':
+ *         description: Internal Server Error
+ */
 router.get('/api/admin/user/:userId', admController.getUser);
 router.put('/api/admin/user/:userId', admController.updateUserStatus);
-router.get('api/');
-
+router.put('/api/admin/blog/:blogId', admController.updateBlogStatus);
+router.put('/api/admin/event/:eventId', admController.updateEventStatus);
 // EVENT SECTION
 //  Phân quyền Authorization -> Middleware handle -> Middleware ???
 /**
@@ -2645,7 +2782,7 @@ router.get('/api/location/getRecommendCafe',locationController.getRecommendCafe,
 
 /**
  * @swagger
- * /api/location/distance:
+ * /api/location/getDistance:
  *   get:
  *     summary: Get distance between 2 location
  *     description: Retrieve distance between 2 location
