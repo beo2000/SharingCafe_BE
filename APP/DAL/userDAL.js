@@ -661,23 +661,18 @@ export async function upsertFreeTimes(data) {
   return result;
 }
 
-export async function getTokenId (userId) {
+export async function getTokenId(userId) {
   return await User.findOne({
-    attributes: [
-      'token_id',
-    ],
+    attributes: ['token_id'],
     where: {
-      user_id:  userId,
-    }
-  })
+      user_id: userId,
+    },
+  });
 }
 
 export async function getLocationByUserId(userId) {
   return await User.findOne({
-    attributes: [
-      'lat',
-      'lng',
-    ],
+    attributes: ['lat', 'lng'],
     where: {
       user_id: userId,
     },
@@ -695,4 +690,35 @@ export async function updateLocation(userId, lat, lng) {
       where: { user_id: userId },
     },
   );
+}
+
+//get profile of userId
+export async function getProfile(userId) {
+  const sqlQuery = `
+  select 
+    u.user_id, u.user_name, u.profile_avatar, u.story, u.gender, u.age, u.purpose, u.favorite_location, u.address,
+    i.interest_id ,
+    i."name" as interest_name,
+    pp.personal_problem_id,
+    pp.problem,
+    ut.unlike_topic_id,
+    ut.topic,
+    fd.favorite_drink_id,
+    fd.favorite_drink,
+    ft.free_time_id,
+    ft.free_time 
+    from public."user" u
+    left join public.user_interest ui on u.user_id = ui.user_id
+    left join public.interest i on i.interest_id = ui.interest_id 
+    left join public.personal_problem pp on pp.user_id = u.user_id 
+    left join public.unlike_topic ut on ut.user_id = u.user_id 
+    left join public.favorite_drink fd on fd.user_id = u.user_id
+    left join public.free_time ft on ft.user_id = u.user_id 
+    where u.user_id = '${userId}'
+    `;
+  const result = await SequelizeInstance.query(sqlQuery, {
+    type: SequelizeInstance.QueryTypes.SELECT,
+    raw: true,
+  });
+  return result;
 }

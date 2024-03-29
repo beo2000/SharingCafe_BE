@@ -316,3 +316,14 @@ export async function getTokenId(req, res) {
     res.status(500).send({ error: error.message });
   }
 }
+
+export async function getProfile(req, res) {
+  try {
+    const userId = req.params.userId;
+    const result = await userService.getProfile(userId);
+    res.status(200).send(result);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ error: error.message });
+  }
+}

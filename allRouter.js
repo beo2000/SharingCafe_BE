@@ -526,6 +526,45 @@ router.put('/api/user/interest/:userInterestId', userController.updateInterest);
 router.delete('/api/user/interest', userController.deleteInterest);
 router.post('/api/user/register', userController.register);
 
+// swagger for getProfile
+/**
+ * @swagger
+ * /api/user/profile/{userId}:
+ *   get:
+ *     summary: Get user profile by ID
+ *     tags:
+ *       - USER SECTION
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         description: ID of the user to retrieve profile for
+ *         schema:
+ *           type: string
+ *         example: 05492fcb-8aa6-4851-8456-8954fa3f23d3
+ *     responses:
+ *       '200':
+ *         description: Successfully retrieved user profile
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 userId:
+ *                   type: string
+ *                   description: ID of the user
+ *                   example: 05492fcb-8aa6-4851-8456-8954fa3f23d3
+ *                 user_name:
+ *                   type: string
+ *                   description: Name of the user
+ *                   example: John Doe
+ *                 email:
+ *                   type: string
+ *                   description: Email of the user
+ *                   example:
+ */ 
+ router.get('/api/user/profile/:userId', userController.getProfile);
+
 /**
  * @swagger
  * /api/user/events/{userId}:
