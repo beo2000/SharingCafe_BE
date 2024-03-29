@@ -2744,31 +2744,17 @@ router.get('/api/location/getRecommendCafe',locationController.getRecommendCafe,
  *      - LOCATION SECTION
  *     parameters:
  *       - in: query
- *         name: originsLAT
+ *         name: userIdA
  *         required: true
- *         description: Latitude of current location
- *         example: 10.855287291321535
+ *         description: UserId of A
+ *         example: 05492fcb-8aa6-4851-8456-8954fa3f23d3
  *         schema:
  *           type: string
  *       - in: query
- *         name: originsLNG
+ *         name: userIdB
  *         required: true
- *         description: Longtitude of current location
- *         example: 106.6513152333054
- *         schema:
- *           type: string
- *       - in: query
- *         name: destinationsLAT
- *         required: string
- *         description: Latitude of destination location
- *         example: 10.838551192432636
- *         schema:
- *           type: string
- *       - in: query
- *         name: destinationsLNG
- *         required: true
- *         description: Longtitude of destination location
- *         example: 106.78081128616805
+ *         description: UserId of B
+ *         example: 68ef7af9-28c1-46df-b2e8-df7657c7264b
  *         schema:
  *           type: string
  *     responses:

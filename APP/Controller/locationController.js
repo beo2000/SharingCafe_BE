@@ -83,10 +83,15 @@ function tinhDiemGiuaCuaKhoangCach(lat1, lon1, lat2, lon2) {
 
 export async function getMiddlePoint(req, res) {
   try {
-    const originsLAT = req.query.originsLAT;
-    const originsLNG = req.query.originsLNG;
-    const destinationsLAT = req.query.destinationsLAT;
-    const destinationsLNG = req.query.destinationsLNG;
+    const userIdA = req.query.userIdA;
+    const userIdB = req.query.userIdB;
+    
+    const locationA = await userService.getLocation(userIdA);
+    const locationB = await userService.getLocation(userIdB);
+    const originsLAT = locationA.lat;
+    const originsLNG = locationA.lng;
+    const destinationsLAT = locationB.lat;
+    const destinationsLNG = locationB.lng;
     
     // Tính tọa độ trung điểm
     const lat = (parseFloat(originsLAT) + parseFloat(destinationsLAT)) / 2;

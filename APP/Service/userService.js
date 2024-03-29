@@ -199,3 +199,7 @@ export async function updateLocation(userId, lat, lng) {
 export async function getTokenId(userId) {
   return await userDAL.getTokenId(userId);
 }
+
+export async function getLocation(userId) {
+  return await userDAL.getLocationByUserId(userId);
+}

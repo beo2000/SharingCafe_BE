@@ -671,3 +671,15 @@ export async function getTokenId (userId) {
     }
   })
 }
+
+export async function getLocationByUserId(userId) {
+  return await User.findOne({
+    attributes: [
+      'lat',
+      'lng',
+    ],
+    where: {
+      user_id: userId,
+    },
+  });
+}
