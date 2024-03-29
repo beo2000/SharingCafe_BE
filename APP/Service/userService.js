@@ -208,15 +208,18 @@ export async function getLocation(userId) {
 export async function getDistance(originsLAT, originsLNG, destinationsLAT, destinationsLNG) {
   const apiKey = 'KnB6OOmQcQpYSTnqzYhjqUmcGSBKUob1cDF9oOPw';
   const response = await axios.get(`https://rsapi.goong.io/DistanceMatrix?origins=${originsLAT},${originsLNG}&destinations=${destinationsLAT},${destinationsLNG}&vehicle=bike&api_key=${apiKey}`);
-  return response;
+  if (response.status == 200) {
+    return response.data.rows[0].elements[0].distance.text;
+  } else {
+    return null;
+  }
 }
 
 //get profile
 export async function getProfile(userId, currentUserId) {
   var currentUserLocation = await userDAL.getLocationByUserId(currentUserId);
   var userLocation = await userDAL.getLocationByUserId(userId);
-  var distanceRes = await getDistance(userLocation.lat, userLocation.lng, currentUserLocation.lat, currentUserLocation.lng);
-  var distance = distanceRes.data.rows[0].elements[0].distance.text;
+  var distance = await getDistance(userLocation.lat, userLocation.lng, currentUserLocation.lat, currentUserLocation.lng);
   var rawResult = await userDAL.getProfile(userId);
   let userProfile = {
     user_id: userId,
