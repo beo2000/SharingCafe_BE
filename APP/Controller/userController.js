@@ -194,7 +194,8 @@ export async function upsertInterests(req, res) {
   try {
     const userId = req.loginUser.user_id;
     const interests = req.body;
-    const user = await userService.upsertInterests(userId, interests);
+    await userService.upsertInterests(userId, interests);
+    const user = await userService.getInterests(userId);
     res.status(200).send(user);
     await t.commit();
   } catch (error) {
@@ -224,7 +225,10 @@ export async function upsertPersonalProblems(req, res) {
   try {
     const userId = req.loginUser.user_id;
     const personal_problems = req.body;
-    const user = await userService.upsertPersonalProblems(userId, personal_problems);
+    const user = await userService.upsertPersonalProblems(
+      userId,
+      personal_problems,
+    );
     res.status(200).send(user);
     await t.commit();
   } catch (error) {
@@ -239,7 +243,10 @@ export async function upsertFavoriteDrinks(req, res) {
   try {
     const userId = req.loginUser.user_id;
     const favorite_drinks = req.body;
-    const user = await userService.upsertFavoriteDrinks(userId, favorite_drinks);
+    const user = await userService.upsertFavoriteDrinks(
+      userId,
+      favorite_drinks,
+    );
     res.status(200).send(user);
     await t.commit();
   } catch (error) {

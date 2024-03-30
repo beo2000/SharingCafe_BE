@@ -560,7 +560,7 @@ export async function deleteUserInterests(userId) {
 export async function upsertInterests(data) {
   const sqlQuery = `
   INSERT INTO public.user_interest (user_interest_id, interest_id, user_id, created_at) 
-  VALUES(gen_random_uuid(), :interest_id, :user_id, now()));
+  VALUES(gen_random_uuid(), :interest_id, :user_id, now())
   `;
   const result = await SequelizeInstance.query(sqlQuery, {
     replacements: data,
