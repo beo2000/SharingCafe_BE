@@ -444,25 +444,21 @@ router.get('/api/admin/statics', admController.getStatics);
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             properties:
- *               interests:
- *                 type: array
- *                 items:
- *                   type: object
- *                   properties:
- *                     interest_id:
- *                       type: string
- *                       description: ID of the interest
+ *             type: array
+ *             items:
+ *               type: object
+ *               properties:
+ *                 interest_id:
+ *                   type: string
+ *                   description: ID of the interest
  *     responses:
- *       200:
+ *       '200':
  *         description: Interests updated successfully
- *       400:
+ *       '400':
  *         description: Bad request - Invalid request body
- *       500:
+ *       '500':
  *         description: Internal server error
  */
-
 /**
  * @swagger
  * /api/user/token/{userId}:
@@ -568,8 +564,8 @@ router.post('/api/user/register', userController.register);
  *                   type: string
  *                   description: Email of the user
  *                   example:
- */ 
- router.get('/api/user/profile/:userId', userController.getProfile);
+ */
+router.get('/api/user/profile/:userId', userController.getProfile);
 
 /**
  * @swagger
@@ -2744,9 +2740,15 @@ router.post('/api/user/schedule', scheduleController.createSchedule);
  */
 router.get('/api/auth/chat-history', chatController.getChatHistory);
 
-router.put('/api/location/updateCurrentLocation', locationController.updateCurrentLocation,);
+router.put(
+  '/api/location/updateCurrentLocation',
+  locationController.updateCurrentLocation,
+);
 router.get('/api/location/getDistance', locationController.getDistance);
-router.get('/api/location/getRecommendCafe',locationController.getRecommendCafe,);
+router.get(
+  '/api/location/getRecommendCafe',
+  locationController.getRecommendCafe,
+);
 /**
  * @swagger
  * /api/location/updateCurrentLocation:
