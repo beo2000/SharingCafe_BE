@@ -1208,7 +1208,7 @@ router.get('/api/interest/count/blog', interestController.countBlogByInterest);
  *       - ADMIN SECTION
  *     parameters:
  *       - in: path
- *         name: blog_id
+ *         name: blogId
  *         required: true
  *         description: The ID of the blog to ban.
  *         schema:
@@ -1236,15 +1236,15 @@ router.get('/api/interest/count/blog', interestController.countBlogByInterest);
  * @swagger
  * /api/admin/event/{eventId}:
  *   put:
- *     summary: Ban a blog
- *     description: Ban a blog from system.
+ *     summary: Ban a Event
+ *     description: Ban a Event from system.
  *     tags:
  *       - ADMIN SECTION
  *     parameters:
  *       - in: path
- *         name: event_id
+ *         name: eventId
  *         required: true
- *         description: The ID of the blog to ban.
+ *         description: The ID of the Event to ban.
  *         schema:
  *           type: string
  *     requestBody:
