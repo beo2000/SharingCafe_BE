@@ -18,10 +18,10 @@ export async function upsertMatch(matchId, userId, userId2, statusId) {
   const sqlQuery = `
     INSERT INTO public.user_match (user_match_id, current_user_id, user_id_liked, user_match_status_id, created_at) 
     VALUES (:user_match_id, :current_user_id, :user_id_liked, :user_match_status_id, NOW())
-    ON CONFLICT (user_match_id) -- Assuming user_match_id is the primary key
+    ON CONFLICT (user_match_id)
     DO UPDATE SET 
         user_match_status_id = :user_match_status_id, -- Update user_match_status_id
-        created_at = NOW() -- Update created_at timestamp
+        created_at = NOW()
     RETURNING *;
   `;
 

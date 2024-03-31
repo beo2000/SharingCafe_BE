@@ -385,7 +385,7 @@ router.get('/api/admin/statics', admController.getStatics);
  */
 /**
  * @swagger
- * /api/user/{userId}:
+ * /api/auth/user-profile:
  *   put:
  *     summary: Update a user profile
  *     tags:
@@ -444,25 +444,21 @@ router.get('/api/admin/statics', admController.getStatics);
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             properties:
- *               interests:
- *                 type: array
- *                 items:
- *                   type: object
- *                   properties:
- *                     interest_id:
- *                       type: string
- *                       description: ID of the interest
+ *             type: array
+ *             items:
+ *               type: object
+ *               properties:
+ *                 interest_id:
+ *                   type: string
+ *                   description: ID of the interest
  *     responses:
- *       200:
+ *       '200':
  *         description: Interests updated successfully
- *       400:
+ *       '400':
  *         description: Bad request - Invalid request body
- *       500:
+ *       '500':
  *         description: Internal server error
  */
-
 /**
  * @swagger
  * /api/user/token/{userId}:
@@ -513,7 +509,7 @@ router.get('/api/user/token/:userId', userController.getTokenId);
 
 router.post('/api/user/login', userController.loginUser);
 router.get('/api/user/:userId', userController.getUser);
-router.put('/api/user/:userId', userController.updateProfile);
+router.put('/api/auth/user-profile', userController.updateProfile);
 router.put(
   '/api/user/avatar/:userId',
   uploadCloud.single('profile_avatar'),
@@ -568,8 +564,8 @@ router.post('/api/user/register', userController.register);
  *                   type: string
  *                   description: Email of the user
  *                   example:
- */ 
- router.get('/api/user/profile/:userId', userController.getProfile);
+ */
+router.get('/api/user/profile/:userId', userController.getProfile);
 
 /**
  * @swagger
@@ -2640,6 +2636,41 @@ router.put('/api/moderator/event/:eventId', modController.censorEvent);
  *       500:
  *         description: Internal server error
  */
+/**
+ * @swagger
+ * tags:
+ *   - name: SCHEDULE SECTION
+ *     description: Operations related to schedules
+ *
+ * /api/auth/user/schedule/{anotherUserId}:
+ *   get:
+ *     summary: Retrieve schedule between users
+ *     description: Retrieve the schedule between the authenticated user and another user.
+ *     security:
+ *       - BearerAuth: []
+ *     tags:
+ *       - SCHEDULE SECTION
+ *     parameters:
+ *       - in: path
+ *         name: anotherUserId
+ *         required: true
+ *         description: ID of the another user
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *     responses:
+ *       '200':
+ *         description: Schedule retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *       '404':
+ *         description: Schedule not found
+ *       '500':
+ *         description: Internal Server Error
+ */
 router.get('/api/match/user-status/count', matchController.countUserByStatus);
 router.get(
   '/api/auth/matches-interest',
@@ -2658,6 +2689,10 @@ router.put('/api/auth/matching-status', matchController.updateUserMatchStatus);
 router.post('/api/user/message', chatController.viewMessage);
 
 router.post('/api/user/schedule', scheduleController.createSchedule);
+router.get(
+  '/api/auth/user/schedule/:anotherUserId',
+  scheduleController.getScheduleBetweenUsers,
+);
 /**
  * @swagger
  * tags:
@@ -2744,9 +2779,15 @@ router.post('/api/user/schedule', scheduleController.createSchedule);
  */
 router.get('/api/auth/chat-history', chatController.getChatHistory);
 
-router.put('/api/location/updateCurrentLocation', locationController.updateCurrentLocation,);
+router.put(
+  '/api/location/updateCurrentLocation',
+  locationController.updateCurrentLocation,
+);
 router.get('/api/location/getDistance', locationController.getDistance);
-router.get('/api/location/getRecommendCafe',locationController.getRecommendCafe,);
+router.get(
+  '/api/location/getRecommendCafe',
+  locationController.getRecommendCafe,
+);
 /**
  * @swagger
  * /api/location/updateCurrentLocation:

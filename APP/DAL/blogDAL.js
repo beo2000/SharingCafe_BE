@@ -6,7 +6,9 @@ import {
 } from '../utility/DbHelper.js';
 export async function getBlogs(page, title) {
   let name = title;
-  if (name == null) {name = ''}
+  if (name == null) {
+    name = '';
+  }
   let sqlQuery = '';
   if (page) {
     sqlQuery = `
@@ -165,8 +167,8 @@ export async function getNewBlogs(page) {
 }
 
 export async function getPopularBlogs(page) {
-  let sqlQuery ='';
-  if (page){
+  let sqlQuery = '';
+  if (page) {
     sqlQuery = `
     select 
       b.*, u.user_name, i.name
@@ -199,7 +201,7 @@ export async function getPopularBlogs(page) {
     order by b.likes_count desc 
   `;
   }
-  
+
   const result = await SequelizeInstance.query(sqlQuery, {
     type: SequelizeInstance.QueryTypes.SELECT,
     raw: true,
@@ -298,7 +300,7 @@ export async function likeBlog(like_blog_id, dataObj) {
     SET likes_count = likes_count + 1
     WHERE blog_id = '${dataObj.blog_id}'
   `;
-    const result = await SequelizeInstance.query(sqlQuery, {
+  const result = await SequelizeInstance.query(sqlQuery, {
     type: SequelizeInstance.QueryTypes.SELECT,
     raw: true,
   });
@@ -309,19 +311,19 @@ export async function likeBlog(like_blog_id, dataObj) {
   });
 }
 
-export async function unlikeBlog(dataObj){
+export async function unlikeBlog(dataObj) {
   const sqlQuery = `
     UPDATE blog 
     SET likes_count = likes_count - 1
     WHERE blog_id = '${dataObj.blog_id}'
   `;
-    const result = await SequelizeInstance.query(sqlQuery, {
+  const result = await SequelizeInstance.query(sqlQuery, {
     type: SequelizeInstance.QueryTypes.SELECT,
     raw: true,
   });
   LikeBlog.destroy({
-    where: {like_blog_id: dataObj.like_blog_id}
-  })
+    where: { like_blog_id: dataObj.like_blog_id },
+  });
   return result;
 }
 

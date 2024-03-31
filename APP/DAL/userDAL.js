@@ -230,7 +230,7 @@ export async function getUserDetailsById(userId) {
 
   const sqlQuery1 = `
   SELECT 
-  u.*, count(ums.user_match_status) filter (where ums.user_match_status = 'Accepted') as matched_successed,
+  u.*, count(ums.user_match_status) filter (where ums.user_match_status = 'Accepted') as matched_succeed,
   count(ums.user_match_status) filter (where ums.user_match_status = 'Failed') as matched_failed,
   json_agg(
       json_build_object(
@@ -241,7 +241,7 @@ export async function getUserDetailsById(userId) {
     json_agg(
         json_build_object(
             'personal_problem_id', pp.personal_problem_id ,
-            'personal_proplem', pp.problem 
+            'personal_problem', pp.problem 
         )
       ) AS personal_problem,
     json_agg(
@@ -307,20 +307,14 @@ export async function getUserDetailsById(userId) {
 }
 export async function getUserMatchByInterest(userId) {
   const sqlQuery = `
-    SELECT 
-    u.*
-    FROM 
-    public."user" u
-    inner JOIN 
-    user_interest ui ON u.user_id = ui.user_id
-    WHERE 
-    u.user_id != '${userId}'
-    AND ui.interest_id IN (
-    select 
-      interest_id
-    from 
-      user_interest
-    where user_id = '${userId}')
+   SELECT u.*
+FROM "user" u
+LEFT JOIN user_match m1 ON u.user_id = m1.user_id_liked AND m1.current_user_id = '${userId}'
+LEFT JOIN user_match m2 ON u.user_id = m2.current_user_id AND m2.user_id_liked = '${userId}'
+LEFT JOIN user_interest i ON u.user_id = i.user_id AND i.interest_id IN (SELECT interest_id FROM user_interest WHERE user_id = '${userId}')
+WHERE m1.user_id_liked IS NULL
+  AND m2.current_user_id IS NULL
+  AND i.user_id IS NULL;
   `;
 
   const userDetails = await SequelizeInstance.query(sqlQuery, {
@@ -344,6 +338,7 @@ export async function getUserMatchWithStatus(userId, status) {
       user_match_status ums 
       ON um.user_match_status_id = ums.user_match_status_id 
     WHERE um.current_user_id = '${userId}'
+    or um.user_id_liked = '${userId}'
   `;
 
   if (status) {
@@ -384,34 +379,31 @@ export async function getUserMatchWithPendingStatus(userId) {
 
 export async function getUserMatchByInterestPaging(userId, limit, offset) {
   const sqlQuery = `
-  select
-	userMatch.*
-from
-	(
-	select
-		distinct 
+select
 	u.*
+from
+	"user" u
+left join user_match m1 on
+	u.user_id = m1.user_id_liked
+	and m1.current_user_id = '${userId}'
+left join user_match m2 on
+	u.user_id = m2.current_user_id
+	and m2.user_id_liked = '${userId}'
+left join user_interest i on
+	u.user_id = i.user_id
+	and i.interest_id in (
+	select
+		interest_id
 	from
-		public."user" u
---	inner join 
---    user_interest ui on
---		u.user_id = ui.user_id
---	where
---		u.user_id != '${userId}'
---		and ui.interest_id in (
---		select
---			interest_id
---		from
---			user_interest
---		where
---			user_id = '${userId}')
-			) as userMatch
-left join public.user_match um on
-	um.user_id_liked = userMatch.user_id
+		user_interest
+	where
+		user_id = '${userId}')
 where
-	um.user_id_liked is null
+	m1.user_id_liked is null
+	and m2.current_user_id is null
+	and i.user_id is null
 limit ${limit} 
-  offset ${offset}`;
+offset ${offset}`;
 
   const userDetails = await SequelizeInstance.query(sqlQuery, {
     type: SequelizeInstance.QueryTypes.SELECT,
