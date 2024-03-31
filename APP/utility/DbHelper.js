@@ -764,7 +764,8 @@ const UserInterest = sequelize.define(
 );
 
 const Schedule = sequelize.define(
-  'schedule', {
+  'schedule',
+  {
     schedule_id: {
       type: DataTypes.UUID,
       primaryKey: true,
@@ -777,7 +778,7 @@ const Schedule = sequelize.define(
       type: DataTypes.TEXT,
       allowNull: false,
     },
-    date: {
+    schedule_time: {
       type: DataTypes.DATE,
     },
     is_accept: {
@@ -795,11 +796,12 @@ const Schedule = sequelize.define(
     receiver_id: {
       type: DataTypes.UUID,
     },
-  },{
+  },
+  {
     tableName: 'schedule',
     timestamps: false,
   },
-)
+);
 
 const LikeBlog = sequelize.define(
   'like_blog',

@@ -192,8 +192,6 @@ export async function updateUserMatchStatus(userId, dataObj) {
 }
 
 export async function updateLocation(userId, lat, lng) {
-  // const user = await getUser(userId);
-  // if (!user) throw new Error('User not found');
   return await userDAL.updateLocation(userId, lat, lng);
 }
 

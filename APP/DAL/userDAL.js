@@ -230,7 +230,7 @@ export async function getUserDetailsById(userId) {
 
   const sqlQuery1 = `
   SELECT 
-  u.*, count(ums.user_match_status) filter (where ums.user_match_status = 'Accepted') as matched_successed,
+  u.*, count(ums.user_match_status) filter (where ums.user_match_status = 'Accepted') as matched_succeed,
   count(ums.user_match_status) filter (where ums.user_match_status = 'Failed') as matched_failed,
   json_agg(
       json_build_object(
@@ -241,7 +241,7 @@ export async function getUserDetailsById(userId) {
     json_agg(
         json_build_object(
             'personal_problem_id', pp.personal_problem_id ,
-            'personal_proplem', pp.problem 
+            'personal_problem', pp.problem 
         )
       ) AS personal_problem,
     json_agg(
@@ -338,6 +338,7 @@ export async function getUserMatchWithStatus(userId, status) {
       user_match_status ums 
       ON um.user_match_status_id = ums.user_match_status_id 
     WHERE um.current_user_id = '${userId}'
+    or um.user_id_liked = '${userId}'
   `;
 
   if (status) {
