@@ -24,8 +24,6 @@ export async function updateUserStatus(userId, userDetails) {
 }
 
 export async function updateBlogStatus(blogId, blogDetails) {
-  console.log(blogId);
-
   const blog = await blogDAL.getBlog(blogId);
   if (!blog) throw new Error('This blog does not exist!!');
   return await adminDAL.updateBlogStatus(blogId, blogDetails);
