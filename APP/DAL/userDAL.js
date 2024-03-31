@@ -227,79 +227,7 @@ export async function getUserDetailsById(userId) {
   GROUP BY 
     u.user_id, u.role_id;  
   `;
-
-  const sqlQuery1 = `
-  SELECT 
-  u.*, count(ums.user_match_status) filter (where ums.user_match_status = 'Accepted') as matched_succeed,
-  count(ums.user_match_status) filter (where ums.user_match_status = 'Failed') as matched_failed,
-  json_agg(
-      json_build_object(
-          'interest_id', ui.interest_id,
-          'interest_name', ui.name
-      )
-    ) AS interest_list,
-    json_agg(
-        json_build_object(
-            'personal_problem_id', pp.personal_problem_id ,
-            'personal_problem', pp.problem 
-        )
-      ) AS personal_problem,
-    json_agg(
-        json_build_object(
-            'unlike_topic_id', ut.unlike_topic_id  ,
-            'unlike_topic', ut.topic  
-        )
-      ) AS unlike_topic,
-    json_agg(
-        json_build_object(
-            'favorite_drink_id', fd.favorite_drink_id  ,
-            'favorite_drink', fd.favorite_drink  
-        )
-      ) AS favorite_drink ,
-      json_agg(
-        json_build_object(
-            'free_time_id', ft.free_time_id  ,
-            'free_time', ft.free_time  
-        )
-      ) AS free_time
-  FROM 
-    public."user" u 
-  INNER JOIN 
-    (SELECT * FROM role WHERE role_name = 'USER') r ON u.role_id = r.role_id
-  full join personal_problem pp
-  	on u.user_id = pp.user_id 
-  full join unlike_topic ut 
- 	  on u.user_id = ut.user_id 
-  full join favorite_drink fd 
-  	on fd.user_id = u.user_id 
-  full join free_time ft 
-  	on ft.user_id = u.user_id 
-  LEFT JOIN 
-    (
-        SELECT 
-            ui.user_id,
-            ui.interest_id,
-            i.name
-        FROM 
-            user_interest ui 
-        INNER JOIN 
-            interest i ON i.interest_id = ui.interest_id
-        ORDER BY 
-            ui.user_id, ui.interest_id  
-    ) ui ON ui.user_id = u.user_id
-  full join user_match um 
-  	on um.current_user_id = u.user_id 
-  full join user_match_status ums 
-  	on um.user_match_status_id = ums.user_match_status_id 
-  full join user_match um2 
-  	on um2.user_id_liked = u.user_id 
-  full join user_match_status ums2 
-  	on um2.user_match_status_id = ums2.user_match_status_id 
-  where u.user_id = '${userId}'
-  GROUP BY 
-    u.user_id
-  `;
-  const userDetails = await SequelizeInstance.query(sqlQuery1, {
+  const userDetails = await SequelizeInstance.query(sqlQuery, {
     type: SequelizeInstance.QueryTypes.SELECT,
     raw: true,
   });
@@ -577,13 +505,14 @@ export async function deleteUnlikeTopics(userId) {
 export async function upsertUnlikeTopics(data) {
   const sqlQuery = `
   INSERT INTO public.unlike_topic (unlike_topic_id, user_id, topic, created_at) 
-  VALUES(gen_random_uuid(), :user_id, :unlike_topic, now()));
+  VALUES(gen_random_uuid(), :user_id, :topic, now());
   `;
   const result = await SequelizeInstance.query(sqlQuery, {
     replacements: data,
     type: SequelizeInstance.QueryTypes.SELECT,
     raw: true,
   });
+  console.log(result);
   return result;
 }
 
@@ -602,7 +531,7 @@ export async function deletePersonalProblems(userId) {
 export async function upsertPersonalProblems(data) {
   const sqlQuery = `
   INSERT INTO public.personal_problem (personal_problem_id, user_id, problem, created_at) 
-  VALUES(gen_random_uuid(), :user_id, :problem, now()));
+  VALUES(gen_random_uuid(), :user_id, :problem, now());
   `;
   const result = await SequelizeInstance.query(sqlQuery, {
     replacements: data,
@@ -615,10 +544,9 @@ export async function upsertPersonalProblems(data) {
 export async function deleteFavoriteDrinks(userId) {
   const sqlQuery = `
   DELETE FROM public.favorite_drink
-  WHERE user_id = :userId
+  WHERE user_id = '${userId}'
   `;
   const result = await SequelizeInstance.query(sqlQuery, {
-    replacements: userId,
     type: SequelizeInstance.QueryTypes.DELETE,
     raw: true,
   });
@@ -628,7 +556,7 @@ export async function deleteFavoriteDrinks(userId) {
 export async function upsertFavoriteDrinks(data) {
   const sqlQuery = `
   INSERT INTO public.favorite_drink (favorite_drink_id, user_id, favorite_drink, created_at) 
-  VALUES(gen_random_uuid(), :user_id, :favorite_drink, now()));
+  VALUES(gen_random_uuid(), :user_id, :favorite_drink, now());
   `;
   const result = await SequelizeInstance.query(sqlQuery, {
     replacements: data,
@@ -641,10 +569,9 @@ export async function upsertFavoriteDrinks(data) {
 export async function deleteFreeTimes(userId) {
   const sqlQuery = `
   DELETE FROM public.free_time
-  WHERE user_id = :userId
+  WHERE user_id = '${userId}'
   `;
   const result = await SequelizeInstance.query(sqlQuery, {
-    replacements: userId,
     type: SequelizeInstance.QueryTypes.DELETE,
     raw: true,
   });
@@ -654,7 +581,7 @@ export async function deleteFreeTimes(userId) {
 export async function upsertFreeTimes(data) {
   const sqlQuery = `
   INSERT INTO public.free_time (free_time_id, user_id, free_time, created_at) 
-  VALUES(gen_random_uuid(), :user_id, :free_time, now()));
+  VALUES(gen_random_uuid(), :user_id, :free_time, now());
   `;
   const result = await SequelizeInstance.query(sqlQuery, {
     replacements: data,

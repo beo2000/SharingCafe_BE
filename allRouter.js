@@ -490,6 +490,146 @@ router.get('/api/admin/statics', admController.getStatics);
  *       '500':
  *         description: Internal server error
  */
+
+/**
+ * @swagger
+ * tags:
+ *   - name: USER SECTION
+ *     description: Operations related to user authentication
+ *
+ * /api/auth/user/update-unlike-topic:
+ *   put:
+ *     summary: Update user unlike topic
+ *     description: Update or insert user unlike topic based on the provided data.
+ *     security:
+ *       - BearerAuth: []
+ *     tags:
+ *       - USER SECTION
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: array
+ *             items:
+ *               type: object
+ *               properties:
+ *                 topic:
+ *                   type: string
+ *                   description: Topic don't want to discuss
+ *     responses:
+ *       '200':
+ *         description: Unlike-topics updated successfully
+ *       '400':
+ *         description: Bad request - Invalid request body
+ *       '500':
+ *         description: Internal server error
+ */
+
+/**
+ * @swagger
+ * tags:
+ *   - name: USER SECTION
+ *     description: Operations related to user authentication
+ *
+ * /api/auth/user/update-personal-problem:
+ *   put:
+ *     summary: Update user personal problem
+ *     description: Update or insert user personal problem based on the provided data.
+ *     security:
+ *       - BearerAuth: []
+ *     tags:
+ *       - USER SECTION
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: array
+ *             items:
+ *               type: object
+ *               properties:
+ *                 problem:
+ *                   type: string
+ *                   description: Personal problem
+ *     responses:
+ *       '200':
+ *         description: Personal-problems updated successfully
+ *       '400':
+ *         description: Bad request - Invalid request body
+ *       '500':
+ *         description: Internal server error
+ */
+
+/**
+ * @swagger
+ * tags:
+ *   - name: USER SECTION
+ *     description: Operations related to user authentication
+ *
+ * /api/auth/user/update-favorite-drink:
+ *   put:
+ *     summary: Update user favorite drink
+ *     description: Update or insert user favorite drink based on the provided data.
+ *     security:
+ *       - BearerAuth: []
+ *     tags:
+ *       - USER SECTION
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: array
+ *             items:
+ *               type: object
+ *               properties:
+ *                 favorite_drink:
+ *                   type: string
+ *                   description: User favorite drink
+ *     responses:
+ *       '200':
+ *         description: Favorite_drinks updated successfully
+ *       '400':
+ *         description: Bad request - Invalid request body
+ *       '500':
+ *         description: Internal server error
+ */
+
+/**
+ * @swagger
+ * tags:
+ *   - name: USER SECTION
+ *     description: Operations related to user authentication
+ *
+ * /api/auth/user/update-free-time:
+ *   put:
+ *     summary: Update user free time
+ *     description: Update or insert user free time based on the provided data.
+ *     security:
+ *       - BearerAuth: []
+ *     tags:
+ *       - USER SECTION
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: array
+ *             items:
+ *               type: object
+ *               properties:
+ *                 free_time:
+ *                   type: string
+ *                   description: User favorite drink
+ *     responses:
+ *       '200':
+ *         description: Free_times updated successfully
+ *       '400':
+ *         description: Bad request - Invalid request body
+ *       '500':
+ *         description: Internal server error
+ */
 router.put('/api/auth/user/update-interests', userController.upsertInterests);
 router.put(
   '/api/auth/user/update-unlike-topic',
@@ -1170,7 +1310,7 @@ router.get('/api/interest/count/blog', interestController.countBlogByInterest);
  *       - ADMIN SECTION
  *     parameters:
  *       - in: path
- *         name: user_id
+ *         name: userId
  *         required: true
  *         description: The ID of the user to ban.
  *         schema:

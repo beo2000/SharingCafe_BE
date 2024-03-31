@@ -65,8 +65,7 @@ export async function getStatics() {
 export async function getUsers() {
   const sqlQuery = `
   SELECT 
-    u.*, count(ums.user_match_status) filter (where user_match_status = 'Accepted') as matched_successed,
-    count(ums.user_match_status) filter (where user_match_status = 'Dislike') as matched_failed,
+    u.*,
     json_agg(
         json_build_object(
             'interest_id', ui.interest_id,
@@ -90,10 +89,6 @@ export async function getUsers() {
           ORDER BY 
               ui.user_id, ui.interest_id  
       ) ui ON ui.user_id = u.user_id
-  full join user_match um 
-  	on um.current_user_id = u.user_id 
-  full join user_match_status ums 
-  	on um.user_match_status_id = ums.user_match_status_id 
   GROUP BY 
       u.user_id, u.role_id; 
   `;
