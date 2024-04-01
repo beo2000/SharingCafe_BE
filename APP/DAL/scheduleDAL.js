@@ -45,3 +45,11 @@ order by
 
   return userDetails;
 }
+
+export async function changeStatus(dataObj) {
+  console.log(dataObj);
+  return await Schedule.update(
+    { is_accept: dataObj.is_accept },
+    { where: { schedule_id: dataObj.schedule_id } },
+  );
+}

@@ -27,3 +27,14 @@ export async function getScheduleBetweenUsers(req, res) {
     res.status(500).send({ error: error.message });
   }
 }
+
+export async function changeStatus(req, res) {
+  try {
+    const dataObj = req.query;
+    const result = await scheduleService.changeStatus(dataObj);
+    res.status(200).send(result);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ error: error.message });
+  }
+}

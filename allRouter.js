@@ -2811,6 +2811,45 @@ router.put('/api/moderator/event/:eventId', modController.censorEvent);
  *       '500':
  *         description: Internal Server Error
  */
+/** 
+ * @swagger
+ * tags:
+ *   - name: SCHEDULE SECTION
+ *     description: Operations related to schedules
+ *
+ * /api/user/schedule/status:
+ *   put:
+ *     summary: Change status of schedule
+ *     description: Change status of schedule
+ *     tags:
+ *       - SCHEDULE SECTION
+ *     parameters:
+ *       - in: query
+ *         name: is_accept
+ *         required: true
+ *         description: status of schedule
+ *         schema:
+ *           type: boolean
+ *       - in: query
+ *         name: schedule_id
+ *         required: true
+ *         description: schedule id
+ *         schema:
+ *           type: string
+ *     responses:
+ *       '200':
+ *         description: Schedule retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *       '404':
+ *         description: Schedule not found
+ *       '500':
+ *         description: Internal Server Error
+ */
+router.put('/api/user/schedule/status', scheduleController.changeStatus)
 router.get('/api/match/user-status/count', matchController.countUserByStatus);
 router.get(
   '/api/auth/matches-interest',
