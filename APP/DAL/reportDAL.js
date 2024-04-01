@@ -178,7 +178,7 @@ export async function getAllUserReport(page) {
   if (page) {
     sqlQuery = `
     select 
-    u2.user_id  ,u2.user_name  , u2.profile_avatar  ,
+    u2.user_id, u2.user_name, u2.profile_avatar, u2.is_available,
     jsonb_agg(
         jsonb_build_object(
           'report_id', ur.report_id ,
@@ -202,7 +202,7 @@ export async function getAllUserReport(page) {
   } else {
     sqlQuery = `
     select 
-    u2.user_id  ,u2.user_name  , u2.profile_avatar  ,
+    u2.user_id, u2.user_name, u2.profile_avatar, u2.is_available, 
     jsonb_agg(
         jsonb_build_object(
           'report_id', ur.report_id ,

@@ -254,19 +254,13 @@ router.get('/api/admin/statics', admController.getStatics);
  */
 /**
  * @swagger
- * /api/user/{userId}:
+ * /api/auth/user/profile:
  *   get:
- *     summary: Get user information by ID
+ *     summary: Get login user information
  *     tags:
  *       - USER SECTION
- *     parameters:
- *       - in: path
- *         name: userId
- *         required: true
- *         description: ID of the user to retrieve
- *         schema:
- *           type: string
- *         example: 6150886b-5920-4884-8e43-d4efb62f89d3
+ *     security:
+ *       - BearerAuth: []
  *     responses:
  *       '200':
  *         description: Successfully retrieved user information
@@ -648,7 +642,7 @@ router.put('/api/auth/user/update-free-time', userController.upsertFreeTimes);
 router.get('/api/user/token/:userId', userController.getTokenId);
 
 router.post('/api/user/login', userController.loginUser);
-router.get('/api/user/:userId', userController.getUser);
+router.get('/api/auth/user/profile', userController.getUser);
 router.put('/api/auth/user-profile', userController.updateProfile);
 router.put(
   '/api/user/avatar/:userId',
@@ -2225,7 +2219,7 @@ router.post(
 
 /**
  * @swagger
- * /api/report:
+ * /api/user/report:
  *   get:
  *     summary: Get a list of report status
  *     tags:
@@ -2253,7 +2247,7 @@ router.post(
 
 /**
  * @swagger
- * /api/blogs/report:
+ * /api/admin/blogs/report:
  *   get:
  *     summary: Get a list of blog report
  *     tags:
@@ -2274,7 +2268,7 @@ router.post(
 
 /**
  * @swagger
- * /api/blogs/report:
+ * /api/user/blogs/report:
  *   post:
  *     summary: Create a blog report
  *     tags:
@@ -2309,7 +2303,7 @@ router.post(
 
 /**
  * @swagger
- * /api/blogs/report/{reportId}:
+ * /api/user/blogs/report/{reportId}:
  *   delete:
  *     summary: Delete a specific report by ID
  *     tags:
@@ -2332,7 +2326,7 @@ router.post(
 
 /**
  * @swagger
- * /api/events/report:
+ * /api/admin/events/report:
  *   get:
  *     summary: Get a list of event report
  *     tags:
@@ -2353,7 +2347,7 @@ router.post(
 
 /**
  * @swagger
- * /api/events/report:
+ * /api/user/events/report:
  *   post:
  *     summary: Create a event report
  *     tags:
@@ -2388,7 +2382,7 @@ router.post(
 
 /**
  * @swagger
- * /api/events/report/{reportId}:
+ * /api/user/events/report/{reportId}:
  *   delete:
  *     summary: Delete a specific event report by ID
  *     tags:
@@ -2411,7 +2405,7 @@ router.post(
 
 /**
  * @swagger
- * /api/users/report:
+ * /api/admin/users/report:
  *   get:
  *     summary: Get a list of user report
  *     tags:
@@ -2432,7 +2426,7 @@ router.post(
 
 /**
  * @swagger
- * /api/users/report:
+ * /api/user/users/report:
  *   post:
  *     summary: Create a user report
  *     tags:
@@ -2467,7 +2461,7 @@ router.post(
 
 /**
  * @swagger
- * /api/users/report/{reportId}:
+ * /api/user/users/report/{reportId}:
  *   delete:
  *     summary: Delete a specific user report by ID
  *     tags:
@@ -2509,22 +2503,22 @@ router.delete('/api/blog/comment/:commentId', blogController.deleteComment);
 router.post('/api/blogs/like', blogController.likeBlog);
 router.put('/api/blogs/like', blogController.unLikeBlog);
 
-router.get('/api/report', reportController.getAllReportStatus);
+router.get('/api/user/report', reportController.getAllReportStatus);
 
-router.get('/api/blogs/report', reportController.getAllBlogReport);
-router.post('/api/blogs/report', reportController.createBlogReport);
-router.delete('/api/blogs/report/:reportId', reportController.deleteBlogReport);
+router.get('/api/admin/blogs/report', reportController.getAllBlogReport);
+router.post('/api/user/blogs/report', reportController.createBlogReport);
+router.delete('/api/user/blogs/report/:reportId', reportController.deleteBlogReport);
 
-router.get('/api/events/report', reportController.getAllEventReport);
-router.post('/api/events/report', reportController.createEventReport);
+router.get('/api/admin/events/report', reportController.getAllEventReport);
+router.post('/api/user/events/report', reportController.createEventReport);
 router.delete(
-  '/api/events/report/:reportId',
+  '/api/user/events/report/:reportId',
   reportController.deleteEventReport,
 );
 
-router.get('/api/users/report', reportController.getAllUserReport);
-router.post('/api/users/report', reportController.createUserReport);
-router.delete('/api/users/report/:reportId', reportController.deleteUserReport);
+router.get('/api/admin/users/report', reportController.getAllUserReport);
+router.post('/api/user/users/report', reportController.createUserReport);
+router.delete('/api/user/users/report/:reportId', reportController.deleteUserReport);
 /**
  * @swagger
  * /api/moderator/login:

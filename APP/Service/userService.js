@@ -30,7 +30,100 @@ export async function register(user) {
 }
 
 export async function getUser(userId) {
-  return await userDAL.getUserDetailsById(userId);
+  // return await userDAL.getUserDetailsById(userId);
+  var rawResult = await userDAL.getProfile(userId);
+  let userProfile = {
+    user_id: userId,
+    user_name: '',
+    profile_avatar: '',
+    story: '',
+    gender: '',
+    age: '',
+    purpose: '',
+    favorite_location: '',
+    address: '',
+    interest: [],
+    problem: [],
+    unlike_topic: [],
+    favorite_drink: [],
+    free_time: [],
+  };
+
+  rawResult.forEach((row) => {
+    if (!userProfile.user_name) {
+      userProfile = {
+        ...userProfile,
+        user_name: row.user_name,
+        profile_avatar: row.profile_avatar,
+        story: row.story,
+        gender: row.gender,
+        age: row.age,
+        purpose: row.purpose,
+        favorite_location: row.favorite_location,
+        address: row.address,
+      };
+    }
+
+    if (
+      row.interest_id &&
+      !userProfile.interest.some(
+        (interest) => interest.interest_id === row.interest_id,
+      )
+    ) {
+      userProfile.interest.push({
+        interest_id: row.interest_id,
+        interest_name: row.interest_name,
+      });
+    }
+
+    if (
+      row.personal_problem_id &&
+      !userProfile.problem.some(
+        (problem) => problem.personal_problem_id === row.personal_problem_id,
+      )
+    ) {
+      userProfile.problem.push({
+        personal_problem_id: row.personal_problem_id,
+        problem: row.problem,
+      });
+    }
+    if (
+      row.unlike_topic_id &&
+      !userProfile.unlike_topic.some(
+        (topic) => topic.unlike_topic_id === row.unlike_topic_id,
+      )
+    ) {
+      userProfile.unlike_topic.push({
+        unlike_topic_id: row.unlike_topic_id,
+        topic: row.topic,
+      });
+    }
+    if (
+      row.favorite_drink_id &&
+      !userProfile.favorite_drink.some(
+        (favorite_drink) =>
+          favorite_drink.favorite_drink_id === row.favorite_drink_id,
+      )
+    ) {
+      userProfile.favorite_drink.push({
+        favorite_drink_id: row.favorite_drink_id,
+        favorite_drink: row.favorite_drink,
+      });
+    }
+    if (
+      row.free_time_id &&
+      !userProfile.free_time.some(
+        (free_time) => free_time.free_time_id === row.free_time_id,
+      )
+    ) {
+      userProfile.free_time.push({
+        free_time_id: row.free_time_id,
+        free_time: row.free_time,
+      });
+    }
+  });
+
+  return userProfile;
 }
 
 export async function updateProfile(userId, profile) {
