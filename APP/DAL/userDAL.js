@@ -38,6 +38,7 @@ export async function getUserDetails(email, password) {
     where: {
       email: email,
       password: password,
+      is_available: true,
     },
     limit: 1,
   });

@@ -254,19 +254,13 @@ router.get('/api/admin/statics', admController.getStatics);
  */
 /**
  * @swagger
- * /api/user/{userId}:
+ * /api/auth/user/profile:
  *   get:
- *     summary: Get user information by ID
+ *     summary: Get login user information
  *     tags:
  *       - USER SECTION
- *     parameters:
- *       - in: path
- *         name: userId
- *         required: true
- *         description: ID of the user to retrieve
- *         schema:
- *           type: string
- *         example: 6150886b-5920-4884-8e43-d4efb62f89d3
+ *     security:
+ *       - BearerAuth: []
  *     responses:
  *       '200':
  *         description: Successfully retrieved user information
@@ -385,19 +379,13 @@ router.get('/api/admin/statics', admController.getStatics);
  */
 /**
  * @swagger
- * /api/auth/user-profile:
+ * /api/auth/user/profile:
  *   put:
  *     summary: Update a user profile
  *     tags:
  *       - USER SECTION
- *     parameters:
- *       - in: path
- *         name: userId
- *         required: true
- *         description: ID of the user profile to be updated
- *         schema:
- *           type: string
- *         example: f6fb30c7-7d61-48ae-8a59-05c53568847c
+ *     security:
+ *       - BearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -414,9 +402,27 @@ router.get('/api/admin/statics', admController.getStatics);
  *                 description: User account password to be updated
  *                 example: 146759
  *               story:
- *                 type: json
+ *                 type: string
  *                 description: User story to be updated
  *                 example: I like fishing
+ *               phone:
+ *                 type: string
+ *                 description: User phone to be updated
+ *               gender:
+ *                 type: string
+ *                 description: User gender to be updated
+ *               age:
+ *                 type: string
+ *                 description: User age to be updated
+ *               purpose:
+ *                 type: string
+ *                 description: User purpose to be updated
+ *               favorite_location:
+ *                  type: string
+ *                  description: User favorite location to be updated
+ *               address:
+ *                  type: string
+ *                  description: User address to be updated
  *     responses:
  *       '200':
  *         description: User updated successfully
@@ -648,8 +654,8 @@ router.put('/api/auth/user/update-free-time', userController.upsertFreeTimes);
 router.get('/api/user/token/:userId', userController.getTokenId);
 
 router.post('/api/user/login', userController.loginUser);
-router.get('/api/user/:userId', userController.getUser);
-router.put('/api/auth/user-profile', userController.updateProfile);
+router.get('/api/auth/user/profile', userController.getUser);
+router.put('/api/auth/user/profile', userController.updateProfile);
 router.put(
   '/api/user/avatar/:userId',
   uploadCloud.single('profile_avatar'),
@@ -1761,6 +1767,36 @@ router.put('/api/admin/event/:eventId', admController.updateEventStatus);
  *       400:
  *         description: Bad request
  */
+
+/**
+ * @swagger
+ * /api/url/event:
+ *  get:
+ *     summary: Get a event url base on event Id
+ *     tags:
+ *     - EVENT SECTION
+ *     parameters:
+ *       - in: query
+ *         name: event_id
+ *         schema:
+ *           type: string
+ *         description: id of event to get url
+ *         example: 2d86fcd8-3380-46ee-8a42-afa03eec77ed
+ *     responses:
+ *       200:
+ *         description: Success
+ *         content:
+ *          application/json:
+ *            schema:
+ *              type: array
+ *              items:
+ *                type: object
+ *                properties:
+ *                  url:
+ *                    type: string
+ *       400:
+ *         description: Bad request
+ */
 router.get('/api/event', eventController.getEvents);
 // router.post('/api/event/search', eventController.getEventsByName);
 router.post('/api/event', eventController.createEvent);
@@ -1770,6 +1806,7 @@ router.delete('/api/event/:eventId', eventController.deleteEvent);
 router.get('/api/event/new/events', eventController.getNewEvents);
 // router.post('/api/event/date', eventController.getEventsByDate);
 router.get('/api/event/popular/events', eventController.getPopularEvents);
+router.get('/api/url/event', eventController.getEventUrl);
 router.post(
   '/api/image',
   uploadCloud.single('background_img'),
@@ -1818,14 +1855,14 @@ router.post(
  *         description: ID of the blog
  *         schema:
  *           type: string
- *         example: fe4e88bd-7211-4285-918e-a1ba14cc946c
+ *         example: f4b02935-dbe1-4b8a-a0af-8cbd92c71c35
  *     responses:
  *       '200':
  *         description: Successful response
  *         content:
  *           application/json:
  *             example:
- *               blogId: fe4e88bd-7211-4285-918e-a1ba14cc946c
+ *               blogId: f4b02935-dbe1-4b8a-a0af-8cbd92c71c35
  *               title: Sample Blog
  *               content: Lorem ipsum dolor sit amet, consectetur adipiscing elit.
  *       '404':
@@ -1952,7 +1989,7 @@ router.post(
  *         description: ID of the blog to be deleted
  *         schema:
  *           type: string
- *         example: fe4e88bd-7211-4285-918e-a1ba14cc946c
+ *         example: f4b02935-dbe1-4b8a-a0af-8cbd92c71c35
  *     responses:
  *       '204':
  *         description: Blog deleted successfully
@@ -2012,17 +2049,13 @@ router.post(
  *     summary: Get a list of blogs base on specific keyword
  *     tags:
  *     - BLOG SECTION
- *     requestBody:
- *       required: false
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               title:
- *                 type: string
- *                 description: Keyword for searching
- *                 example: you
+ *     parameters:
+ *       - in: query
+ *         name: title
+ *         schema:
+ *           type: string
+ *         description: title of blog to search
+ *         example: cuộc sống
  *     responses:
  *       200:
  *         description: Success
@@ -2040,6 +2073,7 @@ router.post(
  *       400:
  *         description: Bad request
  */
+
 /**
  * @swagger
  * /api/blog/comment/{blogId}:
@@ -2225,7 +2259,7 @@ router.post(
 
 /**
  * @swagger
- * /api/report:
+ * /api/user/report:
  *   get:
  *     summary: Get a list of report status
  *     tags:
@@ -2253,7 +2287,7 @@ router.post(
 
 /**
  * @swagger
- * /api/blogs/report:
+ * /api/admin/blogs/report:
  *   get:
  *     summary: Get a list of blog report
  *     tags:
@@ -2274,7 +2308,7 @@ router.post(
 
 /**
  * @swagger
- * /api/blogs/report:
+ * /api/user/blogs/report:
  *   post:
  *     summary: Create a blog report
  *     tags:
@@ -2309,7 +2343,7 @@ router.post(
 
 /**
  * @swagger
- * /api/blogs/report/{reportId}:
+ * /api/user/blogs/report/{reportId}:
  *   delete:
  *     summary: Delete a specific report by ID
  *     tags:
@@ -2332,7 +2366,7 @@ router.post(
 
 /**
  * @swagger
- * /api/events/report:
+ * /api/admin/events/report:
  *   get:
  *     summary: Get a list of event report
  *     tags:
@@ -2353,7 +2387,7 @@ router.post(
 
 /**
  * @swagger
- * /api/events/report:
+ * /api/user/events/report:
  *   post:
  *     summary: Create a event report
  *     tags:
@@ -2388,7 +2422,7 @@ router.post(
 
 /**
  * @swagger
- * /api/events/report/{reportId}:
+ * /api/user/events/report/{reportId}:
  *   delete:
  *     summary: Delete a specific event report by ID
  *     tags:
@@ -2411,7 +2445,7 @@ router.post(
 
 /**
  * @swagger
- * /api/users/report:
+ * /api/admin/users/report:
  *   get:
  *     summary: Get a list of user report
  *     tags:
@@ -2432,7 +2466,7 @@ router.post(
 
 /**
  * @swagger
- * /api/users/report:
+ * /api/user/users/report:
  *   post:
  *     summary: Create a user report
  *     tags:
@@ -2467,7 +2501,7 @@ router.post(
 
 /**
  * @swagger
- * /api/users/report/{reportId}:
+ * /api/user/users/report/{reportId}:
  *   delete:
  *     summary: Delete a specific user report by ID
  *     tags:
@@ -2487,11 +2521,63 @@ router.post(
  *       '500':
  *         description: Internal server error
  */
+
+/**
+ * @swagger
+ * /api/admin/report:
+ *   get:
+ *     summary: Get a list of report
+ *     tags:
+ *      - REPORT SECTION
+ *     responses:
+ *       '200':
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             example:
+ *               - user_id: 1
+ *                 user_name: Sample User 1
+ *               - user_id: 2
+ *                 user_name: Sample User 2
+ *       '500':
+ *         description: Internal server error
+ */
+
+/**
+ * @swagger
+ * /api/url/blog:
+ *  get:
+ *     summary: Get a blog url base on blog Id
+ *     tags:
+ *     - BLOG SECTION
+ *     parameters:
+ *       - in: query
+ *         name: blog_id
+ *         schema:
+ *           type: string
+ *         description: id of blog to get url
+ *         example: ae5b11b2-4e45-4a6d-b669-5ffb3661eda5
+ *     responses:
+ *       200:
+ *         description: Success
+ *         content:
+ *          application/json:
+ *            schema:
+ *              type: array
+ *              items:
+ *                type: object
+ *                properties:
+ *                  url:
+ *                    type: string
+ *       400:
+ *         description: Bad request
+ */
 router.get('/api/blog', blogController.getBlogs);
 router.get('/api/blog/:blogId', blogController.getBlog);
 router.post('/api/blog', blogController.createBlog);
 router.put('/api/blog/:blogId', blogController.updateBlog);
 router.delete('/api/blog/:blogId', blogController.deleteBlog);
+router.get('/api/url/blog', blogController.getBlogUrl);
 router.put(
   '/api/blog/image/:blogId',
   uploadCloud.single('image'),
@@ -2509,22 +2595,24 @@ router.delete('/api/blog/comment/:commentId', blogController.deleteComment);
 router.post('/api/blogs/like', blogController.likeBlog);
 router.put('/api/blogs/like', blogController.unLikeBlog);
 
-router.get('/api/report', reportController.getAllReportStatus);
+router.get('/api/user/report', reportController.getAllReportStatus);
 
-router.get('/api/blogs/report', reportController.getAllBlogReport);
-router.post('/api/blogs/report', reportController.createBlogReport);
-router.delete('/api/blogs/report/:reportId', reportController.deleteBlogReport);
+router.get('/api/admin/report', reportController.getAllReport);
 
-router.get('/api/events/report', reportController.getAllEventReport);
-router.post('/api/events/report', reportController.createEventReport);
+router.get('/api/admin/blogs/report', reportController.getAllBlogReport);
+router.post('/api/user/blogs/report', reportController.createBlogReport);
+router.delete('/api/user/blogs/report/:reportId', reportController.deleteBlogReport);
+
+router.get('/api/admin/events/report', reportController.getAllEventReport);
+router.post('/api/user/events/report', reportController.createEventReport);
 router.delete(
-  '/api/events/report/:reportId',
+  '/api/user/events/report/:reportId',
   reportController.deleteEventReport,
 );
 
-router.get('/api/users/report', reportController.getAllUserReport);
-router.post('/api/users/report', reportController.createUserReport);
-router.delete('/api/users/report/:reportId', reportController.deleteUserReport);
+router.get('/api/admin/users/report', reportController.getAllUserReport);
+router.post('/api/user/users/report', reportController.createUserReport);
+router.delete('/api/user/users/report/:reportId', reportController.deleteUserReport);
 /**
  * @swagger
  * /api/moderator/login:

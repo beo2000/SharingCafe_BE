@@ -82,3 +82,9 @@ export async function deleteComment(commentId) {
     if (!comment) throw new Error('Comment not found !!!');
     return await blogDAL.deleteComment(commentId);
 }
+
+export async function getBlogUrl(blog_id){
+    const blog = await getBlog(blog_id);
+    if (!blog) throw new Error('Blog not found !!!');
+    return {url: `https://sharing-coffee-be-capstone-com.onrender.com/api/blog/${blog_id}`};
+}

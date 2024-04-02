@@ -136,3 +136,14 @@ export async function updateImage(req, res) {
     res.status(404).send(error);
   }
 }
+
+export async function getEventUrl(req, res) {
+  try {
+    const event_id = req.query.event_id;
+    const result = await eventService.getEventUrl(event_id);
+    res.status(200).send(result);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ error: error.message });
+  }
+}

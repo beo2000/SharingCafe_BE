@@ -49,7 +49,7 @@ export async function loginUser(req, res) {
 
 export async function getUser(req, res) {
   try {
-    const userId = req.params.userId;
+    const userId = req.loginUser.user_id;
     const result = await userService.getUser(userId);
     res.status(200).send(result);
   } catch (error) {
@@ -178,7 +178,7 @@ export async function updateProfile(req, res) {
     //   cloudinary.uploader.destroy(fileData.filename)
     //   return res.status(400).send({ error: error.message });
     // }
-    const userId = req.params.userId;
+    const userId = req.loginUser.user_id;
     const profile = req.body;
     const user = await userService.updateProfile(userId, profile);
     res.status(200).send(user);
