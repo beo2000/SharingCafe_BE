@@ -266,13 +266,11 @@ export async function getUserMatchWithStatus(userId, status) {
       user_match_status ums 
       ON um.user_match_status_id = ums.user_match_status_id 
     WHERE um.current_user_id = '${userId}'
-    or um.user_id_liked = '${userId}'
   `;
 
   if (status) {
     sqlQuery += ` AND ums.user_match_status = '${status}'`;
   }
-
   const userDetails = await SequelizeInstance.query(sqlQuery, {
     type: SequelizeInstance.QueryTypes.SELECT,
     raw: true,
