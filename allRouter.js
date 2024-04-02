@@ -379,19 +379,13 @@ router.get('/api/admin/statics', admController.getStatics);
  */
 /**
  * @swagger
- * /api/auth/user-profile:
+ * /api/auth/user/profile:
  *   put:
  *     summary: Update a user profile
  *     tags:
  *       - USER SECTION
- *     parameters:
- *       - in: path
- *         name: userId
- *         required: true
- *         description: ID of the user profile to be updated
- *         schema:
- *           type: string
- *         example: f6fb30c7-7d61-48ae-8a59-05c53568847c
+ *     security:
+ *       - BearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -408,9 +402,27 @@ router.get('/api/admin/statics', admController.getStatics);
  *                 description: User account password to be updated
  *                 example: 146759
  *               story:
- *                 type: json
+ *                 type: string
  *                 description: User story to be updated
  *                 example: I like fishing
+ *               phone:
+ *                 type: string
+ *                 description: User phone to be updated
+ *               gender:
+ *                 type: string
+ *                 description: User gender to be updated
+ *               age:
+ *                 type: string
+ *                 description: User age to be updated
+ *               purpose:
+ *                 type: string
+ *                 description: User purpose to be updated
+ *               favorite_location:
+ *                  type: string
+ *                  description: User favorite location to be updated
+ *               address:
+ *                  type: string
+ *                  description: User address to be updated
  *     responses:
  *       '200':
  *         description: User updated successfully
@@ -643,7 +655,7 @@ router.get('/api/user/token/:userId', userController.getTokenId);
 
 router.post('/api/user/login', userController.loginUser);
 router.get('/api/auth/user/profile', userController.getUser);
-router.put('/api/auth/user-profile', userController.updateProfile);
+router.put('/api/auth/user/profile', userController.updateProfile);
 router.put(
   '/api/user/avatar/:userId',
   uploadCloud.single('profile_avatar'),
