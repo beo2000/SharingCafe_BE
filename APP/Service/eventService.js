@@ -44,3 +44,9 @@ export async function getPopularEvents() {
 export async function updateImage(fileData){
   return await eventDAL.updateImage(fileData);
 }
+
+export async function getEventUrl(event_id){
+  const event = await getEvent(event_id);
+  if (!event) throw new Error('Event not found !!!');
+  return {url: `https://sharing-coffee-be-capstone-com.onrender.com/api/event/${event_id}`};
+}

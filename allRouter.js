@@ -1767,6 +1767,36 @@ router.put('/api/admin/event/:eventId', admController.updateEventStatus);
  *       400:
  *         description: Bad request
  */
+
+/**
+ * @swagger
+ * /api/url/event:
+ *  get:
+ *     summary: Get a event url base on event Id
+ *     tags:
+ *     - EVENT SECTION
+ *     parameters:
+ *       - in: query
+ *         name: event_id
+ *         schema:
+ *           type: string
+ *         description: id of event to get url
+ *         example: 2d86fcd8-3380-46ee-8a42-afa03eec77ed
+ *     responses:
+ *       200:
+ *         description: Success
+ *         content:
+ *          application/json:
+ *            schema:
+ *              type: array
+ *              items:
+ *                type: object
+ *                properties:
+ *                  url:
+ *                    type: string
+ *       400:
+ *         description: Bad request
+ */
 router.get('/api/event', eventController.getEvents);
 // router.post('/api/event/search', eventController.getEventsByName);
 router.post('/api/event', eventController.createEvent);
@@ -1776,6 +1806,7 @@ router.delete('/api/event/:eventId', eventController.deleteEvent);
 router.get('/api/event/new/events', eventController.getNewEvents);
 // router.post('/api/event/date', eventController.getEventsByDate);
 router.get('/api/event/popular/events', eventController.getPopularEvents);
+router.get('/api/url/event', eventController.getEventUrl);
 router.post(
   '/api/image',
   uploadCloud.single('background_img'),
@@ -1824,14 +1855,14 @@ router.post(
  *         description: ID of the blog
  *         schema:
  *           type: string
- *         example: fe4e88bd-7211-4285-918e-a1ba14cc946c
+ *         example: f4b02935-dbe1-4b8a-a0af-8cbd92c71c35
  *     responses:
  *       '200':
  *         description: Successful response
  *         content:
  *           application/json:
  *             example:
- *               blogId: fe4e88bd-7211-4285-918e-a1ba14cc946c
+ *               blogId: f4b02935-dbe1-4b8a-a0af-8cbd92c71c35
  *               title: Sample Blog
  *               content: Lorem ipsum dolor sit amet, consectetur adipiscing elit.
  *       '404':
@@ -1958,7 +1989,7 @@ router.post(
  *         description: ID of the blog to be deleted
  *         schema:
  *           type: string
- *         example: fe4e88bd-7211-4285-918e-a1ba14cc946c
+ *         example: f4b02935-dbe1-4b8a-a0af-8cbd92c71c35
  *     responses:
  *       '204':
  *         description: Blog deleted successfully
@@ -2018,17 +2049,13 @@ router.post(
  *     summary: Get a list of blogs base on specific keyword
  *     tags:
  *     - BLOG SECTION
- *     requestBody:
- *       required: false
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               title:
- *                 type: string
- *                 description: Keyword for searching
- *                 example: you
+ *     parameters:
+ *       - in: query
+ *         name: title
+ *         schema:
+ *           type: string
+ *         description: title of blog to search
+ *         example: cuộc sống
  *     responses:
  *       200:
  *         description: Success
@@ -2046,6 +2073,7 @@ router.post(
  *       400:
  *         description: Bad request
  */
+
 /**
  * @swagger
  * /api/blog/comment/{blogId}:
@@ -2493,11 +2521,63 @@ router.post(
  *       '500':
  *         description: Internal server error
  */
+
+/**
+ * @swagger
+ * /api/admin/report:
+ *   get:
+ *     summary: Get a list of report
+ *     tags:
+ *      - REPORT SECTION
+ *     responses:
+ *       '200':
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             example:
+ *               - user_id: 1
+ *                 user_name: Sample User 1
+ *               - user_id: 2
+ *                 user_name: Sample User 2
+ *       '500':
+ *         description: Internal server error
+ */
+
+/**
+ * @swagger
+ * /api/url/blog:
+ *  get:
+ *     summary: Get a blog url base on blog Id
+ *     tags:
+ *     - BLOG SECTION
+ *     parameters:
+ *       - in: query
+ *         name: blog_id
+ *         schema:
+ *           type: string
+ *         description: id of blog to get url
+ *         example: ae5b11b2-4e45-4a6d-b669-5ffb3661eda5
+ *     responses:
+ *       200:
+ *         description: Success
+ *         content:
+ *          application/json:
+ *            schema:
+ *              type: array
+ *              items:
+ *                type: object
+ *                properties:
+ *                  url:
+ *                    type: string
+ *       400:
+ *         description: Bad request
+ */
 router.get('/api/blog', blogController.getBlogs);
 router.get('/api/blog/:blogId', blogController.getBlog);
 router.post('/api/blog', blogController.createBlog);
 router.put('/api/blog/:blogId', blogController.updateBlog);
 router.delete('/api/blog/:blogId', blogController.deleteBlog);
+router.get('/api/url/blog', blogController.getBlogUrl);
 router.put(
   '/api/blog/image/:blogId',
   uploadCloud.single('image'),
@@ -2516,6 +2596,8 @@ router.post('/api/blogs/like', blogController.likeBlog);
 router.put('/api/blogs/like', blogController.unLikeBlog);
 
 router.get('/api/user/report', reportController.getAllReportStatus);
+
+router.get('/api/admin/report', reportController.getAllReport);
 
 router.get('/api/admin/blogs/report', reportController.getAllBlogReport);
 router.post('/api/user/blogs/report', reportController.createBlogReport);
