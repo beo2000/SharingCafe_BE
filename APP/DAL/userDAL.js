@@ -111,6 +111,22 @@ export async function getUser(userId) {
   });
   return result;
 }
+export async function updateUserToken(email, token) {
+  const sqlQuery = `
+      UPDATE public."user" 
+      SET 
+        token_id = :token
+      WHERE 
+        email = :email
+    `;
+
+  const [result] = await SequelizeInstance.query(sqlQuery, {
+    replacements: { email: email, token: token },
+    type: SequelizeInstance.QueryTypes.UPDATE,
+  });
+
+  return result;
+}
 
 export async function getInterests(userId) {
   const sqlQuery = `
