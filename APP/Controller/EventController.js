@@ -147,3 +147,16 @@ export async function getEventUrl(req, res) {
     res.status(500).send({ error: error.message });
   }
 }
+
+export async function getUserEvent(req, res) {
+  try {
+    const title = req.query.title;
+    const date = req.query.date;
+    const page = req.query.page;
+    const result = await eventService.getUserEvent(title, date, page);
+    res.status(200).send(result);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ error: error.message });
+  }
+}

@@ -1,5 +1,6 @@
 import * as blogDAL from '../DAL/blogDAL.js';
 import { v4 as uuidv4 } from 'uuid';
+
 export async function getBlogs(page, title){
     return await blogDAL.getBlogs(page, title);
 }
@@ -87,4 +88,8 @@ export async function getBlogUrl(blog_id){
     const blog = await getBlog(blog_id);
     if (!blog) throw new Error('Blog not found !!!');
     return {url: `https://sharing-coffee-be-capstone-com.onrender.com/api/blog/${blog_id}`};
+}
+
+export async function getUserBlog(page, title){
+    return await blogDAL.getUserBlog(page, title);
 }

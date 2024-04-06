@@ -46,10 +46,13 @@ export async function deleteInterests(interestIds) {
 export async function getParentInterests() {
   const sqlQuery = `
   select 
- 	i.interest_id, i."name" ,i.image
- from
- 	interest i
- where i.parent_interest_id is null
+	i.interest_id, i."name", i.image , COUNT(b.blog_id) AS blog_count
+  from interest i
+  full join blog b 
+  on b.interest_id = i.interest_id 
+  where i.parent_interest_id is null
+  group by i.interest_id
+  order by blog_count desc 
   `;
   const result = await SequelizeInstance.query(sqlQuery, {
     type: SequelizeInstance.QueryTypes.SELECT,

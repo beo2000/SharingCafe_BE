@@ -5,8 +5,8 @@ import * as commonEnum from '../common/CommonEnums.js';
 import { v4 as uuidv4 } from 'uuid';
 import axios from 'axios';
 
-export function getUserDetails(email, password) {
-  return userDAL.getUserDetails(email, password);
+export async function getUserDetails(email, password) {
+  return await userDAL.getUserDetails(email, password);
 }
 
 export async function getUserByPhone(phone) {

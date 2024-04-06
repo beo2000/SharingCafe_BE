@@ -343,7 +343,7 @@ offset ${offset}`;
 export async function getMyEvents(userId) {
   const sqlQuery = `
   select 
-    e.event_id, e.title, e.background_img, e.time_of_event, e.address, e.location, e.participants_count
+    e.event_id, e.title, e.background_img, e.time_of_event, e.address, e.location, e.participants_count, e.is_visible, i.name
   from
     public."event" e 
   left join 
@@ -375,7 +375,7 @@ export async function getEventsByInterest(interestId) {
   join
     "user" u
     on e.organizer_id = u.user_id
-  where e.interest_id = '${interestId}'
+  where e.interest_id = '${interestId}' and e.is_approve = true and e.is_visible = true
   `;
   const result = await SequelizeInstance.query(sqlQuery, {
     type: SequelizeInstance.QueryTypes.SELECT,
@@ -409,7 +409,7 @@ export async function getBlogsByInterest(interestId) {
 export async function getSuggestEvent(userId) {
   const sqlQuery = `
   select 
-    e.title, e.background_img, e.time_of_event, e.address, e.participants_count
+    e.title, e.background_img, e.time_of_event, e.address, e.participants_count, i.name
 	from
 		user_interest q
 	join
@@ -420,7 +420,7 @@ export async function getSuggestEvent(userId) {
 		on u.user_id = q.user_id 
 	join "event" e 
 		on e.interest_id = i.interest_id 
-	where u.user_id = '${userId}'
+	where u.user_id = '${userId}' and e.is_approve = true and e.is_visible = true
   order by e.participants_count desc
   `;
   const result = await SequelizeInstance.query(sqlQuery, {

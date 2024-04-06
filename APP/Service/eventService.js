@@ -50,3 +50,7 @@ export async function getEventUrl(event_id){
   if (!event) throw new Error('Event not found !!!');
   return {url: `https://sharing-coffee-be-capstone-com.onrender.com/api/event/${event_id}`};
 }
+
+export async function getUserEvent(title, date, page){
+  return await eventDAL.getUserEvent(title, date, page);
+}

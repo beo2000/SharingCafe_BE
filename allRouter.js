@@ -715,51 +715,6 @@ router.get('/api/user/profile/:userId', userController.getProfile);
 
 /**
  * @swagger
- * /api/user/events/{userId}:
- *   get:
- *     summary: Get events created by specific user by ID
- *     tags:
- *       - USER EVENTS
- *     parameters:
- *       - in: path
- *         name: userId
- *         required: true
- *         description: ID of the user to retrieve events for
- *         schema:
- *           type: string
- *         example: 6150886b-5920-4884-8e43-d4efb62f89d5
- *     responses:
- *       '200':
- *         description: Successfully retrieved USER EVENTS
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 userId:
- *                   type: string
- *                   description: ID of the user
- *                   example: 6150886b-5920-4884-8e43-d4efb62f89d5
- *                 events:
- *                   type: array
- *                   items:
- *                     type: object
- *                     properties:
- *                       eventId:
- *                         type: string
- *                         description: ID of the event
- *                         example: 123456
- *                       eventName:
- *                         type: string
- *                         description: Name of the event
- *                         example: Example Event
- *       '404':
- *         description: User not found
- *       '500':
- *         description: Internal server error
- */
-/**
- * @swagger
  * /api/user/events/interest/{interestId}:
  *   get:
  *     summary: Get events based on user's interest by ID
@@ -844,19 +799,13 @@ router.get('/api/user/profile/:userId', userController.getProfile);
  */
 /**
  * @swagger
- * /api/user/events/suggest/{userId}:
+ * /api/auth/user/events/suggest:
  *   get:
+ *     security:
+ *       - BearerAuth: []
  *     summary: Get suggested events for a user
  *     tags:
  *       - USER EVENTS
- *     parameters:
- *       - in: path
- *         name: userId
- *         required: true
- *         description: ID of the user to get suggested events for
- *         schema:
- *           type: string
- *         example: 6150886b-5920-4884-8e43-d4efb62f89d4
  *     responses:
  *       '200':
  *         description: Successfully retrieved suggested events for the user
@@ -887,19 +836,13 @@ router.get('/api/user/profile/:userId', userController.getProfile);
  */
 /**
  * @swagger
- * /api/user/events/{userId}:
+ * /api/auth/user/my-event:
  *   get:
+ *     security:
+ *       - BearerAuth: []
  *     summary: Get all events created by a user
  *     tags:
  *       - USER EVENTS
- *     parameters:
- *       - in: path
- *         name: userId
- *         required: true
- *         description: ID of the user to get all events created by
- *         schema:
- *           type: string
- *         example: 6150886b-5920-4884-8e43-d4efb62f89d5
  *     responses:
  *       '200':
  *         description: Successfully retrieved all events created by the user
@@ -928,7 +871,55 @@ router.get('/api/user/profile/:userId', userController.getProfile);
  *       '500':
  *         description: Internal server error
  */
-router.get('/api/user/events/:userId', userController.getMyEvents);
+
+/**
+ * @swagger
+ * /api/auth/user/event:
+ *   get:
+ *     security:
+ *       - BearerAuth: []
+ *     summary: Get all events
+ *     description: Retrieve a list of all events.
+ *     tags:
+ *       - USER EVENTS
+ *     parameters:
+ *        - in: query
+ *          name: title
+ *          schema:
+ *             type: string
+ *          description: Title of Event
+ *          example: competition
+ *        - in: query
+ *          name: date
+ *          schema:
+ *             type: string
+ *          description: Time of Event
+ *          example: 3/4/2024
+ *        - in: query
+ *          name: page
+ *          schema:
+ *             type: integer
+ *          description: The number of page to skip before starting to collect the result set
+ *          example: 1
+ *     responses:
+ *       200:
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             example:
+ *               message: Success
+ *               data:
+ *                 events:
+ *                   - eventId: 1
+ *                     eventName: "Event A"
+ *                   - eventId: 2
+ *                     eventName: "Event B"
+ *       401:
+ *         description: Unauthorized - Missing or invalid token
+ *       500:
+ *         description: Internal server error
+ */
+router.get('/api/auth/user/my-event', userController.getMyEvents);
 router.get(
   '/api/user/events/interest/:interestId',
   userController.getEventsByInterest,
@@ -937,49 +928,9 @@ router.get(
   '/api/user/blogs/interest/:interestId',
   userController.getBlogsByInterest,
 );
-router.get('/api/user/events/suggest/:userId', userController.getSuggestEvent);
-/**
- * @swagger
- * /api/user/events/suggest/{userId}:
- *   get:
- *     summary: Get events for user base on interest
- *     tags:
- *       - USER EVENTS
- *     parameters:
- *       - in: path
- *         name: userId
- *         required: true
- *         description: ID of the user to retrieve events for
- *         schema:
- *           type: string
- *         example: 6150886b-5920-4884-8e43-d4efb62f89d4
- *     responses:
- *       "200":
- *         description: Successfully retrieved events based on the user ID
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 type: object
- *                 properties:
- *                   eventId:
- *                     type: string
- *                     description: ID of the event
- *                     example: 123456
- *                   eventTitle:
- *                     type: string
- *                     description: Title of the event
- *                     example: Example Event
- *                   author:
- *                     type: string
- *                     description: Author of the event
- *                     example: John Doe
- *       "404":
- *         description: Events not found for the specified user
- *       "500":
- *         description: Internal server error
- */
+router.get('/api/auth/user/events/suggest', userController.getSuggestEvent);
+router.get('/api/auth/user/event', eventController.getUserEvent);
+
 /**
  * @swagger
  * /api/interest:
@@ -2532,7 +2483,45 @@ router.post(
  *       400:
  *         description: Bad request
  */
+/**
+ * @swagger
+ * /api/auth/user/blog:
+ *   get:
+ *     security:
+ *       - BearerAuth: []
+ *     summary: Get a list of blogs for user
+ *     tags:
+ *      - USER BLOGS
+ *     parameters:
+ *        - in: query
+ *          name: title
+ *          schema:
+ *             type: string
+ *          description: Title of Event
+ *          example: cuộc sống
+ *        - in: query
+ *          name: page
+ *          schema:
+ *            type: integer
+ *          description: The number of page to skip before starting to collect the result set
+ *          example: 1
+ *     responses:
+ *       '200':
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             example:
+ *               - blogId: 1
+ *                 title: Sample Blog 1
+ *                 content: Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ *               - blogId: 2
+ *                 title: Sample Blog 2
+ *                 content: Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.
+ *       '500':
+ *         description: Internal server error
+ */
 router.get('/api/blog', blogController.getBlogs);
+router.get('/api/auth/user/blog', blogController.getUserBlog);
 router.get('/api/blog/:blogId', blogController.getBlog);
 router.post('/api/blog', blogController.createBlog);
 router.put('/api/blog/:blogId', blogController.updateBlog);

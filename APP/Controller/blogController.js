@@ -213,3 +213,15 @@ export async function getBlogUrl(req, res) {
     res.status(500).send({ error: error.message });
   }
 }
+
+export async function getUserBlog(req, res) {
+  try {
+    const page = req.query.page;
+    const title = req.query.title;
+    const result = await blogService.getUserBlog(page, title);
+    res.status(200).send(result);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ error: error.message });
+  }
+}

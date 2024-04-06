@@ -10,7 +10,7 @@ export async function getEvents(title, date, page) {
   if (page){
     sqlQuery = `
     select 
-      e.*, u.user_name, i.name, i.is_available
+      e.*, u.user_name, i.name
     from
       public."event" e 
     left join 
@@ -27,7 +27,7 @@ export async function getEvents(title, date, page) {
   } else {
     sqlQuery = `
     select 
-      e.*, u.user_name, i.name, i.is_available
+      e.*, u.user_name, i.name
     from
       public."event" e 
     left join 
@@ -132,7 +132,7 @@ export async function getNewEvents() {
   join
     "user" u
     on u.user_id = e.organizer_id
-    where e.time_of_event >= '${date.toUTCString()}' or e.end_of_event >= '${date.toUTCString()}'
+    where (e.time_of_event >= '${date.toUTCString()}' or e.end_of_event >= '${date.toUTCString()}') and e.is_approve = true and e.is_visible = true
   order by e.time_of_event
   `;
   const result = await SequelizeInstance.query(sqlQuery, {
@@ -214,12 +214,58 @@ export async function getPopularEvents() {
   join
     "user" u
     on u.user_id = e.organizer_id
-  where e.time_of_event >= '${date.toISOString()}' or e.end_of_event <= '${date.toISOString()}'
+  where (e.time_of_event >= '${date.toISOString()}' or e.end_of_event <= '${date.toISOString()}') and e.is_approve = true and e.is_visible = true
   order by 
     e.time_of_event desc
     , e.participants_count desc
   limit 10
   `;
+  const result = await SequelizeInstance.query(sqlQuery, {
+    type: SequelizeInstance.QueryTypes.SELECT,
+    raw: true,
+  });
+  return result;
+}
+
+export async function getUserEvent (title, date, page){
+  let sqlQuery = '';
+  let name = title;
+  if (name == null) {name = ''}
+  let date1 = new Date(date);
+  if (date1 == 'Invalid Date') {date1 = new Date(Date.now())}
+  if (page){
+    sqlQuery = `
+    select 
+      e.*, u.user_name, i.name
+    from
+      public."event" e 
+    left join 
+      interest i 
+      on 1=1 
+      and e.interest_id = i.interest_id
+    join
+      "user" u
+      on u.user_id = e.organizer_id
+      where (e.time_of_event >= '${date1.toDateString()}' or e.end_of_event >= '${date1.toDateString()}') and e.title  like '%${name}%' and e.is_approve = true and e.is_visible = true
+    offset ((${page} - 1) * 5) rows 
+ 	  fetch next 5 rows only
+  `;
+  } else {
+    sqlQuery = `
+    select 
+      e.*, u.user_name, i.name
+    from
+      public."event" e 
+    left join 
+      interest i 
+      on 1=1 
+      and e.interest_id = i.interest_id
+    join
+      "user" u
+      on u.user_id = e.organizer_id
+      where (e.time_of_event >= '${date1.toDateString()}' or e.end_of_event >= '${date1.toDateString()}') and e.title  like '%${name}%' and e.is_approve = true and e.is_visible = true
+    `
+  }
   const result = await SequelizeInstance.query(sqlQuery, {
     type: SequelizeInstance.QueryTypes.SELECT,
     raw: true,

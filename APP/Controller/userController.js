@@ -115,7 +115,7 @@ export async function deleteInterest(req, res) {
 
 export async function getMyEvents(req, res) {
   try {
-    const userId = req.params.userId;
+    const userId = req.loginUser.user_id;
     const result = await userService.getMyEvents(userId);
     res.status(200).send(result);
   } catch (error) {
@@ -148,7 +148,7 @@ export async function getBlogsByInterest(req, res) {
 
 export async function getSuggestEvent(req, res) {
   try {
-    const userId = req.params.userId;
+    const userId = req.loginUser.user_id;
     const result = await userService.getSuggestEvent(userId);
     res.status(200).send(result);
   } catch (error) {

@@ -4,6 +4,7 @@ import {
   Comment,
   LikeBlog,
 } from '../utility/DbHelper.js';
+
 export async function getBlogs(page, title) {
   let name = title;
   if (name == null) {
@@ -332,4 +333,50 @@ export async function deleteComment(commentId) {
     where: { comment_id: commentId },
   });
   return deletedComment;
+}
+
+export async function getUserBlog(page, title) {
+  let name = title;
+  if (name == null) {
+    name = '';
+  }
+  let sqlQuery = '';
+  if (page) {
+    sqlQuery = `
+    select 
+      b.*, u.user_name, i.name, u.profile_avatar
+    from 
+      blog b 
+    join 
+      interest i 
+      on 1=1 
+      and b.interest_id = i.interest_id
+    join
+      "user" u
+      on u.user_id = b.user_id
+    where b.title like '%${name}%' and b.is_approve = true and b.is_visible = true
+    offset ((${page} - 1 ) * 10) rows 
+    fetch next 10 rows only
+    `;
+  } else {
+    sqlQuery = `
+    select 
+      b.*, u.user_name, i.name, u.profile_avatar
+    from 
+      blog b 
+    join 
+      interest i 
+      on 1=1 
+      and b.interest_id = i.interest_id
+    join
+      "user" u
+    on u.user_id = b.user_id
+    where b.title like '%${name}%' and b.is_approve = true and b.is_visible = true
+  `;
+  }
+  const result = await SequelizeInstance.query(sqlQuery, {
+    type: SequelizeInstance.QueryTypes.SELECT,
+    raw: true,
+  });
+  return result;
 }
