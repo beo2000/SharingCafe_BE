@@ -322,29 +322,51 @@ export async function getUserMatchWithPendingStatus(userId) {
 
 export async function getUserMatchByInterestPaging(userId, limit, offset) {
   const sqlQuery = `
-select
-	u.*
-from
-	"user" u
-left join user_match m1 on
-	u.user_id = m1.user_id_liked
-	and m1.current_user_id = '${userId}'
-left join user_match m2 on
-	u.user_id = m2.current_user_id
-	and m2.user_id_liked = '${userId}'
-left join user_interest i on
-	u.user_id = i.user_id
-	and i.interest_id in (
-	select
-		interest_id
-	from
-		user_interest
-	where
-		user_id = '${userId}')
-where
-	m1.user_id_liked is null
-	and m2.current_user_id is null
-	and i.user_id is null
+SELECT
+    u.*
+FROM
+    "user" u
+LEFT JOIN (
+    SELECT
+        user_match_id,
+        current_user_id,
+        user_id_liked,
+        ums.*
+    FROM
+        public.user_match um
+    INNER JOIN user_match_status ums ON ums.user_match_status_id = um.user_match_status_id
+) m1 ON u.user_id = m1.user_id_liked AND m1.current_user_id = '${userId}'
+LEFT JOIN (
+    SELECT
+        user_match_id,
+        current_user_id,
+        user_id_liked,
+        ums.*
+    FROM
+        public.user_match um
+    INNER JOIN user_match_status ums ON ums.user_match_status_id = um.user_match_status_id
+) m2 ON u.user_id = m2.current_user_id AND m2.user_id_liked = '${userId}'
+LEFT JOIN user_interest i ON u.user_id = i.user_id
+    AND i.interest_id IN (
+        SELECT
+            interest_id
+        FROM
+            user_interest
+        WHERE
+            user_id = '${userId}'
+    )
+WHERE
+    (
+        m1.user_id_liked IS NULL
+        OR m1.user_match_status IS NULL
+        OR m1.user_match_status = 'Pending'
+    )
+    AND (
+        m2.current_user_id IS NULL
+        OR m2.user_match_status IS NULL
+        OR m2.user_match_status = 'Pending'
+    )
+    AND i.user_id IS NULL
 limit ${limit} 
 offset ${offset}`;
 
