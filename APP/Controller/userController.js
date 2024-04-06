@@ -22,19 +22,6 @@ export async function loginUser(req, res) {
       const accessToken = jwt.sign({ email: email }, secret_key, {
         expiresIn: '30d',
       });
-      // console.log(notificationToken)
-      // const token = notificationToken;
-      // const title = 'Xin chao';
-      // const body = 'You have a new message!';
-
-      // firebaseHelper.sendNotification(token, title, body)
-      //   .then(response => {
-      //     console.log('Notification sent successfully:', response);
-      //   })
-      //   .catch(error => {
-      //     console.error('Error sending notification:', error);
-      //   });
-
       res.header('Authorization', `Bearer ${accessToken}`);
       userDetails.accessToken = `Bearer ${accessToken}`;
       res.send(userDetails);
@@ -173,11 +160,6 @@ export async function getSuggestEvent(req, res) {
 export async function updateProfile(req, res) {
   const t = await SequelizeInstance.transaction();
   try {
-    // const fileData = req.file;
-    // if (fileData === undefined) {
-    //   cloudinary.uploader.destroy(fileData.filename)
-    //   return res.status(400).send({ error: error.message });
-    // }
     const userId = req.loginUser.user_id;
     const profile = req.body;
     const user = await userService.updateProfile(userId, profile);

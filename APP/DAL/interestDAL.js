@@ -1,8 +1,6 @@
 import { Interest, SequelizeInstance } from '../utility/DbHelper.js';
 
 export async function getInterests() {
-  // const interests = await Interest.findAll();
-  // return interests;
   const sqlQuery = `
   select 
     i.* , count(b.interest_id) as num_of_blog 
@@ -35,6 +33,7 @@ export async function updateInterest(interest, interestDetail) {
     name: interestDetail.name,
     parent_interest_id: interestDetail.parent_interest_id,
     image: interestDetail.image,
+    is_available: interestDetail.is_available,
   });
 }
 export async function deleteInterests(interestIds) {

@@ -1651,46 +1651,6 @@ router.put('/api/admin/event/:eventId', admController.updateEventStatus);
  *       '500':
  *         description: Internal server error
  */
-// /**
-//  * @swagger
-//  * '/api/event/search':
-//  *  post:
-//  *     summary: Get a list of events base on specific keyword
-//  *     tags:
-//  *     - EVENT SECTION
-//  *     requestBody:
-//  *       required: false
-//  *       content:
-//  *         application/json:
-//  *           schema:
-//  *             type: object
-//  *             properties:
-//  *               title:
-//  *                 type: string
-//  *                 description: Keyword for searching
-//  *                 example: competition
-//  *               date:
-//  *                 type: string
-//  *                 description: Date for searching
-//  *                 example: 3/7/2024
-//  *
-//  *     responses:
-//  *       200:
-//  *         description: Success
-//  *         content:
-//  *          application/json:
-//  *            schema:
-//  *              type: array
-//  *              items:
-//  *                type: object
-//  *                properties:
-//  *                  id:
-//  *                    type: string
-//  *                  title:
-//  *                    type: string
-//  *       400:
-//  *         description: Bad request
-//  */
 /**
  * @swagger
  * /api/event/{eventId}:
@@ -1798,13 +1758,13 @@ router.put('/api/admin/event/:eventId', admController.updateEventStatus);
  *         description: Bad request
  */
 router.get('/api/event', eventController.getEvents);
-// router.post('/api/event/search', eventController.getEventsByName);
+
 router.post('/api/event', eventController.createEvent);
 router.get('/api/event/:eventId', eventController.getEvent);
 router.put('/api/event/:eventId', eventController.updateEvent);
 router.delete('/api/event/:eventId', eventController.deleteEvent);
 router.get('/api/event/new/events', eventController.getNewEvents);
-// router.post('/api/event/date', eventController.getEventsByDate);
+
 router.get('/api/event/popular/events', eventController.getPopularEvents);
 router.get('/api/url/event', eventController.getEventUrl);
 router.post(
