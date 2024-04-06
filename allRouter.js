@@ -11,6 +11,7 @@ import * as chatController from './APP/Controller/chatController.js';
 import * as scheduleController from './APP/Controller/scheduleController.js';
 import * as reportController from './APP/Controller/reportController.js';
 import * as locationController from './APP/Controller/locationController.js';
+import * as notificationController from './APP/Controller/NotificationController.js';
 const router = express.Router();
 
 /**
@@ -2754,8 +2755,7 @@ router.put('/api/moderator/event/:eventId', modController.censorEvent);
  *                 format: uuid
  *                 description: The ID of the user whose match status is to be updated.
  *               status:
- *                 type: string
- *                 enum: [Pending, Approved, Rejected]
+ *                 type: boolean
  *                 description: The new status to set for the user's match.
  *     responses:
  *       200:
@@ -3142,5 +3142,5 @@ router.get(
  *       '500':
  *         description: An internal server error occurred.
  */
-
+router.get('/test-notification', notificationController.sendNotification);
 export default router;

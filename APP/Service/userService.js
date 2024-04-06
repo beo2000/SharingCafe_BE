@@ -272,20 +272,31 @@ export async function getSuggestEvent(userId) {
   return await userDAL.getSuggestEvent(userId);
 }
 export async function updateUserMatchStatus(userId, dataObj) {
-  const [status] = await matchDAL.getMatchStatus(
-    commonEnum.MATCH_STATUS.ACCEPTED === dataObj.status
-      ? commonEnum.MATCH_STATUS.MATCHED
-      : dataObj.status,
-  );
+  const status = await matchDAL.getMatchStatus();
   const [match] = await matchDAL.getMatchCouple(userId, dataObj.user_id);
-
-  const user_match_id = match?.user_match_id || uuidv4();
-  return await matchDAL.upsertMatch(
+  console.log(match);
+  const upsertOnly = !match;
+  const user_match_id = match ? match.user_match_id : uuidv4();
+  const statusStage =
+    !match && dataObj.status
+      ? status.filter(
+          (e) => e.user_match_status === commonEnum.MATCH_STATUS.PENDING,
+        )[0]
+      : match && dataObj.status
+      ? status.filter(
+          (e) => e.user_match_status === commonEnum.MATCH_STATUS.MATCHED,
+        )[0]
+      : status.filter(
+          (e) => e.user_match_status === commonEnum.MATCH_STATUS.DISLIKE,
+        )[0];
+  await matchDAL.upsertMatch(
     user_match_id,
     userId,
     dataObj.user_id,
-    status.user_match_status_id,
+    statusStage.user_match_status_id,
+    upsertOnly,
   );
+  return await matchDAL.getMatchCouple(userId, dataObj.user_id);
 }
 
 export async function updateLocation(userId, lat, lng) {
