@@ -81,7 +81,7 @@ export async function createBlog(blogId, dataObj) {
     image: dataObj.image,
     likes_count: dataObj.likes_count,
     comments_count: dataObj.comments_count,
-    is_approve: dataObj.is_approve,
+    is_approve: true,
     is_visible: true,
     interest_id: dataObj.interest_id,
   });
