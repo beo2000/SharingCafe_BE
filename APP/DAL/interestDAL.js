@@ -50,7 +50,7 @@ export async function getParentInterests() {
   from interest i
   full join blog b 
   on b.interest_id = i.interest_id 
-  where i.parent_interest_id is null
+  where i.parent_interest_id is null and i.is_available = true
   group by i.interest_id
   order by blog_count desc 
   `;
@@ -70,6 +70,7 @@ export async function getToppick() {
   join
  	  interest i 
  	  on ui.interest_id = i.interest_id
+  where i.is_available = true
   group by i."name", i.image, i.interest_id 
   order by top_pick desc
   `;

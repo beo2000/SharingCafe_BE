@@ -11,6 +11,7 @@ import * as chatController from './APP/Controller/chatController.js';
 import * as scheduleController from './APP/Controller/scheduleController.js';
 import * as reportController from './APP/Controller/reportController.js';
 import * as locationController from './APP/Controller/locationController.js';
+import * as notificationController from './APP/Controller/NotificationController.js';
 const router = express.Router();
 
 /**
@@ -120,7 +121,7 @@ const router = express.Router();
  */
 router.post('/api/admin/login', admController.loginAdmin);
 router.get('/api/admin/statics', admController.getStatics);
-
+router.get('/api/admin/event-statics', admController.getEventStatics)
 /**
  * @swagger
  * /api/user/register:
@@ -182,6 +183,9 @@ router.get('/api/admin/statics', admController.getStatics);
  *               password:
  *                 type: string
  *                 example: User@123
+ *               token:
+ *                 type: string
+ *                 example: xxx.com
  *     responses:
  *       '200':
  *         description: Successful login
@@ -2550,7 +2554,10 @@ router.get('/api/admin/report', reportController.getAllReport);
 
 router.get('/api/admin/blogs/report', reportController.getAllBlogReport);
 router.post('/api/user/blogs/report', reportController.createBlogReport);
-router.delete('/api/user/blogs/report/:reportId', reportController.deleteBlogReport);
+router.delete(
+  '/api/user/blogs/report/:reportId',
+  reportController.deleteBlogReport,
+);
 
 router.get('/api/admin/events/report', reportController.getAllEventReport);
 router.post('/api/user/events/report', reportController.createEventReport);
@@ -2561,7 +2568,10 @@ router.delete(
 
 router.get('/api/admin/users/report', reportController.getAllUserReport);
 router.post('/api/user/users/report', reportController.createUserReport);
-router.delete('/api/user/users/report/:reportId', reportController.deleteUserReport);
+router.delete(
+  '/api/user/users/report/:reportId',
+  reportController.deleteUserReport,
+);
 /**
  * @swagger
  * /api/moderator/login:
@@ -2734,8 +2744,7 @@ router.put('/api/moderator/event/:eventId', modController.censorEvent);
  *                 format: uuid
  *                 description: The ID of the user whose match status is to be updated.
  *               status:
- *                 type: string
- *                 enum: [Pending, Approved, Rejected]
+ *                 type: boolean
  *                 description: The new status to set for the user's match.
  *     responses:
  *       200:
@@ -2848,7 +2857,7 @@ router.put('/api/moderator/event/:eventId', modController.censorEvent);
  *       '500':
  *         description: Internal Server Error
  */
-/** 
+/**
  * @swagger
  * tags:
  *   - name: SCHEDULE SECTION
@@ -2886,7 +2895,7 @@ router.put('/api/moderator/event/:eventId', modController.censorEvent);
  *       '500':
  *         description: Internal Server Error
  */
-router.put('/api/user/schedule/status', scheduleController.changeStatus)
+router.put('/api/user/schedule/status', scheduleController.changeStatus);
 router.get('/api/match/user-status/count', matchController.countUserByStatus);
 router.get(
   '/api/auth/matches-interest',
@@ -3122,4 +3131,5 @@ router.get(
  *       '500':
  *         description: An internal server error occurred.
  */
+router.get('/test-notification', notificationController.sendNotification);
 export default router;

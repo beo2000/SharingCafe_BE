@@ -34,3 +34,7 @@ export async function updateEventStatus(eventId, eventDetails) {
   if (!event) throw new Error('This event does not exist!!');
   return await adminDAL.updateEventStatus(eventId, eventDetails);
 }
+
+export async function getEventStatics() {
+  return await adminDAL.getEventStatics();
+}

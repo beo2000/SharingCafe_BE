@@ -136,3 +136,23 @@ export async function updateEventStatus(eventId, eventDetails) {
     },
   );
 }
+
+export async function getEventStatics() {
+  const sqlQuery = `
+  SELECT 
+  EXTRACT(YEAR FROM time_of_event) AS event_year,
+  EXTRACT(MONTH FROM time_of_event) AS event_month,
+  COUNT(*) AS event_count
+FROM 
+  public."event"
+GROUP BY 
+  event_year, event_month
+ORDER BY 
+  event_year, event_month;
+    `;
+  const statics = await SequelizeInstance.query(sqlQuery, {
+    type: SequelizeInstance.QueryTypes.SELECT,
+    raw: true,
+  });
+  return statics;
+}

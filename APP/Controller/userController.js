@@ -14,7 +14,8 @@ const secret_key = process.env.SECRET_KEY;
 
 export async function loginUser(req, res) {
   try {
-    const { email, password } = req.body;
+    const { email, password, token } = req.body;
+    await userService.updateUserToken(email, token);
     const result = await userService.getUserDetails(email, password);
     const userDetails = result.dataValues;
     if (userDetails) {
