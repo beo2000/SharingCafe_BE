@@ -56,7 +56,7 @@ export async function getEventUrl(event_id) {
   };
 }
 
-export async function getUserEvent(title, date, page){
+export async function getUserEvent(title, date, page) {
   return await eventDAL.getUserEvent(title, date, page);
 }
 
@@ -86,30 +86,30 @@ export async function sendNotificationIfEventOccurToday() {
       if (events.length === 0) {
         console.log('Fetching events from database');
         // Simulating database fetch for demonstration
-        result = [
-          {
-            event_id: 1,
-            time_of_event: '2024-04-06 17:15:00.000',
-            title: 'TITLE',
-            body: 'TESTBODy',
-            user_token: [1, 2],
-          },
-          {
-            event_id: 2,
-            time_of_event: '2024-04-06 17:15:00.000',
-            title: 'TITLE',
-            body: 'TESTBODy',
-            user_token: [1, 2],
-          },
-          {
-            event_id: 3,
-            time_of_event: '2024-04-06 17:15:00.000',
-            title: 'TITLE',
-            body: 'TESTBODy',
-            user_token: [1, 2],
-          },
-        ];
-        // result = await eventDAL.getEventOccurToday();
+        // result = [
+        //   {
+        //     event_id: 1,
+        //     time_of_event: '2024-04-06 17:15:00.000',
+        //     title: 'TITLE',
+        //     body: 'TESTBODy',
+        //     user_token: [1, 2],
+        //   },
+        //   {
+        //     event_id: 2,
+        //     time_of_event: '2024-04-06 17:15:00.000',
+        //     title: 'TITLE',
+        //     body: 'TESTBODy',
+        //     user_token: [1, 2],
+        //   },
+        //   {
+        //     event_id: 3,
+        //     time_of_event: '2024-04-06 17:15:00.000',
+        //     title: 'TITLE',
+        //     body: 'TESTBODy',
+        //     user_token: [1, 2],
+        //   },
+        // ];
+        result = await eventDAL.getEventOccurToday();
         if (result.length > 0) {
           console.log(`Fetched ${result.length} events from database`);
           fs.writeFileSync(filePath, JSON.stringify(result, null, 2));
@@ -128,11 +128,11 @@ export async function sendNotificationIfEventOccurToday() {
             console.log(
               `Sending notification to token ${token} for event ${event.title} and event body ${event.body}`,
             );
-            // await firebaseHelper.sendNotification(
-            //   token,
-            //   event.title,
-            //   event.body,
-            // );
+            await firebaseHelper.sendNotification(
+              token,
+              event.title,
+              event.body,
+            );
           }
         }
       }
