@@ -41,20 +41,25 @@ export async function getAdmDetails(email, password) {
 }
 export async function getStatics() {
   const sqlQuery = `
-    SELECT 'Account' AS entity_type, COUNT(*) AS entity_count
-    FROM public.user
-    UNION
-    SELECT 'Blog' AS entity_type, COUNT(*) AS entity_count
-    FROM blog
-    UNION
-    SELECT 'Event' AS entity_type, COUNT(*) AS entity_count
-    FROM event
-    union 
-   	select 'Total Matched' as entity_type, count(um.user_match_id) 
-   	from user_match um 
-   	join user_match_status ums 
-   	 on um.user_match_status_id = ums.user_match_status_id
-   	where ums.user_match_status = 'Accepted'
+  SELECT 'Account' AS entity_type, COUNT(*) AS entity_count
+  FROM public.user
+  UNION
+  SELECT 'Blog' AS entity_type, COUNT(*) AS entity_count
+  FROM blog
+  UNION
+  SELECT 'Event' AS entity_type, COUNT(*) AS entity_count
+  FROM event
+  union 
+   select 'Matched Succeed' as entity_type, count(um.user_match_id) 
+   from user_match um 
+   join user_match_status ums 
+    on um.user_match_status_id = ums.user_match_status_id
+   where ums.user_match_status = 'Accepted'
+   union 
+   select 'Matched Failed' as entity_type, (count(case when ums.user_match_status = 'Dislike' then 1 end) + count(case when ums.user_match_status = 'Declined' then 1 end))
+   from user_match um 
+   join user_match_status ums 
+    on um.user_match_status_id = ums.user_match_status_id
     `;
   const statics = await SequelizeInstance.query(sqlQuery, {
     type: SequelizeInstance.QueryTypes.SELECT,
