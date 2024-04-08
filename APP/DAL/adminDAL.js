@@ -156,3 +156,26 @@ ORDER BY
   });
   return statics;
 }
+
+export async function getScheduleList() {
+  const sqlQuery = `
+  select 
+  s.schedule_id , 
+  u.user_name as sender, 
+  u2.user_name as receiver, 
+  s."content" , 
+  s."location" , 
+  s.schedule_time ,
+  s.is_accept
+  from schedule s
+  join "user" u 
+  on u.user_id = s.sender_id
+  join "user" u2
+  on u2.user_id = s.receiver_id 
+    `;
+  const list = await SequelizeInstance.query(sqlQuery, {
+    type: SequelizeInstance.QueryTypes.SELECT,
+    raw: true,
+  });
+  return list;
+}
