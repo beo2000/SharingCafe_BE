@@ -238,51 +238,51 @@ export async function getPopularEvents() {
 export async function getEventOccurToday() {
   const sqlQuery = `
 SELECT 
-    e.event_id, 
-    e.organizer_id, 
-    e.title, 
-    e.description as body, 
-    e.time_of_event, 
-    e."location", 
-    e.participants_count, 
-    e.is_approve, 
-    e.created_at, 
-    e.background_img, 
-    e.is_visible, 
-    e.interest_id, 
-    e.end_of_event, 
-    e.address,
-    EXTRACT(HOUR FROM e.time_of_event) AS event_hour,
-    EXTRACT(MINUTE FROM e.time_of_event) AS event_minute,
-    EXTRACT(SECOND FROM e.time_of_event) AS event_second,
-    string_to_array(u.token_id, ',') as user_token
+  e.event_id, 
+  e.organizer_id, 
+  e.title, 
+  e.description as body, 
+  e.time_of_event, 
+  e."location", 
+  e.participants_count, 
+  e.is_approve, 
+  e.created_at, 
+  e.background_img, 
+  e.is_visible, 
+  e.interest_id, 
+  e.end_of_event, 
+  e.address,
+  EXTRACT(HOUR FROM e.time_of_event) AS event_hour,
+  EXTRACT(MINUTE FROM e.time_of_event) AS event_minute,
+  EXTRACT(SECOND FROM e.time_of_event) AS event_second,
+  string_to_array(u.token_id, ',') as user_token
 FROM 
-    public."event" e
+  public."event" e
 LEFT JOIN event_participation ep 
-    ON e.event_id = ep.event_id
+  ON e.event_id = ep.event_id
 LEFT JOIN public."user" u 
-    ON ep.user_id = u.user_id
+  ON ep.user_id = u.user_id
 WHERE 
-    DATE(e.time_of_event) = CURRENT_DATE
+  DATE(e.time_of_event) = CURRENT_DATE
 GROUP BY 
-    e.event_id, 
-    e.organizer_id, 
-    e.title, 
-    e.description, 
-    e.time_of_event, 
-    e."location", 
-    e.participants_count, 
-    e.is_approve, 
-    e.created_at, 
-    e.background_img, 
-    e.is_visible, 
-    e.interest_id, 
-    e.end_of_event, 
-    e.address,
-    event_hour,
-    event_minute,
-    event_second,
-    user_token
+  e.event_id, 
+  e.organizer_id, 
+  e.title, 
+  e.description, 
+  e.time_of_event, 
+  e."location", 
+  e.participants_count, 
+  e.is_approve, 
+  e.created_at, 
+  e.background_img, 
+  e.is_visible, 
+  e.interest_id, 
+  e.end_of_event, 
+  e.address,
+  event_hour,
+  event_minute,
+  event_second,
+  user_token
   `;
   const result = await SequelizeInstance.query(sqlQuery, {
     type: SequelizeInstance.QueryTypes.SELECT,
@@ -291,14 +291,17 @@ GROUP BY
   return result;
 }
 
-
-export async function getUserEvent (title, date, page){
+export async function getUserEvent(title, date, page) {
   let sqlQuery = '';
   let name = title;
-  if (name == null) {name = ''}
+  if (name == null) {
+    name = '';
+  }
   let date1 = new Date(date);
-  if (date1 == 'Invalid Date') {date1 = new Date(Date.now())}
-  if (page){
+  if (date1 == 'Invalid Date') {
+    date1 = new Date(Date.now());
+  }
+  if (page) {
     sqlQuery = `
     select 
       e.*, u.user_name, i.name
@@ -329,7 +332,7 @@ export async function getUserEvent (title, date, page){
       "user" u
       on u.user_id = e.organizer_id
       where (e.time_of_event >= '${date1.toDateString()}' or e.end_of_event >= '${date1.toDateString()}') and e.title  like '%${name}%' and e.is_approve = true and e.is_visible = true
-    `
+    `;
   }
   const result = await SequelizeInstance.query(sqlQuery, {
     type: SequelizeInstance.QueryTypes.SELECT,

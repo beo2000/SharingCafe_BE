@@ -1,32 +1,44 @@
 [
   {
-    "event_id": 1,
-    "time_of_event": "2024-04-06 17:15:00.000",
-    "title": "TITLE",
-    "body": "TESTBODy",
+    "event_id": "50b415b6-b874-429c-9f31-56db62ff0c15",
+    "organizer_id": "c728b850-b6ce-48f4-8bcd-a8260432ead6",
+    "title": "InnoTech Summit: Igniting the Tech Revolution",
+    "body": "Explore the latest advancements, insights, and collaborative discussions in the dynamic world of technology. Join us for a day of knowledge sharing, innovation, and community building as experts and enthusiasts come together to share ideas, trends, and experiences shaping the future of technology.",
+    "time_of_event": "2024-04-09T16:00:00.000Z",
+    "location": "TP HCM",
+    "participants_count": 55,
+    "is_approve": true,
+    "created_at": "2024-02-24T17:00:00.000Z",
+    "background_img": "https://res.cloudinary.com/dzstc41dl/image/upload/v1710824312/sharing-coffee-images-storage/nvwurk5wkzgdj7ypmhvb.png",
+    "is_visible": false,
+    "interest_id": "5c9c7e6d-c9cd-4984-882a-f1f03c5a1f59",
+    "end_of_event": "2024-05-14T17:00:00.000Z",
+    "address": "Công viên Vinhomes Central Park",
+    "event_hour": "23",
+    "event_minute": "0",
+    "event_second": "0.000000",
     "user_token": [
-      1,
-      2
+      "caXm6oClSuqwga782Fg-E-:APA91bGaywYhnmBpK-en6yWHDR2XwVo3Jb9An4RCpaNDQTFbl7QfBhNidDS-Csx-blB4vsvJc4GeeaNKLFN3ULXAlyExH7-nXjg9oquhMcyp6SyGhe2HebGSSkUc50RfDNVPrY08Ec6J"
     ]
   },
   {
-    "event_id": 2,
-    "time_of_event": "2024-04-06 17:15:00.000",
-    "title": "TITLE",
-    "body": "TESTBODy",
-    "user_token": [
-      1,
-      2
-    ]
-  },
-  {
-    "event_id": 3,
-    "time_of_event": "2024-04-06 17:15:00.000",
-    "title": "TITLE",
-    "body": "TESTBODy",
-    "user_token": [
-      1,
-      2
-    ]
+    "event_id": "50b415b6-b874-429c-9f31-56db62ff0c15",
+    "organizer_id": "c728b850-b6ce-48f4-8bcd-a8260432ead6",
+    "title": "InnoTech Summit: Igniting the Tech Revolution",
+    "body": "Explore the latest advancements, insights, and collaborative discussions in the dynamic world of technology. Join us for a day of knowledge sharing, innovation, and community building as experts and enthusiasts come together to share ideas, trends, and experiences shaping the future of technology.",
+    "time_of_event": "2024-04-09T16:00:00.000Z",
+    "location": "TP HCM",
+    "participants_count": 55,
+    "is_approve": true,
+    "created_at": "2024-02-24T17:00:00.000Z",
+    "background_img": "https://res.cloudinary.com/dzstc41dl/image/upload/v1710824312/sharing-coffee-images-storage/nvwurk5wkzgdj7ypmhvb.png",
+    "is_visible": false,
+    "interest_id": "5c9c7e6d-c9cd-4984-882a-f1f03c5a1f59",
+    "end_of_event": "2024-05-14T17:00:00.000Z",
+    "address": "Công viên Vinhomes Central Park",
+    "event_hour": "23",
+    "event_minute": "0",
+    "event_second": "0.000000",
+    "user_token": null
   }
 ]
