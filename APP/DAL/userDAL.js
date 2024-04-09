@@ -272,17 +272,18 @@ WHERE m1.user_id_liked IS NULL
 
 export async function getUserMatchWithStatus(userId, status) {
   let sqlQuery = `
-    SELECT 
-      *
-    FROM 
-      public.user u
-    INNER JOIN 
-      user_match um
-      ON um.user_id_liked = u.user_id 
-    INNER JOIN 
-      user_match_status ums 
-      ON um.user_match_status_id = ums.user_match_status_id 
-    WHERE um.current_user_id = '${userId}'
+SELECT 
+    *
+FROM 
+    public.user u
+INNER JOIN 
+    user_match um ON um.user_id_liked = u.user_id OR um.current_user_id = u.user_id 
+INNER JOIN 
+    user_match_status ums ON um.user_match_status_id = ums.user_match_status_id 
+WHERE 
+    (um.current_user_id = '${userId}' OR um.user_id_liked = '${userId}')
+    AND ums.user_match_status_id IS NOT null
+    and u.user_id <> '${userId}'
   `;
 
   if (status) {
@@ -322,51 +323,37 @@ export async function getUserMatchWithPendingStatus(userId) {
 
 export async function getUserMatchByInterestPaging(userId, limit, offset) {
   const sqlQuery = `
-SELECT
+with base as(
+SELECT 
     u.*
-FROM
+FROM 
     "user" u
-LEFT JOIN (
-    SELECT
-        user_match_id,
-        current_user_id,
-        user_id_liked,
-        ums.*
-    FROM
-        public.user_match um
-    INNER JOIN user_match_status ums ON ums.user_match_status_id = um.user_match_status_id
-) m1 ON u.user_id = m1.user_id_liked AND m1.current_user_id = '${userId}'
-LEFT JOIN (
-    SELECT
-        user_match_id,
-        current_user_id,
-        user_id_liked,
-        ums.*
-    FROM
-        public.user_match um
-    INNER JOIN user_match_status ums ON ums.user_match_status_id = um.user_match_status_id
-) m2 ON u.user_id = m2.current_user_id AND m2.user_id_liked = '${userId}'
-LEFT JOIN user_interest i ON u.user_id = i.user_id
-    AND i.interest_id IN (
-        SELECT
-            interest_id
-        FROM
-            user_interest
-        WHERE
-            user_id = '${userId}'
-    )
-WHERE
+LEFT JOIN public.user_match m1 ON u.user_id = m1.user_id_liked AND m1.current_user_id = '${userId}'
+LEFT JOIN user_match_status ums1 ON m1.user_match_status_id = ums1.user_match_status_id
+LEFT JOIN public.user_match m2 ON u.user_id = m2.current_user_id AND m2.user_id_liked = '${userId}'
+LEFT JOIN user_match_status ums2 ON m2.user_match_status_id = ums2.user_match_status_id
+LEFT JOIN user_interest i ON u.user_id = i.user_id AND i.interest_id IN (
+    SELECT 
+        interest_id
+    FROM 
+        user_interest
+    WHERE 
+        user_id = '${userId}'
+)
+WHERE 
     (
         m1.user_id_liked IS NULL
-        OR m1.user_match_status IS NULL
-        OR m1.user_match_status = 'Pending'
+        OR ums1.user_match_status IS NULL
+        OR ums1.user_match_status = 'Pending'
     )
     AND (
         m2.current_user_id IS NULL
-        OR m2.user_match_status IS NULL
-        OR m2.user_match_status = 'Pending'
+        OR ums2.user_match_status IS NULL
+        OR ums2.user_match_status = 'Pending'
     )
     AND i.user_id IS NULL
+)
+select * from base
 limit ${limit} 
 offset ${offset}`;
 
