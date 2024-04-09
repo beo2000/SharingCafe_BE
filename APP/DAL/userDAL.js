@@ -336,18 +336,16 @@ WITH base AS (
     FROM
         public.user_match um
     INNER JOIN user_match_status ums ON ums.user_match_status_id = um.user_match_status_id
-    WHERE 
-        user_match_status = 'Pending' AND (
-            current_user_id = '${userId}'
+    WHERE current_user_id = '${userId}'
             OR user_id_liked = '${userId}'
-        )
 ),subset as(
 SELECT
     case b.filter_this_user
-    when true then true
+    when true then b.filter_this_user
     else false
     end as filter_this_user
-    , u.user_id 
+    , b.user_match_status
+    ,u.user_id 
 FROM
     "user" u
 LEFT JOIN base b 
@@ -371,14 +369,15 @@ WHERE 1=1
     AND u.user_id <> '${userId}'
 )
 select 
-  *
+  ss.user_match_status,*
 from 
   "user" u 
-inner join 
+left join 
   subset ss
   on 1=1 
   and ss.filter_this_user != true
   and u.user_id = ss.user_id
+  and ss.user_match_status != 'Matched'
 limit ${limit} 
 offset ${offset}`;
 
