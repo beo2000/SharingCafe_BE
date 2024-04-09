@@ -288,6 +288,7 @@ export async function updateUserMatchStatus(userId, dataObj) {
       : status.filter(
           (e) => e.user_match_status === commonEnum.MATCH_STATUS.DISLIKE,
         )[0];
+  console.log(statusStage);
   await matchDAL.upsertMatch(
     user_match_id,
     userId,
