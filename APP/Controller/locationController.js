@@ -81,7 +81,7 @@ function tinhDiemGiuaCuaKhoangCach(lat1, lon1, lat2, lon2) {
   const lngMiddle = (lon1 + lon2) / 2;
 
   return { lat: latMiddle, lng: lngMiddle };
-}
+  }
 }
 export async function getMiddlePoint(req, res) {
   try {

@@ -134,9 +134,25 @@ const router = express.Router();
  *       500:
  *         description: Internal server error
  */
+
+/**
+ * @swagger
+ * /api/admin/schedule-list:
+ *   get:
+ *     summary: Get schedule list for admin
+ *     description: Retrieve schedule list data for the admin.
+ *     tags:
+ *       - ADMIN SECTION
+ *     responses:
+ *       200:
+ *         description: Successful response
+ *       500:
+ *         description: Internal server error
+ */
 router.post('/api/admin/login', admController.loginAdmin);
 router.get('/api/admin/statics', admController.getStatics);
-router.get('/api/admin/event-statics', admController.getEventStatics)
+router.get('/api/admin/event-statics', admController.getEventStatics);
+router.get('/api/admin/schedule-list', admController.getScheduleList);
 /**
  * @swagger
  * /api/user/register:
@@ -2925,8 +2941,6 @@ router.get(
 );
 
 router.put('/api/auth/matching-status', matchController.updateUserMatchStatus);
-
-router.post('/api/user/message', chatController.viewMessage);
 
 router.post('/api/user/schedule', scheduleController.createSchedule);
 router.get(

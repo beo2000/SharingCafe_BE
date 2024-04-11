@@ -38,3 +38,7 @@ export async function updateEventStatus(eventId, eventDetails) {
 export async function getEventStatics() {
   return await adminDAL.getEventStatics();
 }
+
+export async function getScheduleList() {
+  return await adminDAL.getScheduleList();
+}
