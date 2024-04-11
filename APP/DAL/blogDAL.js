@@ -139,6 +139,7 @@ export async function getNewBlogs(page) {
     join
       "user" u
       on u.user_id = b.user_id
+    where b.is_approve = true and b.is_visible = true
     order by b.created_at desc 
     offset ((${page} - 1 ) * 10) rows 
     fetch next 10 rows only
@@ -146,7 +147,7 @@ export async function getNewBlogs(page) {
   } else {
     sqlQuery = `
     select 
-      b.*, u.user_name, i.name
+      b.*, u.user_name, i.name, u.profile_avatar
     from 
       blog b 
     join 
@@ -156,6 +157,7 @@ export async function getNewBlogs(page) {
     join
       "user" u
       on u.user_id = b.user_id
+    where b.is_approve = true and b.is_visible = true
     order by b.created_at desc 
   `;
   }
@@ -172,7 +174,7 @@ export async function getPopularBlogs(page) {
   if (page) {
     sqlQuery = `
     select 
-      b.*, u.user_name, i.name
+      b.*, u.user_name, i.name, u.profile_avatar
     from 
       blog b 
     join 
@@ -182,6 +184,7 @@ export async function getPopularBlogs(page) {
     join
       "user" u
       on u.user_id = b.user_id
+    where b.is_approve = true and b.is_visible = true
     order by b.likes_count desc
     offset ((${page} - 1 ) * 10) rows 
     fetch next 10 rows only
@@ -189,7 +192,7 @@ export async function getPopularBlogs(page) {
   } else {
     sqlQuery = `
     select 
-      b.*, u.user_name, i.name
+      b.*, u.user_name, i.name, u.profile_avatar
     from 
       blog b 
     join 
@@ -199,6 +202,7 @@ export async function getPopularBlogs(page) {
     join
       "user" u
     on u.user_id = b.user_id
+    where b.is_approve = true and b.is_visible = true
     order by b.likes_count desc 
   `;
   }
@@ -254,6 +258,15 @@ export async function getComments(blogId) {
 }
 
 export async function createComment(comment_id, dataObj) {
+  const sqlQuery = `
+  UPDATE blog 
+  SET comments_count = comments_count + 1
+  WHERE blog_id = '${dataObj.blogId}'
+`;
+const result = await SequelizeInstance.query(sqlQuery, {
+  type: SequelizeInstance.QueryTypes.SELECT,
+  raw: true,
+});
   return await Comment.create({
     comment_id: comment_id,
     blog_id: dataObj.blogId,
@@ -328,9 +341,18 @@ export async function unlikeBlog(dataObj) {
   return result;
 }
 
-export async function deleteComment(commentId) {
+export async function deleteComment(commentId, blogId) {
   const deletedComment = await Comment.destroy({
     where: { comment_id: commentId },
+  });
+  const sqlQuery = `
+    UPDATE blog 
+    SET comments_count = comments_count - 1
+    WHERE blog_id = '${blogId}'
+    `;
+  const result = await SequelizeInstance.query(sqlQuery, {
+    type: SequelizeInstance.QueryTypes.SELECT,
+    raw: true,
   });
   return deletedComment;
 }

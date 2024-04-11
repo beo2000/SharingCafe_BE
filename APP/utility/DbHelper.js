@@ -488,8 +488,8 @@ const EventParticipation = sequelize.define(
     user_id: {
       type: DataTypes.UUID,
     },
-    eventParticipationStatusId: {
-      type: DataTypes.UUID,
+    event_participation_status: {
+      type: DataTypes.TEXT,
     },
     created_at: {
       type: DataTypes.DATE,
@@ -812,10 +812,10 @@ UserStatistics.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
 
 EventParticipation.belongsTo(Event, { foreignKey: 'event_id', as: 'event' });
 EventParticipation.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
-EventParticipation.belongsTo(EventParticipationStatus, {
-  foreignKey: 'event_participation_status_id',
-  as: 'eventParticipationStatus',
-});
+// EventParticipation.belongsTo(EventParticipationStatus, {
+//   foreignKey: 'event_participation_status_id',
+//   as: 'eventParticipationStatus',
+// });
 
 Event.belongsTo(User, { foreignKey: 'organizer_id', as: 'organizer' });
 Event.hasMany(EventParticipation, {
