@@ -2689,7 +2689,7 @@ router.delete(
 router.post('/api/moderator/login', modController.loginMod);
 router.put('/api/moderator/blog/:blogId', modController.censorBlog);
 router.put('/api/moderator/event/:eventId', modController.censorEvent);
-
+router.get('/api/test', locationController.getMiddlePoint);
 // MATCH SECTION
 /**
  * @swagger
