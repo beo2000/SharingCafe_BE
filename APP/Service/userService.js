@@ -433,3 +433,8 @@ export async function getProfile(userId, currentUserId) {
 
   return userProfile;
 }
+
+export async function getMiniUser(userId) {
+  var rawResult = await userDAL.getUserToken(userId);
+  return rawResult;
+}

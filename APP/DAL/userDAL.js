@@ -97,10 +97,10 @@ export async function getUserByEmail(email) {
   });
 }
 
-export async function getUser(userId) {
+export async function getUserToken(userId) {
   const sqlQuery = `
   select 
-    u.user_id, u."Bio", u.user_name, u.profile_avatar, u.email, u.phone
+    u.user_id, u.token_id
   from 
     "user" u
    where u.user_id = '${userId}'

@@ -1,5 +1,7 @@
 import { SequelizeInstance } from '../utility/DbHelper.js';
 import * as scheduleService from '../Service/scheduleService.js';
+import { getMiniUser } from '../Service/userService.js';
+import * as firebaseHelper from '../utility/FirebaseHelper.js';
 export async function createSchedule(req, res) {
   const t = await SequelizeInstance.transaction();
   try {
@@ -7,6 +9,13 @@ export async function createSchedule(req, res) {
     const result = await scheduleService.createSchedule(dataObj);
     res.status(200).send(result);
     t.commit();
+    const userProfile = await getMiniUser(dataObj.receiver_id);
+    console.log(userProfile);
+    await firebaseHelper.sendNotification(
+      userProfile[0].token_id,
+      "Bạn có lịch hẹn mới",
+      "Vui lòng kiểm tra hộp tin nhắn",
+    );
   } catch (error) {
     console.log(error);
     res.status(500).send({ error: error.message });

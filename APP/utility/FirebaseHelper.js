@@ -3,6 +3,7 @@ import { getMessaging } from 'firebase-admin/messaging';
 // Function to send a notification
 export async function sendNotification(token, title, body) {
   try {
+    if (!token) return;
     const message = {
       notification: {
         title: title,
