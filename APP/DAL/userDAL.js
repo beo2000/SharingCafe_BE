@@ -568,7 +568,7 @@ export async function upsertUnlikeTopics(data) {
 export async function deletePersonalProblems(userId) {
   const sqlQuery = `
   DELETE FROM public.personal_problem
-  WHERE user_id = ${userId}
+  WHERE user_id = '${userId}'
   `;
   const result = await SequelizeInstance.query(sqlQuery, {
     type: SequelizeInstance.QueryTypes.DELETE,
