@@ -324,7 +324,7 @@ export async function getUserMatchWithPendingStatus(userId) {
 export async function getUserMatchByInterestPaging(userId, limit, offset) {
   const sqlQuery = `
 WITH base AS (
-    SELECT
+     SELECT
         user_match_id,
         current_user_id,
         user_id_liked,
@@ -332,28 +332,28 @@ WITH base AS (
         CASE
             WHEN current_user_id = '${userId}' THEN true
             ELSE false
-        END AS filter_this_user
+        END AS filter_this_user,
+        CASE
+            WHEN ums.user_match_status = 'Pending' AND current_user_id = '${userId}' THEN true
+            ELSE false
+        END AS sent_pending_status
     FROM
         public.user_match um
     INNER JOIN user_match_status ums ON ums.user_match_status_id = um.user_match_status_id
     WHERE current_user_id = '${userId}'
             OR user_id_liked = '${userId}'
-),subset as(
+),
+subset AS (
 SELECT
-    case b.filter_this_user
-    when true then b.filter_this_user
-    else false
-    end as filter_this_user
-    , b.user_match_status
-    ,u.user_id 
+    b.filter_this_user,
+    b.user_match_status,
+    b.sent_pending_status,
+    u.user_id 
 FROM
     "user" u
 LEFT JOIN base b 
-    ON 1 = 1
-    AND (
-        (b.filter_this_user = false AND b.current_user_id = u.user_id)
-        OR (b.filter_this_user = true AND b.user_id_liked = u.user_id)
-    )
+on b.user_id_liked = u.user_id 
+    and  b.filter_this_user = false
 LEFT JOIN user_interest i 
     ON u.user_id = i.user_id
     AND i.interest_id IN (
@@ -364,20 +364,22 @@ LEFT JOIN user_interest i
         WHERE
             user_id = '${userId}'
     )
-WHERE 1=1
-    and i.user_id IS NULL
-    AND u.user_id <> '${userId}'
+WHERE i.user_id IS NOT NULL
+--AND u.user_id <> '${userId}'
+AND (b.user_match_status = 'Pending' AND b.sent_pending_status = false OR b.user_match_status != 'Pending')
 )
-select 
-  ss.user_match_status,*
-from 
-  "user" u 
-left join 
-  subset ss
-  on 1=1 
-  and ss.filter_this_user != true
-  and u.user_id = ss.user_id
-  and ss.user_match_status != 'Matched'
+SELECT 
+    ss.user_match_status,
+    u.*
+FROM 
+    "user" u 
+LEFT JOIN 
+    subset ss
+ON 
+    u.user_id = ss.user_id
+WHERE 
+    ss.filter_this_user IS null
+    AND u.user_id <> '${userId}'
 limit ${limit} 
 offset ${offset}`;
 
