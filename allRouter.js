@@ -1702,6 +1702,10 @@ router.put('/api/admin/event/:eventId', admController.updateEventStatus);
  *               format: date
  *               description: End date of the event
  *               example: 2024-03-10
+ *             address:
+ *               type: string
+ *               description: event's address
+ *               example: Kinh thành Huế
  *     responses:
  *       '204':
  *         description: Event successfully updated

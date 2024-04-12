@@ -108,7 +108,8 @@ export async function updateEvent(eventId, eventDetails) {
       participants_count: eventDetails.participants_count,
       interest_id: eventDetails.interest_id,
       background_img: eventDetails.background_img,
-      is_visible: true,
+      address: eventDetails.address,
+      is_visible: eventDetails.is_visible,
     },
     {
       where: { event_id: eventId },
