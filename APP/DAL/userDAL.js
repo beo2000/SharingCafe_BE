@@ -384,113 +384,122 @@ limit ${limit}
 offset ${offset}`;
 
   const sqlQueryNEWSOLUTION = `select 
- u.user_id ,
- u.user_name ,
- u.phone ,
- u.email ,
- u.profile_avatar ,
- u.story ,
- u.registration ,
- u.role_id ,
- u.is_available ,
- u.gender ,
- u.is_available ,
- u.gender ,
- u.age ,
- u.purpose ,
- u.favorite_location ,
- u.lat ,
- u.lng ,
- u.address,
- 1 as priority
+	u.user_id ,
+	u.user_name ,
+	u.phone ,
+	u.email ,
+	u.profile_avatar ,
+	u.story ,
+	u.registration ,
+	u.role_id ,
+	u.is_available ,
+	u.gender ,
+	u.is_available ,
+	u.gender ,
+	u.age ,
+	u.purpose ,
+	u.favorite_location ,
+	u.lat ,
+	u.lng ,
+	u.address,
+	1 as priority
 from
- "user" u
+	"user" u
 left join user_interest ui on
- u.user_id = ui.user_id
+	u.user_id = ui.user_id
 where
- ui.interest_id in (
- select
-   uii.interest_id
- from
-   user_interest uii
- where
-   uii.user_id = '${userId}'
+	ui.interest_id in (
+	select
+		uii.interest_id
+	from
+		user_interest uii
+	where
+		uii.user_id = '${userId}'
 union
- select
-   iii.parent_interest_id
- from
-   user_interest uii
- join interest iii on
-   uii.interest_id = iii.interest_id
- where
-   uii.user_id = '${userId}')
- and u.user_id not in (
- select
-   user_id
- from
-   (
-   select
-     *
-   from
-     public.user u
-   inner join 
-   user_match um on
-     um.user_id_liked = u.user_id
-     or um.current_user_id = u.user_id
-   inner join 
-   user_match_status ums on
-     um.user_match_status_id = ums.user_match_status_id
-   where
-     (um.current_user_id = '${userId}'
-       or um.user_id_liked = '${userId}')
-     and ums.user_match_status_id is not null
-     and u.user_id <> '${userId}'
-     and (ums.user_match_status = 'Matched'
-       or ums.user_match_status = 'Dislike')) as excludeUser)
-union select us.user_id ,
- us.user_name ,
- us.phone ,
- us.email ,
- us.profile_avatar ,
- us.story ,
- us.registration ,
- us.role_id ,
- us.is_available ,
- us.gender ,
- us.is_available ,
- us.gender ,
- us.age ,
- us.purpose ,
- us.favorite_location ,
- us.lat ,
- us.lng ,
- us.address,
- 0 as priority from "user" us 
-where us.user_id not in (
- select
-   user_id
- from
-   (
-   select
-     *
-   from
-     public.user u
-   inner join 
-   user_match um on
-     um.user_id_liked = us.user_id
-     or um.current_user_id = u.user_id
-   inner join 
-   user_match_status ums on
-     um.user_match_status_id = ums.user_match_status_id
-   where
-     (um.current_user_id = '${userId}'
-       or um.user_id_liked = '${userId}')
-     and ums.user_match_status_id is not null
-     and u.user_id <> '${userId}'
-     and (ums.user_match_status = 'Matched'
-       or ums.user_match_status = 'Dislike')) as excludeUser)
-group by user_id
-order by priority desc
+	select
+		iii.parent_interest_id
+	from
+		user_interest uii
+	join interest iii on
+		uii.interest_id = iii.interest_id
+	where
+		uii.user_id = '${userId}')
+	and u.user_id not in (
+	select
+		user_id
+	from
+		(
+		select
+			*
+		from
+			public.user u
+		inner join 
+    user_match um on
+			um.user_id_liked = u.user_id
+			or um.current_user_id = u.user_id
+		inner join 
+    user_match_status ums on
+			um.user_match_status_id = ums.user_match_status_id
+		where
+			(um.current_user_id = '${userId}'
+				or um.user_id_liked = '${userId}')
+			and ums.user_match_status_id is not null
+			and u.user_id <> '${userId}'
+			and (ums.user_match_status = 'Matched'
+				or ums.user_match_status = 'Dislike')) as excludeUser)
+	and u.user_id != '${userId}'
+union
+select
+	us.user_id ,
+	us.user_name ,
+	us.phone ,
+	us.email ,
+	us.profile_avatar ,
+	us.story ,
+	us.registration ,
+	us.role_id ,
+	us.is_available ,
+	us.gender ,
+	us.is_available ,
+	us.gender ,
+	us.age ,
+	us.purpose ,
+	us.favorite_location ,
+	us.lat ,
+	us.lng ,
+	us.address,
+	0 as priority
+from
+	"user" us
+where
+	us.user_id not in (
+	select
+		user_id
+	from
+		(
+		select
+			*
+		from
+			public.user u
+		inner join 
+    user_match um on
+			um.user_id_liked = us.user_id
+			or um.current_user_id = u.user_id
+		inner join 
+    user_match_status ums on
+			um.user_match_status_id = ums.user_match_status_id
+		where
+			(um.current_user_id = '${userId}'
+				or um.user_id_liked = '${userId}')
+			and ums.user_match_status_id is not null
+			and u.user_id <> '${userId}'
+			and (ums.user_match_status = 'Matched'
+				or ums.user_match_status = 'Dislike')) as excludeUser)
+	and us.user_id != '${userId}'
+group by
+	user_id
+order by
+	priority desc
 limit ${limit}
 offset ${offset};`;
 
