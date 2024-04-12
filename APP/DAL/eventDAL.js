@@ -1,4 +1,4 @@
-import { Event, SequelizeInstance } from '../utility/DbHelper.js';
+import { Event, SequelizeInstance, EventParticipation } from '../utility/DbHelper.js';
 
 export async function getEvents(title, date, page) {
   let sqlQuery = '';
@@ -108,7 +108,8 @@ export async function updateEvent(eventId, eventDetails) {
       participants_count: eventDetails.participants_count,
       interest_id: eventDetails.interest_id,
       background_img: eventDetails.background_img,
-      is_visible: true,
+      address: eventDetails.address,
+      is_visible: eventDetails.is_visible,
     },
     {
       where: { event_id: eventId },
@@ -334,6 +335,59 @@ export async function getUserEvent(title, date, page) {
       where (e.time_of_event >= '${date1.toDateString()}' or e.end_of_event >= '${date1.toDateString()}') and e.title  like '%${name}%' and e.is_approve = true and e.is_visible = true
     `;
   }
+  const result = await SequelizeInstance.query(sqlQuery, {
+    type: SequelizeInstance.QueryTypes.SELECT,
+    raw: true,
+  });
+  return result;
+}
+
+export async function joinEvent(participation_id, event_id, userId) {
+  const sqlQuery = `
+    UPDATE event 
+    SET participants_count = participants_count + 1
+    WHERE event_id = '${event_id}'
+  `;
+  const result = await SequelizeInstance.query(sqlQuery, {
+    type: SequelizeInstance.QueryTypes.SELECT,
+    raw: true,
+  });
+  return await EventParticipation.create({
+    participation_id: participation_id,
+    user_id: userId,
+    event_id: event_id,
+    event_participation_status: 'Đã tham gia',
+  });
+}
+
+export async function leaveEvent(event_id, userId) {
+  const sqlQuery = `
+    UPDATE event 
+    SET participants_count = participants_count - 1
+    WHERE event_id = '${event_id}'
+  `;
+  const result = await SequelizeInstance.query(sqlQuery, {
+    type: SequelizeInstance.QueryTypes.SELECT,
+    raw: true,
+  });
+  EventParticipation.destroy({
+    where: {
+      event_id: event_id,
+      user_id: userId,      
+    },
+  });
+  return result;
+}
+
+export async function getEventParticipants(event_id) {
+  const sqlQuery = `
+  select 
+   	 u.user_id , u.user_name ,u.profile_avatar 
+   	 from "user" u 
+   	 left join event_participation ep 
+   	 on ep.user_id = u.user_id 
+   	 where ep.event_id = '${event_id}'
+  `;
   const result = await SequelizeInstance.query(sqlQuery, {
     type: SequelizeInstance.QueryTypes.SELECT,
     raw: true,

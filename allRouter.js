@@ -458,6 +458,9 @@ router.get('/api/admin/schedule-list', admController.getScheduleList);
  *               address:
  *                  type: string
  *                  description: User address to be updated
+ *               profile_avatar:
+ *                  type: string
+ *                  description: User avatar to be updated
  *     responses:
  *       '200':
  *         description: User updated successfully
@@ -954,6 +957,96 @@ router.get('/api/user/profile/:userId', userController.getProfile);
  *       500:
  *         description: Internal server error
  */
+
+/**
+ * @swagger
+ * /api/auth/user/join-event:
+ *   post:
+ *     security:
+ *       - BearerAuth: []
+ *     summary: Join an event
+ *     description: User join an event.
+ *     tags:
+ *       - EVENT SECTION
+ *     parameters:
+ *        - in: query
+ *          name: event_id
+ *          schema:
+ *             type: string
+ *          description: Id of Event
+ *          example: 891f28ff-9e2b-41b6-b434-3f33fbfe7dbe
+ *     responses:
+ *       200:
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             example:
+ *               message: Success
+ *       401:
+ *         description: Unauthorized - Missing or invalid token
+ *       500:
+ *         description: Internal server error
+ */
+
+/**
+ * @swagger
+ * /api/auth/user/event/leave-event:
+ *   put:
+ *     security:
+ *       - BearerAuth: []
+ *     summary: Leave an event
+ *     description: User leave an event.
+ *     tags:
+ *       - EVENT SECTION
+ *     parameters:
+ *        - in: query
+ *          name: event_id
+ *          schema:
+ *             type: string
+ *          description: Id of Event
+ *          example: 891f28ff-9e2b-41b6-b434-3f33fbfe7dbe
+ *     responses:
+ *       200:
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             example:
+ *               message: Success
+ *       401:
+ *         description: Unauthorized - Missing or invalid token
+ *       500:
+ *         description: Internal server error
+ */
+
+/**
+ * @swagger
+ * /api/auth/user/event/event-participants:
+ *   get:
+ *     security:
+ *       - BearerAuth: []
+ *     summary: Get list of user joined an event
+ *     description: List of user joined an event.
+ *     tags:
+ *       - EVENT SECTION
+ *     parameters:
+ *        - in: query
+ *          name: event_id
+ *          schema:
+ *             type: string
+ *          description: Id of Event
+ *          example: 50b415b6-b874-429c-9f31-56db62ff0c00
+ *     responses:
+ *       200:
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             example:
+ *               message: Success
+ *       401:
+ *         description: Unauthorized - Missing or invalid token
+ *       500:
+ *         description: Internal server error
+ */
 router.get('/api/auth/user/my-event', userController.getMyEvents);
 router.get(
   '/api/user/events/interest/:interestId',
@@ -965,7 +1058,9 @@ router.get(
 );
 router.get('/api/auth/user/events/suggest', userController.getSuggestEvent);
 router.get('/api/auth/user/event', eventController.getUserEvent);
-
+router.post('/api/auth/user/event/join-event', eventController.joinEvent);
+router.put('/api/auth/user/event/leave-event', eventController.leaveEvent);
+router.get('/api/auth/user/event/event-participants', eventController.getEventParticipants);
 /**
  * @swagger
  * /api/interest:
@@ -1607,6 +1702,10 @@ router.put('/api/admin/event/:eventId', admController.updateEventStatus);
  *               format: date
  *               description: End date of the event
  *               example: 2024-03-10
+ *             address:
+ *               type: string
+ *               description: event's address
+ *               example: Kinh thành Huế
  *     responses:
  *       '204':
  *         description: Event successfully updated
@@ -2132,6 +2231,12 @@ router.post(
  *         description: ID of the comment to be deleted
  *         schema:
  *           type: string
+ *       - in: query
+ *         name: blog_id
+ *         required: true
+ *         description: ID of the blog has comment
+ *         schema:
+ *           type: string
  *     responses:
  *       '204':
  *         description: Comment deleted successfully
@@ -2287,28 +2392,28 @@ router.post(
  *         description: Internal server error
  */
 
-/**
- * @swagger
- * /api/user/blogs/report/{reportId}:
- *   delete:
- *     summary: Delete a specific report by ID
- *     tags:
- *       - REPORT SECTION
- *     parameters:
- *       - in: path
- *         name: reportId
- *         required: true
- *         description: ID of the report to be deleted
- *         schema:
- *           type: string
- *     responses:
- *       '204':
- *         description: Report deleted successfully
- *       '404':
- *         description: Report not found
- *       '500':
- *         description: Internal server error
- */
+// /**
+//  * @swagger
+//  * /api/user/blogs/report/{reportId}:
+//  *   delete:
+//  *     summary: Delete a specific report by ID
+//  *     tags:
+//  *       - REPORT SECTION
+//  *     parameters:
+//  *       - in: path
+//  *         name: reportId
+//  *         required: true
+//  *         description: ID of the report to be deleted
+//  *         schema:
+//  *           type: string
+//  *     responses:
+//  *       '204':
+//  *         description: Report deleted successfully
+//  *       '404':
+//  *         description: Report not found
+//  *       '500':
+//  *         description: Internal server error
+//  */
 
 /**
  * @swagger
@@ -2366,28 +2471,28 @@ router.post(
  *         description: Internal server error
  */
 
-/**
- * @swagger
- * /api/user/events/report/{reportId}:
- *   delete:
- *     summary: Delete a specific event report by ID
- *     tags:
- *       - REPORT SECTION
- *     parameters:
- *       - in: path
- *         name: reportId
- *         required: true
- *         description: ID of the report to be deleted
- *         schema:
- *           type: string
- *     responses:
- *       '204':
- *         description: Report deleted successfully
- *       '404':
- *         description: Report not found
- *       '500':
- *         description: Internal server error
- */
+// /**
+//  * @swagger
+//  * /api/user/events/report/{reportId}:
+//  *   delete:
+//  *     summary: Delete a specific event report by ID
+//  *     tags:
+//  *       - REPORT SECTION
+//  *     parameters:
+//  *       - in: path
+//  *         name: reportId
+//  *         required: true
+//  *         description: ID of the report to be deleted
+//  *         schema:
+//  *           type: string
+//  *     responses:
+//  *       '204':
+//  *         description: Report deleted successfully
+//  *       '404':
+//  *         description: Report not found
+//  *       '500':
+//  *         description: Internal server error
+//  */
 
 /**
  * @swagger

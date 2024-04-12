@@ -192,8 +192,9 @@ export async function unLikeBlog(req, res) {
 export async function deleteComment(req, res) {
   const t = await SequelizeInstance.transaction();
   try {
-    const commentId = req.params.blogId;
-    const comment = await blogService.deleteComment(commentId);
+    const commentId = req.params.commentId;
+    const blogId = req.query.blog_id
+    const comment = await blogService.deleteComment(commentId, blogId);
     res.status(200).send({ comment });
     await t.commit();
   } catch (error) {

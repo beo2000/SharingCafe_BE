@@ -143,3 +143,20 @@ export async function sendNotificationIfEventOccurToday() {
     console.error('Error:', error);
   }
 }
+
+export async function joinEvent(event_id, userId){
+  const participation_id = uuidv4();
+  const event = await eventDAL.getEvent(event_id);
+  if (!event) throw new Error('Event not found !!!');   
+  return await eventDAL.joinEvent(participation_id, event_id, userId);
+}
+
+export async function leaveEvent(event_id, userId){
+  const event = await eventDAL.getEvent(event_id);
+  if (!event)  throw new Error('Event not found !!!');   
+  return await eventDAL.leaveEvent(event_id, userId);
+}
+
+export async function getEventParticipants(event_id) {
+  return await eventDAL.getEventParticipants(event_id);
+}

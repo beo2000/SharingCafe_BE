@@ -78,10 +78,10 @@ export async function unlikeBlog(dataObj){
     return await blogDAL.unlikeBlog(dataObj);
 }
 
-export async function deleteComment(commentId) {
+export async function deleteComment(commentId, blogId) {
     const comment = await getComment(commentId);
     if (!comment) throw new Error('Comment not found !!!');
-    return await blogDAL.deleteComment(commentId);
+    return await blogDAL.deleteComment(commentId, blogId);
 }
 
 export async function getBlogUrl(blog_id){
