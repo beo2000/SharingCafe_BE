@@ -823,3 +823,14 @@ export async function getProfile(userId) {
   });
   return result;
 }
+
+export async function getProvince() {
+  const sqlQuery = `
+  select * from province
+  `;
+  const result = await SequelizeInstance.query(sqlQuery, {
+    type: SequelizeInstance.QueryTypes.SELECT,
+    raw: true,
+  });
+  return result;
+}

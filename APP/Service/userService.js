@@ -438,3 +438,7 @@ export async function getMiniUser(userId) {
   var rawResult = await userDAL.getUserToken(userId);
   return rawResult;
 }
+
+export async function getProvince() {
+  return await userDAL.getProvince();
+}

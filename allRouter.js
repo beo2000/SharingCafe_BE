@@ -3147,6 +3147,8 @@ router.get(
   '/api/location/getRecommendCafe',
   locationController.getRecommendCafe,
 );
+router.get('/api/location/getDistrict', locationController.getDistrict);
+router.get('/api/location/getProvince', locationController.getProvince);
 /**
  * @swagger
  * /api/location/updateCurrentLocation:
@@ -3260,6 +3262,48 @@ router.get(
  *     responses:
  *       '200':
  *         description: Successfully retrieved chat history.
+ *       '400':
+ *         description: Bad request. Invalid parameters provided.
+ *       '500':
+ *         description: An internal server error occurred.
+ */
+
+/**
+ * @swagger
+ * /api/location/getProvince:
+ *   get:
+ *     summary: Get Vietnam province and it id
+ *     description: Retrieve Vietnam province and it id
+ *     tags:
+ *      - LOCATION SECTION
+ *     responses:
+ *       '200':
+ *         description: Successfully retrieved province.
+ *       '400':
+ *         description: Bad request. Invalid parameters provided.
+ *       '500':
+ *         description: An internal server error occurred.
+ */
+
+/**
+ * @swagger
+ * /api/location/getDistrict:
+ *   get:
+ *     summary: Get all district of a province by province id
+ *     description: Retrieve all district of a province
+ *     tags:
+ *      - LOCATION SECTION
+ *     parameters:
+ *       - in: query
+ *         name: province_id
+ *         required: true
+ *         description: id of province
+ *         example: 79
+ *         schema:
+ *           type: string
+ *     responses:
+ *       '200':
+ *         description: Successfully retrieved district.
  *       '400':
  *         description: Bad request. Invalid parameters provided.
  *       '500':

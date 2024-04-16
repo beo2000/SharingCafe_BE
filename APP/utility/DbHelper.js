@@ -792,6 +792,24 @@ const LikeBlog = sequelize.define(
   },
 );
 
+const Province = sequelize.define(
+  'province',
+  {
+    province_id: {
+      type: DataTypes.TEXT,
+      primaryKey: true,
+    },
+    province: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+    },
+  },
+  {
+    tableName: 'province',
+    timestamps: false,
+  },
+);
+
 User.belongsTo(Role, { foreignKey: 'role_id', as: 'UserRole' });
 
 EventReport.belongsTo(User, { foreignKey: 'reporter_id', as: 'reporter' });
@@ -869,4 +887,5 @@ export {
   FreeTime,
   FavoriteDrink,
   UserReport,
+  Province,
 };
