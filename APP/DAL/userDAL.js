@@ -116,6 +116,8 @@ export async function getUserInfoById(userId) {
   select 
    u.lat,
    u.lng,
+   u.token,
+   u.user_name
   from 
     "user" u
    where u.user_id = '${userId}'
