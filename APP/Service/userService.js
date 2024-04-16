@@ -2,6 +2,7 @@ import { Error } from 'sequelize';
 import * as userDAL from '../DAL/userDAL.js';
 import * as matchDAL from '../DAL/matchDAL.js';
 import * as commonEnum from '../common/CommonEnums.js';
+import * as commonFunction from '../common/commonFunction.js';
 import { v4 as uuidv4 } from 'uuid';
 import axios from 'axios';
 
@@ -246,11 +247,15 @@ export async function getUserMatchWithPendingStatus(userId) {
   return result;
 }
 export async function getUserMatchByInterestPaging(userId, limit, offset) {
-  const result = await userDAL.getUserMatchByInterestPaging(
+  const [user] = await userDAL.getUserInfoById(userId);
+  let result = await userDAL.getUserMatchByInterestPaging(
     userId,
     limit,
     offset,
   );
+  result = result.map((e) => {
+    return { ...e, distance: commonFunction(e.lat, e.lng, user.lat, user.lng) };
+  });
   const list = await userDAL.getUserMatchByInterest(userId);
   return { total: list.length, limit, offset, data: result };
 }
