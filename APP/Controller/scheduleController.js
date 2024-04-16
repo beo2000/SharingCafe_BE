@@ -13,8 +13,8 @@ export async function createSchedule(req, res) {
     console.log(userProfile);
     await firebaseHelper.sendNotification(
       userProfile[0].token_id,
-      "Bạn có lịch hẹn mới",
-      "Vui lòng kiểm tra hộp tin nhắn",
+      'Bạn có lịch hẹn mới',
+      'Vui lòng kiểm tra hộp tin nhắn',
     );
   } catch (error) {
     console.log(error);
@@ -41,6 +41,19 @@ export async function changeStatus(req, res) {
   try {
     const dataObj = req.query;
     const result = await scheduleService.changeStatus(dataObj);
+    res.status(200).send(result);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ error: error.message });
+  }
+}
+
+export async function getScheduleHistoryByUserId(req, res) {
+  try {
+    const loginUser = req.loginUser;
+    const result = await scheduleService.getScheduleHistoryByUserId(
+      loginUser.user_id,
+    );
     res.status(200).send(result);
   } catch (error) {
     console.log(error);

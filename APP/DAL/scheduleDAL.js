@@ -53,3 +53,24 @@ export async function changeStatus(dataObj) {
     { where: { schedule_id: dataObj.schedule_id } },
   );
 }
+
+export async function getScheduleHistoryByUserId(userId) {
+  const sqlQuery = `
+        SELECT
+            *
+        FROM
+            public.schedule
+        WHERE
+            sender_id = '${userId}'
+            OR receiver_id = '${userId}'
+            AND schedule_time < NOW()
+        ORDER BY
+            schedule_time DESC
+    `;
+
+  const userDetails = await SequelizeInstance.query(sqlQuery, {
+    type: SequelizeInstance.QueryTypes.SELECT,
+    raw: true,
+  });
+  return userDetails;
+}

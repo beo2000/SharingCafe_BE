@@ -12,3 +12,7 @@ export async function getScheduleBetweenUsers(userId, anotherUserId) {
 export async function changeStatus(dataObj) {
   return await scheduleDAL.changeStatus(dataObj);
 }
+
+export async function getScheduleHistoryByUserId(dataObj) {
+  return await scheduleDAL.getScheduleHistoryByUserId(dataObj);
+}

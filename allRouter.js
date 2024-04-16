@@ -1060,7 +1060,10 @@ router.get('/api/auth/user/events/suggest', userController.getSuggestEvent);
 router.get('/api/auth/user/event', eventController.getUserEvent);
 router.post('/api/auth/user/event/join-event', eventController.joinEvent);
 router.put('/api/auth/user/event/leave-event', eventController.leaveEvent);
-router.get('/api/auth/user/event/event-participants', eventController.getEventParticipants);
+router.get(
+  '/api/auth/user/event/event-participants',
+  eventController.getEventParticipants,
+);
 /**
  * @swagger
  * /api/interest:
@@ -3107,6 +3110,8 @@ router.get(
  *   get:
  *     summary: Get chat history
  *     description: Retrieve chat history based on userId, with pagination using limit and offset.
+ *     tags:
+ *       - CHAT SECTION
  *     security:
  *       - BearerAuth: []
  *     parameters:
@@ -3310,4 +3315,44 @@ router.get('/api/location/getProvince', locationController.getProvince);
  *         description: An internal server error occurred.
  */
 router.get('/test-notification', notificationController.sendNotification);
+
+/**
+ * @swagger
+ * /api/auth/schedule/get-history:
+ *   get:
+ *     summary: Get schedule history by user ID
+ *     description: Retrieve schedule history for a user by their ID
+ *     security:
+ *       - BearerAuth: []
+ *     tags:
+ *       - SCHEDULE SECTION
+ *     responses:
+ *       '200':
+ *         description: Successful response with schedule history
+ *       '400':
+ *         description: Bad request
+ */
+/**
+ * @swagger
+ * /api/auth/notification/get-history:
+ *   get:
+ *     summary: Get notification history by user ID
+ *     description: Retrieve notification history for a user by their ID
+ *     tags:
+ *       - NOTIFICATION SECTION
+ *     responses:
+ *       '200':
+ *         description: Successful response with notification history
+ *       '400':
+ *         description: Bad request
+ */
+router.get(
+  '/api/auth/notification/get-history',
+  notificationController.getNotificationHistoryByUserId,
+);
+
+router.get(
+  '/api/auth/schedule/get-history',
+  scheduleController.getScheduleHistoryByUserId,
+);
 export default router;
