@@ -1,6 +1,6 @@
 import * as chatDAL from '../DAL/chatDAL.js';
 import * as userDAL from '../DAL/userDAL.js';
-import * as firebaseHelder from '../utility/FirebaseHelper.js';
+import * as firebaseHelper from '../utility/FirebaseHelper.js';
 import { v4 as uuidv4 } from 'uuid';
 
 export async function saveMessage(messageData) {
@@ -11,7 +11,7 @@ export async function saveMessage(messageData) {
   const [userTo] = await userDAL.getUserInfoById(to);
   const title = `CHAT FEATURE`;
   const body = `${messageContent} by ${userFrom.user_name}`;
-  await firebaseHelder.sendNotification(userTo.token, title, body);
+  await firebaseHelper.sendNotification(userTo.token_id, title, body);
   return messageId;
 }
 export async function getChatHistory(userIdFrom, userIdTo, limit, offset) {
