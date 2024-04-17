@@ -1,4 +1,4 @@
-import { Schedule, SequelizeInstance } from '../utility/DbHelper.js';
+import { Schedule, SequelizeInstance, Rating } from '../utility/DbHelper.js';
 
 export async function createSchedule(schedule_id, dataObj) {
   return await Schedule.create({
@@ -97,4 +97,14 @@ WHERE
     raw: true,
   });
   return userDetails;
+}
+
+export async function createRating(rating_id, loginUser, dataObj) {
+  return await Rating.create({
+    schedule_id: dataObj.schedule_id,
+    content: dataObj.content,
+    rating_id: rating_id,
+    user_id: loginUser,
+    rating: dataObj.rating,
+  });
 }

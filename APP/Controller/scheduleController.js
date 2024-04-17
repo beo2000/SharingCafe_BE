@@ -60,3 +60,18 @@ export async function getScheduleHistoryByUserId(req, res) {
     res.status(500).send({ error: error.message });
   }
 }
+
+export async function createRating(req, res) {
+  try {
+    const loginUser = req.loginUser.user_id;
+    const dataObj = req.body;
+    const result = await scheduleService.createRating(
+      loginUser,
+      dataObj,
+    );
+    res.status(200).send(result);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ error: error.message });
+  }
+}
