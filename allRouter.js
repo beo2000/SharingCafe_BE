@@ -3066,6 +3066,42 @@ router.put('/api/moderator/event/:eventId', modController.censorEvent);
  *       '500':
  *         description: Internal Server Error
  */
+/**
+ * @swagger
+ * /api/auth/schedule/rating:
+ *   post:
+ *     summary: Rating a meeting
+ *     tags:
+ *      - SCHEDULE SECTION
+ *     security:
+ *       - BearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               schedule_id:
+ *                 type: string
+ *                 description: ID of the schedule for rating
+ *                 example: "d1463c77-80b3-498d-8a70-af2bad9fba04"
+ *               content:
+ *                 type: string
+ *                 description: User's feedback about meeting and other user
+ *                 example: "Tiến đi trễ tầm 15p nên 2* thôi nha"
+ *               rating:
+ *                 type: string
+ *                 description: Rating of the meeting
+ *                 example: "2"
+ *     responses:
+ *       '201':
+ *         description: Rating created successfully
+ *       '400':
+ *         description: Bad request, e.g., missing parameters
+ *       '500':
+ *         description: Internal server error
+ */
 router.put('/api/user/schedule/status', scheduleController.changeStatus);
 router.get('/api/match/user-status/count', matchController.countUserByStatus);
 router.get(
@@ -3087,6 +3123,7 @@ router.get(
   '/api/auth/user/schedule/:anotherUserId',
   scheduleController.getScheduleBetweenUsers,
 );
+router.post('/api/auth/schedule/rating', scheduleController.createRating);
 /**
  * @swagger
  * tags:

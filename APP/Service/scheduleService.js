@@ -29,3 +29,8 @@ export async function changeStatus(dataObj) {
 export async function getScheduleHistoryByUserId(dataObj) {
   return await scheduleDAL.getScheduleHistoryByUserId(dataObj);
 }
+
+export async function createRating(loginUser,dataObj) {
+  const rating_id = uuidv4();
+  return await scheduleDAL.createRating(rating_id, loginUser, dataObj);
+}
