@@ -99,6 +99,32 @@ WHERE
   return userDetails;
 }
 
+export async function getScheduleById(scheduleId) {
+  const sqlQuery = `
+  SELECT
+  u.user_name as user_from,
+  u.token_id as user_from_token,
+  u2.user_name as user_to,
+  u2.token_id as user_token_token,
+  'The schedule ' || s.content || ' occurring at ' || s.schedule_time || ' has been updated as ' || now()  as message
+FROM
+  public.schedule s
+inner join public.user u
+on u.user_id = s.sender_id
+inner join public.user u2
+on u2.user_id = s.receiver_id
+WHERE
+  schedule_id = '${scheduleId}'
+  `;
+
+  const userDetails = await SequelizeInstance.query(sqlQuery, {
+    type: SequelizeInstance.QueryTypes.SELECT,
+    raw: true,
+  });
+
+  return userDetails;
+}
+
 export async function createRating(rating_id, loginUser, dataObj) {
   return await Rating.create({
     schedule_id: dataObj.schedule_id,

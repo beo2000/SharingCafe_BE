@@ -26,3 +26,15 @@ export async function getNotificationHistoryByUserId(req, res, next) {
     res.status(500).send(e);
   }
 }
+
+export async function sendNotificationForSchedule(req, res) {
+  try {
+    const result = await notificationService.sendNotificationForSchedule(req);
+    res.send({
+      "result": result,
+    });
+  } catch (e) {
+    console.log(e);
+    res.status(500).send(e);
+  }
+}

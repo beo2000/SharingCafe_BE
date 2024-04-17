@@ -3388,6 +3388,30 @@ router.get(
   notificationController.getNotificationHistoryByUserId,
 );
 
+/**
+ * @swagger
+ * /api/notifications/sendNotificationForSchedule:
+ *   get:
+ *     summary: Send notification for schedule
+ *     description: Send notification for schedule
+ *     tags:
+ *       - NOTIFICATION SECTION
+ *     parameters:
+ *       - in: query
+ *         name: scheduleId
+ *         required: true
+ *         description: id schedule
+ *         example: d1463c77-80b3-498d-8a70-af2bad9fba04
+ *         schema:
+ *           type: string
+ *     responses:
+ *       '200':
+ *         description: Successful response with notification
+ *       '400':
+ *         description: Bad request
+ */
+router.get('/api/notifications/sendNotificationForSchedule', notificationController.sendNotificationForSchedule);
+
 router.get(
   '/api/auth/schedule/get-history',
   scheduleController.getScheduleHistoryByUserId,
