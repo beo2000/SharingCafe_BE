@@ -3463,6 +3463,8 @@ router.get('/test-notification', notificationController.sendNotification);
  *   get:
  *     summary: Get notification history by user ID
  *     description: Retrieve notification history for a user by their ID
+ *     security:
+ *       - BearerAuth: []
  *     tags:
  *       - NOTIFICATION SECTION
  *     responses:
