@@ -159,3 +159,28 @@ export async function updateLocation(req, res) {
     res.status(500).send({ error: error.message });
   }
 }
+
+export async function getDistrict(req, res) {
+  try {
+    const provinceId = req.query.province_id;
+    const result = await axios.get(
+    `
+      https://esgoo.net/api-tinhthanh/2/${provinceId}.htm
+    `
+    );
+    return res.status(200).send(result.data);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+}
+
+export async function getProvince(req, res) {
+  try {
+    const result = await userService.getProvince();
+    res.status(200).send(result);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ error: error.message });
+  }
+}

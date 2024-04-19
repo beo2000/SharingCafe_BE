@@ -227,6 +227,37 @@ router.get('/api/admin/schedule-list', admController.getScheduleList);
  */
 /**
  * @swagger
+ * /api/user/confirmVerificationEmail:
+ *   get:
+ *     summary: Check the email has been verified
+ *     description: Check the email has been verified
+ *     tags:
+ *       - USER SECTION
+ *     parameters:
+ *       - in: query
+ *         name: email
+ *         required: true
+ *         description: email
+ *         schema:
+ *           type: string
+ *         example: phutrong12d@gmail.com
+ *       - in: query
+ *         name: password
+ *         required: true
+ *         description: password
+ *         schema:
+ *           type: string
+ *         example: pass123
+ *     responses:
+ *       '200':
+ *         description: Successful login
+ *       '401':
+ *         description: Unauthorized - Invalid credentials
+ *       '500':
+ *         description: Internal Server Error
+ */
+/**
+ * @swagger
  * /api/user/interest/{userInterestId}:
  *   get:
  *     summary: Get a specific user interest by ID
@@ -705,6 +736,7 @@ router.get('/api/user/interest/:userInterestId', userController.getInterest);
 router.put('/api/user/interest/:userInterestId', userController.updateInterest);
 router.delete('/api/user/interest', userController.deleteInterest);
 router.post('/api/user/register', userController.register);
+router.get('/api/user/confirmVerificationEmail', userController.confirmVerificationEmail);
 
 // swagger for getProfile
 /**
@@ -1060,7 +1092,10 @@ router.get('/api/auth/user/events/suggest', userController.getSuggestEvent);
 router.get('/api/auth/user/event', eventController.getUserEvent);
 router.post('/api/auth/user/event/join-event', eventController.joinEvent);
 router.put('/api/auth/user/event/leave-event', eventController.leaveEvent);
-router.get('/api/auth/user/event/event-participants', eventController.getEventParticipants);
+router.get(
+  '/api/auth/user/event/event-participants',
+  eventController.getEventParticipants,
+);
 /**
  * @swagger
  * /api/interest:
@@ -3031,6 +3066,42 @@ router.get('/api/test', locationController.getMiddlePoint);
  *       '500':
  *         description: Internal Server Error
  */
+/**
+ * @swagger
+ * /api/auth/schedule/rating:
+ *   post:
+ *     summary: Rating a meeting
+ *     tags:
+ *      - SCHEDULE SECTION
+ *     security:
+ *       - BearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               schedule_id:
+ *                 type: string
+ *                 description: ID of the schedule for rating
+ *                 example: "d1463c77-80b3-498d-8a70-af2bad9fba04"
+ *               content:
+ *                 type: string
+ *                 description: User's feedback about meeting and other user
+ *                 example: "Tiến đi trễ tầm 15p nên 2* thôi nha"
+ *               rating:
+ *                 type: string
+ *                 description: Rating of the meeting
+ *                 example: "2"
+ *     responses:
+ *       '201':
+ *         description: Rating created successfully
+ *       '400':
+ *         description: Bad request, e.g., missing parameters
+ *       '500':
+ *         description: Internal server error
+ */
 router.put('/api/user/schedule/status', scheduleController.changeStatus);
 router.get('/api/match/user-status/count', matchController.countUserByStatus);
 router.get(
@@ -3052,6 +3123,7 @@ router.get(
   '/api/auth/user/schedule/:anotherUserId',
   scheduleController.getScheduleBetweenUsers,
 );
+router.post('/api/auth/schedule/rating', scheduleController.createRating);
 /**
  * @swagger
  * tags:
@@ -3107,6 +3179,8 @@ router.get(
  *   get:
  *     summary: Get chat history
  *     description: Retrieve chat history based on userId, with pagination using limit and offset.
+ *     tags:
+ *       - CHAT SECTION
  *     security:
  *       - BearerAuth: []
  *     parameters:
@@ -3147,6 +3221,8 @@ router.get(
   '/api/location/getRecommendCafe',
   locationController.getRecommendCafe,
 );
+router.get('/api/location/getDistrict', locationController.getDistrict);
+router.get('/api/location/getProvince', locationController.getProvince);
 /**
  * @swagger
  * /api/location/updateCurrentLocation:
@@ -3265,5 +3341,111 @@ router.get(
  *       '500':
  *         description: An internal server error occurred.
  */
+
+/**
+ * @swagger
+ * /api/location/getProvince:
+ *   get:
+ *     summary: Get Vietnam province and it id
+ *     description: Retrieve Vietnam province and it id
+ *     tags:
+ *      - LOCATION SECTION
+ *     responses:
+ *       '200':
+ *         description: Successfully retrieved province.
+ *       '400':
+ *         description: Bad request. Invalid parameters provided.
+ *       '500':
+ *         description: An internal server error occurred.
+ */
+
+/**
+ * @swagger
+ * /api/location/getDistrict:
+ *   get:
+ *     summary: Get all district of a province by province id
+ *     description: Retrieve all district of a province
+ *     tags:
+ *      - LOCATION SECTION
+ *     parameters:
+ *       - in: query
+ *         name: province_id
+ *         required: true
+ *         description: id of province
+ *         example: 79
+ *         schema:
+ *           type: string
+ *     responses:
+ *       '200':
+ *         description: Successfully retrieved district.
+ *       '400':
+ *         description: Bad request. Invalid parameters provided.
+ *       '500':
+ *         description: An internal server error occurred.
+ */
 router.get('/test-notification', notificationController.sendNotification);
+
+/**
+ * @swagger
+ * /api/auth/schedule/get-history:
+ *   get:
+ *     summary: Get schedule history by user ID
+ *     description: Retrieve schedule history for a user by their ID
+ *     security:
+ *       - BearerAuth: []
+ *     tags:
+ *       - SCHEDULE SECTION
+ *     responses:
+ *       '200':
+ *         description: Successful response with schedule history
+ *       '400':
+ *         description: Bad request
+ */
+/**
+ * @swagger
+ * /api/auth/notification/get-history:
+ *   get:
+ *     summary: Get notification history by user ID
+ *     description: Retrieve notification history for a user by their ID
+ *     tags:
+ *       - NOTIFICATION SECTION
+ *     responses:
+ *       '200':
+ *         description: Successful response with notification history
+ *       '400':
+ *         description: Bad request
+ */
+router.get(
+  '/api/auth/notification/get-history',
+  notificationController.getNotificationHistoryByUserId,
+);
+
+/**
+ * @swagger
+ * /api/notifications/sendNotificationForSchedule:
+ *   get:
+ *     summary: Send notification for schedule
+ *     description: Send notification for schedule
+ *     tags:
+ *       - NOTIFICATION SECTION
+ *     parameters:
+ *       - in: query
+ *         name: scheduleId
+ *         required: true
+ *         description: id schedule
+ *         example: d1463c77-80b3-498d-8a70-af2bad9fba04
+ *         schema:
+ *           type: string
+ *     responses:
+ *       '200':
+ *         description: Successful response with notification
+ *       '400':
+ *         description: Bad request
+ */
+router.get('/api/notifications/sendNotificationForSchedule', notificationController.sendNotificationForSchedule);
+
+router.get(
+  '/api/auth/schedule/get-history',
+  scheduleController.getScheduleHistoryByUserId,
+);
 export default router;

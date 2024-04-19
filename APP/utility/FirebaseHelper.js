@@ -1,8 +1,24 @@
 import { getMessaging } from 'firebase-admin/messaging';
+import { initializeApp } from 'firebase/app';
+import { getAuth, createUserWithEmailAndPassword, sendEmailVerification, onAuthStateChanged, signInWithEmailAndPassword } from 'firebase/auth';
+// Firebase project configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyBLcZ_QKCpYSHSr8o4DYFoG2xrInQ8y4zE",
+  authDomain: "sharing-coffee.firebaseapp.com",
+  projectId: "sharing-coffee",
+  storageBucket: "sharing-coffee.appspot.com",
+  messagingSenderId: "11188755522",
+  appId: "1:11188755522:web:b54b787b94338a0ee3a1db"
+};
+
+// Initialize Firebase App
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 
 // Function to send a notification
 export async function sendNotification(token, title, body) {
   try {
+    if (!token) return;
     const message = {
       notification: {
         title: title,
@@ -49,3 +65,30 @@ export async function sendNotificationToMultipleDevices(tokens, title, body) {
     throw error;
   }
 }
+
+// Function to register user and send verification email
+export const registerUser = async (email, password) => {
+  try {
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    const user = userCredential.user;
+    await sendEmailVerification(user);
+    console.log('Verification email sent.');
+  } catch (error) {
+    console.error('Error registering user:', error.message);
+  }
+};
+
+// check an email has verificated
+export const checkEmailVerified = async (email, password) => {
+  try {
+    const userCredential = await signInWithEmailAndPassword(auth ,email, password);
+    console.log(userCredential.user);
+    if (userCredential.user.emailVerified) {
+      return true;
+    }
+    return false;
+  } catch (error) {
+    console.error('Error checking email verification:', error.message);
+    throw error;
+  }
+};

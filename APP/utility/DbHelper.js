@@ -792,6 +792,58 @@ const LikeBlog = sequelize.define(
   },
 );
 
+const Province = sequelize.define(
+  'province',
+  {
+    province_id: {
+      type: DataTypes.TEXT,
+      primaryKey: true,
+    },
+    province: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+    },
+  },
+  {
+    tableName: 'province',
+    timestamps: false,
+  },
+);
+
+const Rating = sequelize.define(
+  'rating',
+  {
+    rating_id: {
+      type: DataTypes.UUID,
+      primaryKey: true,
+      defaultValue: DataTypes.UUIDV4,
+    },
+    schedule_id: {
+      type: DataTypes.UUID,
+      allowNull: false,
+    },
+    user_id: {
+      type: DataTypes.UUID,
+      allowNull: false,
+    },
+    rating: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+    },
+    content: {
+      type: DataTypes.TEXT,
+    },
+    created_at: {
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW,
+    },
+  },
+  {
+    tableName: 'rating',
+    timestamps: false,
+  },
+);
+
 User.belongsTo(Role, { foreignKey: 'role_id', as: 'UserRole' });
 
 EventReport.belongsTo(User, { foreignKey: 'reporter_id', as: 'reporter' });
@@ -869,4 +921,6 @@ export {
   FreeTime,
   FavoriteDrink,
   UserReport,
+  Province,
+  Rating,
 };
