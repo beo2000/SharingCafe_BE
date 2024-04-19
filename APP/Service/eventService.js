@@ -1,5 +1,5 @@
 import * as eventDAL from '../DAL/eventDAL.js';
-import * as commonFunction from '../common/CommonFunction.js';
+import * as commonFunction from '../common/CommonFunctions.js';
 import * as firebaseHelper from '../utility/FirebaseHelper.js';
 import { v4 as uuidv4 } from 'uuid';
 import fs from 'fs';

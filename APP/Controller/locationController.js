@@ -55,19 +55,6 @@ export async function updateCurrentLocation(req, res) {
 
 export async function getDistance(req, res) {
   // sửa thành db
-  try {
-    const originsLAT = req.query.originsLAT;
-    const originsLNG = req.query.originsLNG;
-    const destinationsLAT = req.query.destinationsLAT;
-    const destinationsLNG = req.query.destinationsLNG;
-    var response = await userService.getDistance(originsLAT, originsLNG, destinationsLAT, destinationsLNG);
-    res.status(200).json(response.data);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-}
-
 // Hàm tính tọa độ điểm ở giữa của một khoảng cách trên mặt cầu
 function tinhDiemGiuaCuaKhoangCach(lat1, lon1, lat2, lon2) {
   const toRadians = (degrees) => degrees * (Math.PI / 180);
@@ -94,8 +81,8 @@ function tinhDiemGiuaCuaKhoangCach(lat1, lon1, lat2, lon2) {
   const lngMiddle = (lon1 + lon2) / 2;
 
   return { lat: latMiddle, lng: lngMiddle };
+  }
 }
-
 export async function getMiddlePoint(req, res) {
   try {
     const userIdA = req.query.userIdA;

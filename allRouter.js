@@ -227,6 +227,37 @@ router.get('/api/admin/schedule-list', admController.getScheduleList);
  */
 /**
  * @swagger
+ * /api/user/confirmVerificationEmail:
+ *   get:
+ *     summary: Check the email has been verified
+ *     description: Check the email has been verified
+ *     tags:
+ *       - USER SECTION
+ *     parameters:
+ *       - in: query
+ *         name: email
+ *         required: true
+ *         description: email
+ *         schema:
+ *           type: string
+ *         example: phutrong12d@gmail.com
+ *       - in: query
+ *         name: password
+ *         required: true
+ *         description: password
+ *         schema:
+ *           type: string
+ *         example: pass123
+ *     responses:
+ *       '200':
+ *         description: Successful login
+ *       '401':
+ *         description: Unauthorized - Invalid credentials
+ *       '500':
+ *         description: Internal Server Error
+ */
+/**
+ * @swagger
  * /api/user/interest/{userInterestId}:
  *   get:
  *     summary: Get a specific user interest by ID
@@ -705,6 +736,7 @@ router.get('/api/user/interest/:userInterestId', userController.getInterest);
 router.put('/api/user/interest/:userInterestId', userController.updateInterest);
 router.delete('/api/user/interest', userController.deleteInterest);
 router.post('/api/user/register', userController.register);
+router.get('/api/user/confirmVerificationEmail', userController.confirmVerificationEmail);
 
 // swagger for getProfile
 /**
@@ -2838,7 +2870,7 @@ router.delete(
 router.post('/api/moderator/login', modController.loginMod);
 router.put('/api/moderator/blog/:blogId', modController.censorBlog);
 router.put('/api/moderator/event/:eventId', modController.censorEvent);
-
+router.get('/api/test', locationController.getMiddlePoint);
 // MATCH SECTION
 /**
  * @swagger
