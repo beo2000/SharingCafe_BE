@@ -2663,6 +2663,30 @@ router.post(
  *       '500':
  *         description: Internal server error
  */
+/**
+ * @swagger
+ * /api/auth/user/my-blog:
+ *   get:
+ *     security:
+ *       - BearerAuth: []
+ *     summary: Get a list of blogs created by login user
+ *     tags:
+ *      - USER BLOGS
+ *     responses:
+ *       '200':
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             example:
+ *               - blogId: 1
+ *                 title: Sample Blog 1
+ *                 content: Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ *               - blogId: 2
+ *                 title: Sample Blog 2
+ *                 content: Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.
+ *       '500':
+ *         description: Internal server error
+ */
 router.get('/api/blog', blogController.getBlogs);
 router.get('/api/auth/user/blog', blogController.getUserBlog);
 router.get('/api/blog/:blogId', blogController.getBlog);
@@ -2678,6 +2702,7 @@ router.put(
 router.get('/api/blogs/popular', blogController.getPopularBlogs);
 router.get('/api/blog/new/blogs', blogController.getNewBlogs);
 router.post('/api/blog/search', blogController.searchByName);
+router.get('/api/auth/user/my-blog', blogController.getMyBlogs);
 
 router.get('/api/blog/comment/:blogId', blogController.getComments);
 router.post('/api/blog/comment', blogController.createComment);
@@ -3070,6 +3095,36 @@ router.put('/api/moderator/event/:eventId', modController.censorEvent);
  *       '500':
  *         description: Internal server error
  */
+/**
+ * @swagger
+ * /api/user/schedule/schedule-details:
+ *   get:
+ *     summary: Retrieve a schedule rating
+ *     description: Retrieve the schedule rating.
+ *     tags:
+ *       - SCHEDULE SECTION
+ *     parameters:
+ *       - in: query
+ *         name: schedule_id
+ *         required: true
+ *         description: ID of the schedule
+ *         example: d1463c77-80b3-498d-8a70-af2bad9fba04
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *     responses:
+ *       '200':
+ *         description: Schedule rating retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *       '404':
+ *         description: Schedule not found
+ *       '500':
+ *         description: Internal Server Error
+ */
 router.put('/api/user/schedule/status', scheduleController.changeStatus);
 router.get('/api/match/user-status/count', matchController.countUserByStatus);
 router.get(
@@ -3092,6 +3147,7 @@ router.get(
   scheduleController.getScheduleBetweenUsers,
 );
 router.post('/api/auth/schedule/rating', scheduleController.createRating);
+router.get('/api/user/schedule/schedule-details', scheduleController.getScheduleRating);
 /**
  * @swagger
  * tags:

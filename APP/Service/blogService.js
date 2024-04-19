@@ -93,3 +93,7 @@ export async function getBlogUrl(blog_id){
 export async function getUserBlog(page, title){
     return await blogDAL.getUserBlog(page, title);
 }
+
+export async function getMyBlogs(userId){
+    return await blogDAL.getMyBlogs(userId);
+}

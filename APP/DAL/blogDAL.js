@@ -402,3 +402,31 @@ export async function getUserBlog(page, title) {
   });
   return result;
 }
+
+export async function getMyBlogs(userId) {
+  const sqlQuery = `
+  select 
+	  b.blog_id,
+	  u.user_name,
+	  b.title,
+	  b."content",
+	  b.likes_count,
+	  b.comments_count,
+	  b.image,
+	  b.is_approve,
+	  b.is_visible,
+	  i."name",
+	  b.created_at 
+  from blog b 
+  left join "user" u 
+  on u.user_id = b.user_id
+  left join interest i 
+  on b.interest_id = i.interest_id 
+  where u.user_id = '${userId}'
+  `;
+  const result = await SequelizeInstance.query(sqlQuery, {
+    type: SequelizeInstance.QueryTypes.SELECT,
+    raw: true,
+  });
+  return result;
+}
