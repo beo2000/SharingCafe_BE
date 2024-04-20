@@ -5,7 +5,9 @@ import { v4 as uuidv4 } from 'uuid';
 
 export async function saveMessage(messageData) {
   const messageId = uuidv4();
+  const [block] = await userDAL.getBlockCouple(messageData);
   await chatDAL.saveMessage(messageId, messageData);
+  if (block) return null;
   const { from, to, messageContent } = messageData;
   const [userFrom] = await userDAL.getUserInfoById(from);
   const [userTo] = await userDAL.getUserInfoById(to);
