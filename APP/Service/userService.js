@@ -1,6 +1,8 @@
 import { Error } from 'sequelize';
 import * as userDAL from '../DAL/userDAL.js';
 import * as matchDAL from '../DAL/matchDAL.js';
+import * as scheduleDAL from '../DAL/scheduleDAL.js';
+
 import * as commonEnum from '../common/CommonEnums.js';
 import * as commonFunction from '../common/CommonFunctions.js';
 import { v4 as uuidv4 } from 'uuid';
@@ -467,7 +469,7 @@ export async function blockingAUser(userId, blockedId) {
   const [userCurrent] = await userDAL.getUserInfoById(userId);
   const [userLiked] = await userDAL.getUserInfoById(blockedId);
   const status = await matchDAL.getMatchStatus();
-  const [match] = await matchDAL.getMatchCouple(userId, dataObj.user_id);
+  const [match] = await matchDAL.getMatchCouple(userId, blockedId);
   console.log(match);
   const upsertOnly = !match;
   const user_match_id = match ? match.user_match_id : uuidv4();
@@ -480,10 +482,11 @@ export async function blockingAUser(userId, blockedId) {
   await matchDAL.upsertMatch(
     user_match_id,
     userId,
-    dataObj.user_id,
+    blockedId,
     statusStage.user_match_status_id,
     upsertOnly,
   );
+  await scheduleDAL.canceledSchedule(userId, blockedId);
   return await userDAL.blockingAUser(userId, blockedId);
 }
 
