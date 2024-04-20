@@ -1120,7 +1120,9 @@ and ub.blocker_id = :userId
 
 export async function blockingAUser(userId, blockedId) {
   const sqlQuery = `
-  INSERT INTO public.user_block (blocker_id, blocked_id, created_at) VALUES(:userId, :blockedId, now());
+  INSERT INTO public.user_block (blocker_id, blocked_id, created_at)
+VALUES (:userId, :blockedId, now())
+ON CONFLICT (blocker_id, blocked_id) DO NOTHING;
   `;
   const result = await SequelizeInstance.query(sqlQuery, {
     replacements: { userId, blockedId },
@@ -1144,7 +1146,7 @@ export async function unBlockingAUser(userId, blockedId) {
 export async function getBlockCouple(messageData) {
   const { from, to } = messageData;
   const sqlQuery = `
-      SELECT 1
+      SELECT *
       FROM public.user_block
       WHERE (blocker_id = '${from}' AND blocked_id = '${to}')
           OR (blocker_id = '${to}' AND blocked_id = '${from}')

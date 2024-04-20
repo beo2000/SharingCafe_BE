@@ -464,6 +464,26 @@ export async function getUserBlockedByUser(userId) {
   return await userDAL.getUserBlockedByUser(userId);
 }
 export async function blockingAUser(userId, blockedId) {
+  const [userCurrent] = await userDAL.getUserInfoById(userId);
+  const [userLiked] = await userDAL.getUserInfoById(blockedId);
+  const status = await matchDAL.getMatchStatus();
+  const [match] = await matchDAL.getMatchCouple(userId, dataObj.user_id);
+  console.log(match);
+  const upsertOnly = !match;
+  const user_match_id = match ? match.user_match_id : uuidv4();
+  const statusStage =
+    !match &&
+    status.filter(
+      (e) => e.user_match_status === commonEnum.MATCH_STATUS.DISLIKE,
+    )[0];
+  console.log(statusStage);
+  await matchDAL.upsertMatch(
+    user_match_id,
+    userId,
+    dataObj.user_id,
+    statusStage.user_match_status_id,
+    upsertOnly,
+  );
   return await userDAL.blockingAUser(userId, blockedId);
 }
 
