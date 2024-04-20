@@ -1092,3 +1092,46 @@ export async function getProvince() {
   });
   return result;
 }
+export async function getUserBlockedByUser(userId) {
+  const sqlQuery = `
+  select 
+  u.user_id,
+  u.user_name,
+  u.email,
+  u.profile_avatar
+from "user" u 
+inner join user_block ub 
+on blocked_id = u.user_id 
+and ub.blocker_id = :userId
+  `;
+  const result = await SequelizeInstance.query(sqlQuery, {
+    replacements: { userId },
+    type: SequelizeInstance.QueryTypes.SELECT,
+    raw: true,
+  });
+  return result;
+}
+
+export async function blockingAUser(userId, blockedId) {
+  const sqlQuery = `
+  INSERT INTO public.user_block (blocker_id, blocked_id, created_at) VALUES(:userId, :blockedId, now());
+  `;
+  const result = await SequelizeInstance.query(sqlQuery, {
+    replacements: { userId, blockedId },
+    type: SequelizeInstance.QueryTypes.SELECT,
+    raw: true,
+  });
+  return result;
+}
+export async function unBlockingAUser(userId, blockedId) {
+  const sqlQuery = `
+    DELETE FROM public.user_block 
+    WHERE blocker_id = :userId AND blocked_id = :blockedId
+  `;
+  const result = await SequelizeInstance.query(sqlQuery, {
+    replacements: { userId, blockedId },
+    type: SequelizeInstance.QueryTypes.DELETE, // Changed QueryTypes.SELECT to QueryTypes.DELETE
+    raw: true,
+  });
+  return result;
+}

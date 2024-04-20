@@ -459,3 +459,14 @@ export async function getMiniUser(userId) {
 export async function getProvince() {
   return await userDAL.getProvince();
 }
+
+export async function getUserBlockedByUser(userId) {
+  return await userDAL.getUserBlockedByUser(userId);
+}
+export async function blockingAUser(userId, blockedId) {
+  return await userDAL.blockingAUser(userId, blockedId);
+}
+
+export async function unBlockingAUser(userId, blockedId) {
+  return await userDAL.unBlockingAUser(userId, blockedId);
+}
