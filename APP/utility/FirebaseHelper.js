@@ -36,7 +36,6 @@ export async function sendNotification(token, title, body) {
     return response;
   } catch (error) {
     console.error('Error sending message:', error);
-    throw error;
   }
 }
 export async function sendNotificationToMultipleDevices(tokens, title, body) {
