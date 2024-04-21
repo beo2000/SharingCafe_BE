@@ -134,3 +134,67 @@ export async function createRating(rating_id, loginUser, dataObj) {
     rating: dataObj.rating,
   });
 }
+
+export async function getScheduleRating(scheduleId) {
+  const sqlQuery = `
+  SELECT
+  	s.schedule_id,
+	s."content",
+	s.schedule_time,
+	s.is_accept,
+	s.created_at,
+	s."location",
+	jsonb_agg(
+  			jsonb_build_object(
+  			'rating_id', r.rating_id ,
+  			'user_id', u.user_id ,
+  			'user_name', u.user_name ,
+  			'profile_avatar', u.profile_avatar ,
+  			'content', r."content"  ,
+  			'rating', r.rating
+  			) 
+  		) as rating
+FROM
+   schedule s
+FULL JOIN
+	rating r 
+	on r.schedule_id = s.schedule_id
+LEFT JOIN 
+	"user" u 
+	on r.user_id = u.user_id 
+WHERE
+     s.schedule_id = '${scheduleId}'
+GROUP BY 
+ 	s.schedule_id, 
+ 	s."content", 
+ 	s.schedule_time, 
+ 	s.is_accept,
+	s.created_at,
+	s."location"
+  `;
+
+  const result = await SequelizeInstance.query(sqlQuery, {
+    type: SequelizeInstance.QueryTypes.SELECT,
+    raw: true,
+  });
+
+  return result;
+}
+
+export async function canceledSchedule(userId, blockedId) {
+  const sqlQuery = `
+    UPDATE public.schedule
+    SET is_accept = false
+    WHERE 
+      ((sender_id = :userId AND receiver_id = :blockedId) OR (sender_id = :blockedId AND receiver_id = :userId))
+      AND schedule_time >= NOW();
+  `;
+
+  const userDetails = await SequelizeInstance.query(sqlQuery, {
+    replacements: { userId, blockedId },
+    type: SequelizeInstance.QueryTypes.UPDATE,
+    raw: true,
+  });
+
+  return userDetails;
+}

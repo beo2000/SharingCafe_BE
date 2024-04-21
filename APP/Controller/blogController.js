@@ -226,3 +226,14 @@ export async function getUserBlog(req, res) {
     res.status(500).send({ error: error.message });
   }
 }
+
+export async function getMyBlogs(req, res) {
+  try {
+    const userId = req.loginUser.user_id;
+    const result = await blogService.getMyBlogs(userId);
+    res.status(200).send(result);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ error: error.message });
+  }
+}

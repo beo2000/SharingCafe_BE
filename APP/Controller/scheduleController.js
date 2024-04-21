@@ -75,3 +75,15 @@ export async function createRating(req, res) {
     res.status(500).send({ error: error.message });
   }
 }
+
+export async function getScheduleRating(req, res) {
+  try {
+    const scheduleId = req.query.schedule_id;
+    console.log(scheduleId);
+    const result = await scheduleService.getScheduleRating(scheduleId);
+     res.status(200).send(result);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ error: error.message });
+  }
+}

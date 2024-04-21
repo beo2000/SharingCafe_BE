@@ -111,8 +111,12 @@ io.on('connection', (socket) => {
   socket.on('message', async (data) => {
     console.log('Received data:', data);
     const messageId = await chatController.saveMessage(data);
-    const message = await chatController.getMessage(messageId);
-    io.emit('message', message);
+    if(!messageId) {
+      const message = await chatController.getMessage(messageId);
+      io.emit('message', message);
+    }else{
+      io.emit('message', "USER GOT BLOCKED");
+    }
   });
 });
 // Schedule the task to run every 5 minutes

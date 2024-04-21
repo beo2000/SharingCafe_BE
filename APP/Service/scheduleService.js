@@ -34,3 +34,7 @@ export async function createRating(loginUser,dataObj) {
   const rating_id = uuidv4();
   return await scheduleDAL.createRating(rating_id, loginUser, dataObj);
 }
+
+export async function getScheduleRating(scheduleId) {
+  return await scheduleDAL.getScheduleRating(scheduleId);
+}

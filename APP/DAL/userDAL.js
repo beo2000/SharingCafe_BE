@@ -634,10 +634,16 @@ FROM
     match_liked u
 WHERE 
     u.user_id <> '${userId}'
+    and u.user_id not in (select blocker_id from user_block ub where blocked_id = '${userId}')
+    and u.user_id not in (select blocked_id from user_block ub where blocker_id = '${userId}')
     UNION 
  select 
  *
 FROM total t
+  WHERE 
+    1=1
+    and t.user_id not in(select blocker_id from user_block ub where blocked_id = '${userId}')
+    and t.user_id not in (select blocked_id from user_block ub where blocker_id = '${userId}')
 limit ${limit} 
 offset ${offset}`;
 
@@ -1088,6 +1094,65 @@ export async function getProvince() {
   `;
   const result = await SequelizeInstance.query(sqlQuery, {
     type: SequelizeInstance.QueryTypes.SELECT,
+    raw: true,
+  });
+  return result;
+}
+export async function getUserBlockedByUser(userId) {
+  const sqlQuery = `
+  select 
+  u.user_id,
+  u.user_name,
+  u.email,
+  u.profile_avatar
+from "user" u 
+inner join user_block ub 
+on blocked_id = u.user_id 
+and ub.blocker_id = :userId
+  `;
+  const result = await SequelizeInstance.query(sqlQuery, {
+    replacements: { userId },
+    type: SequelizeInstance.QueryTypes.SELECT,
+    raw: true,
+  });
+  return result;
+}
+
+export async function blockingAUser(userId, blockedId) {
+  const sqlQuery = `
+  INSERT INTO public.user_block (blocker_id, blocked_id, created_at)
+VALUES (:userId, :blockedId, now())
+ON CONFLICT (blocker_id, blocked_id) DO NOTHING;
+  `;
+  const result = await SequelizeInstance.query(sqlQuery, {
+    replacements: { userId, blockedId },
+    type: SequelizeInstance.QueryTypes.SELECT,
+    raw: true,
+  });
+  return result;
+}
+export async function unBlockingAUser(userId, blockedId) {
+  const sqlQuery = `
+    DELETE FROM public.user_block 
+    WHERE blocker_id = :userId AND blocked_id = :blockedId
+  `;
+  const result = await SequelizeInstance.query(sqlQuery, {
+    replacements: { userId, blockedId },
+    type: SequelizeInstance.QueryTypes.DELETE, // Changed QueryTypes.SELECT to QueryTypes.DELETE
+    raw: true,
+  });
+  return result;
+}
+export async function getBlockCouple(messageData) {
+  const { from, to } = messageData;
+  const sqlQuery = `
+      SELECT *
+      FROM public.user_block
+      WHERE (blocker_id = '${from}' AND blocked_id = '${to}')
+          OR (blocker_id = '${to}' AND blocked_id = '${from}')
+    `;
+  const result = await SequelizeInstance.query(sqlQuery, {
+    type: SequelizeInstance.QueryTypes.INSERT,
     raw: true,
   });
   return result;
