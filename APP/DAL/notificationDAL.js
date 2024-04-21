@@ -16,16 +16,27 @@ order by n.created_at DESC
   return result;
 }
 
-export async function createNotification(userId, content) {
+export async function getNotificationNewStatus() {
+  const sqlQuery = `
+  select * from notification_status ns where notification_status = 'NEW'
+  `;
+  const result = await SequelizeInstance.query(sqlQuery, {
+    type: SequelizeInstance.QueryTypes.SELECT,
+    raw: true,
+  });
+  return result;
+}
+
+export async function createNotification(userId, content, statusId) {
   const sqlQuery = `
         INSERT INTO public.notification (notification_id, user_id, notification_status_id, created_at, content) 
-        VALUES (gen_random_uuid(), :userId, '7c29f5fb-8379-480e-87bb-78c4d1d76845'::uuid, now(), :content)
+        VALUES (gen_random_uuid(), :userId, :statusId, now(), :content)
         RETURNING *;
     `;
 
   try {
     const result = await SequelizeInstance.query(sqlQuery, {
-      replacements: { userId, content },
+      replacements: { userId, content, statusId },
       type: SequelizeInstance.QueryTypes.INSERT,
     });
     return result;

@@ -36,7 +36,6 @@ export async function register(user) {
     throw new Error('Email/Phone already in use 😕');
   }
   return await userDAL.register(userId, user);
-  
 }
 
 export async function getUser(userId) {
@@ -259,7 +258,15 @@ export async function getUserMatchByInterestPaging(userId, limit, offset) {
     offset,
   );
   result = result.map((e) => {
-    return { ...e, distance: commonFunctions.calculateDistance(e.lat, e.lng, user.lat, user.lng) };
+    return {
+      ...e,
+      distance: commonFunctions.calculateDistance(
+        e.lat,
+        e.lng,
+        user.lat,
+        user.lng,
+      ),
+    };
   });
   const list = await userDAL.getUserMatchByInterest(userId);
   return { total: list.length, limit, offset, data: result };
@@ -311,8 +318,19 @@ export async function updateUserMatchStatus(userId, dataObj) {
   const title = `MATCHING FEATURE`;
   const bodyCurrent = `MATCHING STATUS : ${statusStage.user_match_status} with ${userLiked.user_name}`;
   const bodyLike = `MATCHING STATUS : ${statusStage.user_match_status} by ${userCurrent.user_name}`;
-  await notificationDAL.createNotification(userId, bodyCurrent);
-  await notificationDAL.createNotification(dataObj.user_id, bodyLike);
+  const [newNotificationStatus] =
+    await notificationDAL.getNotificationNewStatus();
+
+  await notificationDAL.createNotification(
+    userId,
+    bodyCurrent,
+    newNotificationStatus.notification_status_id,
+  );
+  await notificationDAL.createNotification(
+    dataObj.user_id,
+    bodyLike,
+    newNotificationStatus.notification_status_id,
+  );
   firebaseHelper.sendNotification(userLiked.token_id, title, bodyLike);
   firebaseHelper.sendNotification(userCurrent.token_id, title, bodyCurrent);
 

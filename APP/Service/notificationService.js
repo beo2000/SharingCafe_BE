@@ -15,12 +15,20 @@ export async function sendNotificationForSchedule(req) {
     const receiverToken = schedule[0].user_token_token;
     const message = schedule[0].message;
     const notification = {
-      title: "Thông báo lịch hẹn",
+      title: 'Thông báo lịch hẹn',
       body: message,
     };
-    
-    firebaseHelper.sendNotification(receiverToken, notification.title, notification.body);
-    firebaseHelper.sendNotification(senderToken, notification.title, notification.body);
+
+    firebaseHelper.sendNotification(
+      receiverToken,
+      notification.title,
+      notification.body,
+    );
+    firebaseHelper.sendNotification(
+      senderToken,
+      notification.title,
+      notification.body,
+    );
   } catch (error) {
     console.error(error);
     return error;
