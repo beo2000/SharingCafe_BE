@@ -258,7 +258,7 @@ export async function getUserMatchByInterestPaging(userId, limit, offset) {
     offset,
   );
   result = result.map((e) => {
-    return { ...e, distance: commonFunctions(e.lat, e.lng, user.lat, user.lng) };
+    return { ...e, distance: commonFunctions.calculateDistance(e.lat, e.lng, user.lat, user.lng) };
   });
   const list = await userDAL.getUserMatchByInterest(userId);
   return { total: list.length, limit, offset, data: result };
