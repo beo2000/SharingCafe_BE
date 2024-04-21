@@ -612,8 +612,33 @@ u.user_id NOT IN (
     SELECT user_id_liked 
     FROM user_match um 
     WHERE current_user_id = '${userId}'
+  )
+), user_in_age_and_address as(
+  select 
+    u.user_id,
+    u.user_name,
+    u.phone,
+    u.email,
+    u.profile_avatar,
+    u.story,
+    u.registration,
+    u.gender,
+    u.age,
+    u.purpose,
+    u.favorite_location,
+    u.lat,
+    u.lng,
+    u.address,
+    u.token_id
+  from 
+    public.user u
+  where 1 = 1
+  and u.user_id <> '${userId}'
+  and u.age in (select age from "user" u2 where u2.user_id = '${userId}')
+  and u.address in (select address from "user" u2 where u2.user_id = '${userId}')
 )
-)
+select * from user_in_age_and_address
+union
 SELECT 
     u.user_id,
     u.user_name,

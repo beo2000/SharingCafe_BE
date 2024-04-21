@@ -36,7 +36,6 @@ export async function register(user) {
     throw new Error('Email/Phone already in use 😕');
   }
   return await userDAL.register(userId, user);
-  
 }
 
 export async function getUser(userId) {
@@ -259,7 +258,15 @@ export async function getUserMatchByInterestPaging(userId, limit, offset) {
     offset,
   );
   result = result.map((e) => {
-    return { ...e, distance: commonFunctions.calculateDistance(e.lat, e.lng, user.lat, user.lng) };
+    return {
+      ...e,
+      distance: commonFunctions.calculateDistance(
+        e.lat,
+        e.lng,
+        user.lat,
+        user.lng,
+      ),
+    };
   });
   const list = await userDAL.getUserMatchByInterest(userId);
   return { total: list.length, limit, offset, data: result };
@@ -313,8 +320,12 @@ export async function updateUserMatchStatus(userId, dataObj) {
   const bodyLike = `MATCHING STATUS : ${statusStage.user_match_status} by ${userCurrent.user_name}`;
   await notificationDAL.createNotification(userId, bodyCurrent);
   await notificationDAL.createNotification(dataObj.user_id, bodyLike);
-  firebaseHelper.sendNotification(userLiked.token_id, title, bodyLike);
-  firebaseHelper.sendNotification(userCurrent.token_id, title, bodyCurrent);
+  await firebaseHelper.sendNotification(userLiked.token_id, title, bodyLike);
+  await firebaseHelper.sendNotification(
+    userCurrent.token_id,
+    title,
+    bodyCurrent,
+  );
 
   return await matchDAL.getMatchCouple(userId, dataObj.user_id);
 }
