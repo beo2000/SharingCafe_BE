@@ -736,11 +736,6 @@ router.get('/api/admin/blog-statics', admController.getBlogStatics);
  *     tags:
  *       - USER SECTION
  *     parameters:
- *       - in: header
- *         name: Authorization
- *         description: JWT Token
- *         required: true
- *         type: string
  *     responses:
  *       '200':
  *         description: Success
@@ -765,27 +760,22 @@ router.get('/api/admin/blog-statics', admController.getBlogStatics);
  *   post:
  *     summary: Block User API
  *     description: API to block a user
+ *     operationId: blockUser
  *     security:
  *       - BearerAuth: []
  *     tags:
  *       - USER SECTION
- *     parameters:
- *       - in: header
- *         name: Authorization
- *         description: JWT Token
- *         required: true
- *         type: string
- *       - in: body
- *         name: blocked_id
- *         description: ID of the user to be blocked
- *         required: true
- *         schema:
- *           type: object
- *           properties:
- *             blocked_id:
- *               type: string
- *               format: uuid
- *               description: ID of the user to be blocked
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               blocked_id:
+ *                 type: string
+ *                 format: uuid
+ *                 description: ID of the user to be blocked
  *     responses:
  *       '200':
  *         description: User blocked successfully
@@ -811,11 +801,6 @@ router.get('/api/admin/blog-statics', admController.getBlogStatics);
  *     tags:
  *       - USER SECTION
  *     parameters:
- *       - in: header
- *         name: Authorization
- *         description: JWT Token
- *         required: true
- *         type: string
  *       - in: body
  *         name: body
  *         description: ID of the user to be unblocked
