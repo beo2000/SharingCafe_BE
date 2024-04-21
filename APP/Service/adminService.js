@@ -42,3 +42,7 @@ export async function getEventStatics() {
 export async function getScheduleList() {
   return await adminDAL.getScheduleList();
 }
+
+export async function getBlogStatics() {
+  return await adminDAL.getBlogStatics();
+}

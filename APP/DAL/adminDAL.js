@@ -184,3 +184,23 @@ export async function getScheduleList() {
   });
   return list;
 }
+
+export async function getBlogStatics() {
+  const sqlQuery = `
+  SELECT 
+  EXTRACT(YEAR FROM created_at) AS blog_year,
+  EXTRACT(MONTH FROM created_at) AS blog_month,
+  COUNT(*) AS blog_count
+FROM 
+  public."blog"
+GROUP BY 
+  blog_year, blog_month
+ORDER BY 
+  blog_year, blog_month;
+    `;
+  const statics = await SequelizeInstance.query(sqlQuery, {
+    type: SequelizeInstance.QueryTypes.SELECT,
+    raw: true,
+  });
+  return statics;
+}
