@@ -2,7 +2,7 @@ import { Error } from 'sequelize';
 import * as userDAL from '../DAL/userDAL.js';
 import * as matchDAL from '../DAL/matchDAL.js';
 import * as commonEnum from '../common/CommonEnums.js';
-import * as commonFunction from '../common/CommonFunctions.js';
+import * as commonFunctions from '../common/CommonFunctions.js';
 import { v4 as uuidv4 } from 'uuid';
 import * as firebaseHelper from '../utility/FirebaseHelper.js';
 import * as notificationDAL from '../DAL/notificationDAL.js';
@@ -256,7 +256,7 @@ export async function getUserMatchByInterestPaging(userId, limit, offset) {
     offset,
   );
   result = result.map((e) => {
-    return { ...e, distance: commonFunction(e.lat, e.lng, user.lat, user.lng) };
+    return { ...e, distance: commonFunctions(e.lat, e.lng, user.lat, user.lng) };
   });
   const list = await userDAL.getUserMatchByInterest(userId);
   return { total: list.length, limit, offset, data: result };
