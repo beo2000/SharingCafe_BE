@@ -287,7 +287,7 @@ export async function searchByName(title) {
 export async function getComments(blogId) {
   const sqlQuery = `
   select 
-    c.comment_id , c."content", u.user_id ,u.user_name , u.profile_avatar
+    c.comment_id , c."content", c.parent_comment_id, u.user_id ,u.user_name , u.profile_avatar
   from 
  	"comment" c
   join

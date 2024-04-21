@@ -32,10 +32,11 @@ export async function register(user) {
   let phone = user.phone;
   if (phone != null) {
     phone = await getUserByPhone(user.phone);
-  } else if (phone || email) {
-    throw new Error('Email already in use 😕');
+  } else if (phone != null || email != null) {
+    throw new Error('Email/Phone already in use 😕');
   }
   return await userDAL.register(userId, user);
+  
 }
 
 export async function getUser(userId) {

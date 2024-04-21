@@ -190,15 +190,15 @@ router.get('/api/admin/blog-statics', admController.getBlogStatics);
  *                 example: tienpmse140@gmail.com
  *               password:
  *                 type: string
- *                 example: pass
+ *                 example: pass1234
  *               user_name:
  *                 type: string
  *                 example: Huỳnh Minh Mẫn
  *               phone:
  *                 type: string
  *                 example: 012612375
- *               Bio:
- *                 type: Json
+ *               story:
+ *                 type: string
  *                 example: Chưa nghĩ ra được gì hay ho
  *     responses:
  *       '200':
@@ -232,7 +232,7 @@ router.get('/api/admin/blog-statics', admController.getBlogStatics);
  *                 example: User@123
  *               token:
  *                 type: string
- *                 example: xxx.com
+ *                 example: Iphone 15 promax
  *     responses:
  *       '200':
  *         description: Successful login
@@ -286,7 +286,7 @@ router.get('/api/admin/blog-statics', admController.getBlogStatics);
  *         description: ID of the user interest
  *         schema:
  *           type: string
- *         example: your-user-interest-id
+ *         example: b34d85ed-227f-4d4a-8c05-1b869af7cc52
  *     responses:
  *       '200':
  *         description: Successful response
@@ -943,7 +943,7 @@ router.get('/api/user/profile/:userId', userController.getProfile);
  *         description: ID of the interest to retrieve events for
  *         schema:
  *           type: string
- *         example: abfa4293-5d5e-4a8b-a1d1-ce3cab1c1285
+ *         example: 2372c3f9-cbb4-4a2a-9d7c-929dc5456f33
  *     responses:
  *       '200':
  *         description: Successfully retrieved events based on interest
@@ -1539,7 +1539,7 @@ router.get('/api/interest/count/blog', interestController.countBlogByInterest);
  * @swagger
  * /api/admin/user/{userId}:
  *   get:
- *     summary: Get admin user information by ID
+ *     summary: Get user information by ID
  *     tags:
  *       - ADMIN SECTION
  *     parameters:
@@ -1549,7 +1549,7 @@ router.get('/api/interest/count/blog', interestController.countBlogByInterest);
  *         description: ID of the admin user to retrieve
  *         schema:
  *           type: string
- *         example: 6150886b-5920-4884-8e43-d4efb62f89d3
+ *         example: 68ef7af9-28c1-46df-b2e8-df7657c7264b
  *     responses:
  *       '200':
  *         description: Successfully retrieved admin user information
@@ -1786,12 +1786,11 @@ router.put('/api/admin/event/:eventId', admController.updateEventStatus);
  *           example:
  *             organizer_id: "6150886b-5920-4884-8e43-d4efb62f89d3"
  *             interest_id: "7ebbd78e-9589-45f2-af64-d6713ad2e0a9"
- *             title: "Nude"
+ *             title: "Technology speaking"
  *             description: "Explore the latest advancements, insights, and collaborative discussions in the dynamic world of technology. Join us for a day of knowledge sharing, innovation, and community building as experts and enthusiasts come together to share ideas, trends, and experiences shaping the future of technology."
  *             time_of_event: "2024-02-29T17:00:00.000Z"
  *             location: "TP HCM"
- *             participants_count: 88
- *             is_approve: true
+ *             end_of_event: "2024-03-29T17:00:00.000Z"
  *             background_img: "https://res.cloudinary.com/dvepci5on/image/upload/v1708879045/sharing-coffee-images-storage/B-Tech-Degree_pfkflz.jpg"
  *     responses:
  *       201:

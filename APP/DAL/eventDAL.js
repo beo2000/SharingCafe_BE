@@ -86,6 +86,8 @@ export async function createEvent(eventId, dataObj) {
     background_img: dataObj.background_img,
     is_visible: dataObj.is_visible,
     interest_id: dataObj.interest_id,
+    is_visible: true,
+    participants_count: 0
   });
 }
 
@@ -139,6 +141,12 @@ export async function getNewEvents() {
     "user" u
     on u.user_id = e.organizer_id
     where (e.time_of_event >= '${date.toUTCString()}' or e.end_of_event >= '${date.toUTCString()}') and e.is_approve = true and e.is_visible = true
+    and not exists (
+      select 1
+      from public.user_block
+      where (blocker_id = u.user_id and blocked_id = e.organizer_id)
+          or (blocker_id = e.organizer_id and blocked_id = u.user_id)
+    )
   order by e.time_of_event
   `;
   const result = await SequelizeInstance.query(sqlQuery, {
@@ -163,6 +171,12 @@ export async function getEventsByDate(dateString) {
     "user" u
     on u.user_id = e.organizer_id
     where e.time_of_event >= '${date.toDateString()}'
+    and not exists (
+      select 1
+      from public.user_block
+      where (blocker_id = u.user_id and blocked_id = e.organizer_id)
+          or (blocker_id = e.organizer_id and blocked_id = u.user_id)
+    )
   order by e.time_of_event
   `;
   const result = await SequelizeInstance.query(sqlQuery, {
@@ -194,6 +208,12 @@ export async function getEventsByName(dataObj) {
     "user" u
     on u.user_id = e.organizer_id
   where (e.time_of_event >= '${date1.toUTCString()}' or e.end_of_event <= '${date1.toUTCString()}') and e.title  like '%${name}%'
+  and not exists (
+    select 1
+    from public.user_block
+    where (blocker_id = u.user_id and blocked_id = e.organizer_id)
+        or (blocker_id = e.organizer_id and blocked_id = u.user_id)
+  )
   `;
   const result = await SequelizeInstance.query(sqlQuery, {
     type: SequelizeInstance.QueryTypes.SELECT,
@@ -224,7 +244,13 @@ export async function getPopularEvents() {
   join
     "user" u
     on u.user_id = e.organizer_id
-  where (e.time_of_event >= '${date.toISOString()}' or e.end_of_event <= '${date.toISOString()}') and e.is_approve = true and e.is_visible = true
+  where e.end_of_event >= '${date.toISOString()}' and e.is_approve = true and e.is_visible = true
+  and not exists (
+    select 1
+    from public.user_block
+    where (blocker_id = u.user_id and blocked_id = e.organizer_id)
+        or (blocker_id = e.organizer_id and blocked_id = u.user_id)
+  )
   order by 
     e.time_of_event desc
     , e.participants_count desc
@@ -265,6 +291,12 @@ LEFT JOIN public."user" u
   ON ep.user_id = u.user_id
 WHERE 
   DATE(e.time_of_event) = CURRENT_DATE
+  and not exists (
+    select 1
+    from public.user_block
+    where (blocker_id = u.user_id and blocked_id = e.organizer_id)
+        or (blocker_id = e.organizer_id and blocked_id = u.user_id)
+  )
 GROUP BY 
   e.event_id, 
   e.organizer_id, 
@@ -316,6 +348,12 @@ export async function getUserEvent(title, date, page) {
       "user" u
       on u.user_id = e.organizer_id
       where (e.time_of_event >= '${date1.toDateString()}' or e.end_of_event >= '${date1.toDateString()}') and e.title  like '%${name}%' and e.is_approve = true and e.is_visible = true
+      and not exists (
+        select 1
+        from public.user_block
+        where (blocker_id = u.user_id and blocked_id = e.organizer_id)
+            or (blocker_id = e.organizer_id and blocked_id = u.user_id)
+      )
     offset ((${page} - 1) * 5) rows 
  	  fetch next 5 rows only
   `;
@@ -333,6 +371,12 @@ export async function getUserEvent(title, date, page) {
       "user" u
       on u.user_id = e.organizer_id
       where (e.time_of_event >= '${date1.toDateString()}' or e.end_of_event >= '${date1.toDateString()}') and e.title  like '%${name}%' and e.is_approve = true and e.is_visible = true
+      and not exists (
+        select 1
+        from public.user_block
+        where (blocker_id = u.user_id and blocked_id = e.organizer_id)
+            or (blocker_id = e.organizer_id and blocked_id = u.user_id)
+      )
     `;
   }
   const result = await SequelizeInstance.query(sqlQuery, {

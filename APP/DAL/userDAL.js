@@ -53,7 +53,7 @@ export async function register(userId, user) {
     password: user.password,
     phone: user.phone,
     email: user.email,
-    Bio: user.Bio,
+    story: user.story,
     gender: user.gender,
     age: user.age,
     is_available: true,
