@@ -721,6 +721,122 @@ router.get('/api/admin/blog-statics', admController.getBlogStatics);
  *       '500':
  *         description: Internal server error
  */
+/**
+ * @swagger
+ * tags:
+ *   - name: USER SECTION
+ *     description: Operations related to user authentication
+ *
+ * /api/auth/user/block/check-blocked:
+ *   get:
+ *     summary: Check Blocked User API
+ *     description: API to check if a user is blocked by another user
+ *     security:
+ *       - BearerAuth: []
+ *     tags:
+ *       - USER SECTION
+ *     parameters:
+ *       - in: header
+ *         name: Authorization
+ *         description: JWT Token
+ *         required: true
+ *         type: string
+ *     responses:
+ *       '200':
+ *         description: Success
+ *         schema:
+ *           type: object
+ *           properties:
+ *             blocked:
+ *               type: boolean
+ *               description: Indicates if the user is blocked
+ *       '401':
+ *         description: Unauthorized
+ *       '500':
+ *         description: Internal server error
+ */
+/**
+ * @swagger
+ * tags:
+ *   - name: USER SECTION
+ *     description: Operations related to user authentication
+ *
+ * /api/auth/user/block/block-user:
+ *   post:
+ *     summary: Block User API
+ *     description: API to block a user
+ *     security:
+ *       - BearerAuth: []
+ *     tags:
+ *       - USER SECTION
+ *     parameters:
+ *       - in: header
+ *         name: Authorization
+ *         description: JWT Token
+ *         required: true
+ *         type: string
+ *       - in: body
+ *         name: blocked_id
+ *         description: ID of the user to be blocked
+ *         required: true
+ *         schema:
+ *           type: object
+ *           properties:
+ *             blocked_id:
+ *               type: string
+ *               format: uuid
+ *               description: ID of the user to be blocked
+ *     responses:
+ *       '200':
+ *         description: User blocked successfully
+ *       '400':
+ *         description: Bad request - Invalid request body
+ *       '401':
+ *         description: Unauthorized
+ *       '500':
+ *         description: Internal server error
+ */
+/**
+ * @swagger
+ * tags:
+ *   - name: USER SECTION
+ *     description: Operations related to user authentication
+ *
+ * /api/auth/user/block/block-user:
+ *   delete:
+ *     summary: Unblock User API
+ *     description: API to unblock a user
+ *     security:
+ *       - BearerAuth: []
+ *     tags:
+ *       - USER SECTION
+ *     parameters:
+ *       - in: header
+ *         name: Authorization
+ *         description: JWT Token
+ *         required: true
+ *         type: string
+ *       - in: body
+ *         name: body
+ *         description: ID of the user to be unblocked
+ *         required: true
+ *         schema:
+ *           type: object
+ *           properties:
+ *             blocked_id:
+ *               type: string
+ *               format: uuid
+ *               description: ID of the user to be unblocked
+ *     responses:
+ *       '200':
+ *         description: User unblocked successfully
+ *       '400':
+ *         description: Bad request - Invalid request body
+ *       '401':
+ *         description: Unauthorized
+ *       '500':
+ *         description: Internal server error
+ */
 router.put('/api/auth/user/update-interests', userController.upsertInterests);
 router.put(
   '/api/auth/user/update-unlike-topic',
@@ -752,7 +868,21 @@ router.get('/api/user/interest/:userInterestId', userController.getInterest);
 router.put('/api/user/interest/:userInterestId', userController.updateInterest);
 router.delete('/api/user/interest', userController.deleteInterest);
 router.post('/api/user/register', userController.register);
-router.get('/api/user/confirmVerificationEmail', userController.confirmVerificationEmail);
+router.get(
+  '/api/user/confirmVerificationEmail',
+  userController.confirmVerificationEmail,
+);
+
+router.post('/api/auth/user/block/block-user', userController.blockingAUser);
+router.delete(
+  '/api/auth/user/block/block-user',
+  userController.unBlockingAUser,
+);
+
+router.get(
+  '/api/auth/user/block/check-blocked',
+  userController.getUserBlockedByUser,
+);
 
 // swagger for getProfile
 /**
@@ -3195,7 +3325,10 @@ router.get(
   scheduleController.getScheduleBetweenUsers,
 );
 router.post('/api/auth/schedule/rating', scheduleController.createRating);
-router.get('/api/user/schedule/schedule-details', scheduleController.getScheduleRating);
+router.get(
+  '/api/user/schedule/schedule-details',
+  scheduleController.getScheduleRating,
+);
 /**
  * @swagger
  * tags:
@@ -3516,10 +3649,14 @@ router.get(
  *       '400':
  *         description: Bad request
  */
-router.get('/api/notifications/sendNotificationForSchedule', notificationController.sendNotificationForSchedule);
+router.get(
+  '/api/notifications/sendNotificationForSchedule',
+  notificationController.sendNotificationForSchedule,
+);
 
 router.get(
   '/api/auth/schedule/get-history',
   scheduleController.getScheduleHistoryByUserId,
 );
+
 export default router;

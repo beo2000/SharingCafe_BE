@@ -180,3 +180,21 @@ GROUP BY
 
   return result;
 }
+
+export async function canceledSchedule(userId, blockedId) {
+  const sqlQuery = `
+    UPDATE public.schedule
+    SET is_accept = false
+    WHERE 
+      ((sender_id = :userId AND receiver_id = :blockedId) OR (sender_id = :blockedId AND receiver_id = :userId))
+      AND schedule_time >= NOW();
+  `;
+
+  const userDetails = await SequelizeInstance.query(sqlQuery, {
+    replacements: { userId, blockedId },
+    type: SequelizeInstance.QueryTypes.UPDATE,
+    raw: true,
+  });
+
+  return userDetails;
+}

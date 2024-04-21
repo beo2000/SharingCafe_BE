@@ -1,6 +1,8 @@
 import { Error } from 'sequelize';
 import * as userDAL from '../DAL/userDAL.js';
 import * as matchDAL from '../DAL/matchDAL.js';
+import * as scheduleDAL from '../DAL/scheduleDAL.js';
+
 import * as commonEnum from '../common/CommonEnums.js';
 import * as commonFunction from '../common/CommonFunctions.js';
 import { v4 as uuidv4 } from 'uuid';
@@ -458,4 +460,36 @@ export async function getMiniUser(userId) {
 
 export async function getProvince() {
   return await userDAL.getProvince();
+}
+
+export async function getUserBlockedByUser(userId) {
+  return await userDAL.getUserBlockedByUser(userId);
+}
+export async function blockingAUser(userId, blockedId) {
+  const [userCurrent] = await userDAL.getUserInfoById(userId);
+  const [userLiked] = await userDAL.getUserInfoById(blockedId);
+  const status = await matchDAL.getMatchStatus();
+  const [match] = await matchDAL.getMatchCouple(userId, blockedId);
+  console.log(match);
+  const upsertOnly = !match;
+  const user_match_id = match ? match.user_match_id : uuidv4();
+  const statusStage =
+    !match &&
+    status.filter(
+      (e) => e.user_match_status === commonEnum.MATCH_STATUS.DISLIKE,
+    )[0];
+  console.log(statusStage);
+  await matchDAL.upsertMatch(
+    user_match_id,
+    userId,
+    blockedId,
+    statusStage.user_match_status_id,
+    upsertOnly,
+  );
+  await scheduleDAL.canceledSchedule(userId, blockedId);
+  return await userDAL.blockingAUser(userId, blockedId);
+}
+
+export async function unBlockingAUser(userId, blockedId) {
+  return await userDAL.unBlockingAUser(userId, blockedId);
 }

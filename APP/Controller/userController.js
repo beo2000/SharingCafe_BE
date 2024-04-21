@@ -336,3 +336,45 @@ export async function confirmVerificationEmail(req, res) {
   }
 }
 
+export async function getUserBlockedByUser(req, res) {
+  try {
+    const loginUser = req.loginUser;
+    const result = await userService.getUserBlockedByUser(loginUser.user_id);
+    res.status(200).send(result);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ error: error.message });
+  }
+}
+
+export async function blockingAUser(req, res) {
+  try {
+    const loginUser = req.loginUser;
+    const { blocked_id } = req.body;
+    const result = await userService.blockingAUser(
+      loginUser.user_id,
+      blocked_id,
+    );
+    res.status(200).send({ status: 'BLOCKED', message: 'BLOCKED THIS USER' });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ error: error.message });
+  }
+}
+
+export async function unBlockingAUser(req, res) {
+  try {
+    const loginUser = req.loginUser;
+    const { blocked_id } = req.body;
+    const result = await userService.unBlockingAUser(
+      loginUser.user_id,
+      blocked_id,
+    );
+    res
+      .status(200)
+      .send({ status: 'UN-BLOCKED', message: 'UN-BLOCKED THIS USER' });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ error: error.message });
+  }
+}
