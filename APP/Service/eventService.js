@@ -1,5 +1,5 @@
 import * as eventDAL from '../DAL/eventDAL.js';
-import * as commonFunction from '../common/CommonFunctions.js';
+import * as commonFunctions from '../common/CommonFunctions.js';
 import * as firebaseHelper from '../utility/FirebaseHelper.js';
 import { v4 as uuidv4 } from 'uuid';
 import fs from 'fs';
@@ -68,7 +68,7 @@ export async function sendNotificationIfEventOccurToday() {
 
   try {
     // Check if it's midnight and clear events.json if true
-    const isMidnight = commonFunction.isMidnightToFourAM();
+    const isMidnight = commonFunctions.isMidnightToFourAM();
     if (isMidnight) {
       console.log(`Clearing events.json`);
       fs.writeFileSync(filePath, '[]');
@@ -121,7 +121,7 @@ export async function sendNotificationIfEventOccurToday() {
       for (const event of events) {
         console.log(`Processing event:`, event);
         const is30minTillTheEventOccur =
-          commonFunction.is30minTillTheEventOccur(event.time_of_event);
+          commonFunctions.is30minTillTheEventOccur(event.time_of_event);
         console.log(`is30minTillTheEventOccur:`, is30minTillTheEventOccur);
         if (is30minTillTheEventOccur) {
           for (const token of event.user_token) {
