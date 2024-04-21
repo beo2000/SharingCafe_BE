@@ -19,12 +19,12 @@ export async function sendNotificationForSchedule(req) {
       body: message,
     };
 
-    await firebaseHelper.sendNotification(
+    firebaseHelper.sendNotification(
       receiverToken,
       notification.title,
       notification.body,
     );
-    await firebaseHelper.sendNotification(
+    firebaseHelper.sendNotification(
       senderToken,
       notification.title,
       notification.body,

@@ -318,14 +318,21 @@ export async function updateUserMatchStatus(userId, dataObj) {
   const title = `MATCHING FEATURE`;
   const bodyCurrent = `MATCHING STATUS : ${statusStage.user_match_status} with ${userLiked.user_name}`;
   const bodyLike = `MATCHING STATUS : ${statusStage.user_match_status} by ${userCurrent.user_name}`;
-  await notificationDAL.createNotification(userId, bodyCurrent);
-  await notificationDAL.createNotification(dataObj.user_id, bodyLike);
-  await firebaseHelper.sendNotification(userLiked.token_id, title, bodyLike);
-  await firebaseHelper.sendNotification(
-    userCurrent.token_id,
-    title,
+  const [newNotificationStatus] =
+    await notificationDAL.getNotificationNewStatus();
+
+  await notificationDAL.createNotification(
+    userId,
     bodyCurrent,
+    newNotificationStatus.notification_status_id,
   );
+  await notificationDAL.createNotification(
+    dataObj.user_id,
+    bodyLike,
+    newNotificationStatus.notification_status_id,
+  );
+  firebaseHelper.sendNotification(userLiked.token_id, title, bodyLike);
+  firebaseHelper.sendNotification(userCurrent.token_id, title, bodyCurrent);
 
   return await matchDAL.getMatchCouple(userId, dataObj.user_id);
 }

@@ -13,7 +13,7 @@ export async function saveMessage(messageData) {
   const [userTo] = await userDAL.getUserInfoById(to);
   const title = `CHAT FEATURE`;
   const body = `${messageContent} by ${userFrom.user_name}`;
-  await firebaseHelper.sendNotification(userTo.token_id, title, body);
+  firebaseHelper.sendNotification(userTo.token_id, title, body);
   return messageId;
 }
 export async function getChatHistory(userIdFrom, userIdTo, limit, offset) {

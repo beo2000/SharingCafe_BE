@@ -11,7 +11,7 @@ export async function createSchedule(req, res) {
     t.commit();
     const userProfile = await getMiniUser(dataObj.receiver_id);
     console.log(userProfile);
-    await firebaseHelper.sendNotification(
+    firebaseHelper.sendNotification(
       userProfile[0].token_id,
       'Bạn có lịch hẹn mới',
       'Vui lòng kiểm tra hộp tin nhắn',
@@ -65,10 +65,7 @@ export async function createRating(req, res) {
   try {
     const loginUser = req.loginUser.user_id;
     const dataObj = req.body;
-    const result = await scheduleService.createRating(
-      loginUser,
-      dataObj,
-    );
+    const result = await scheduleService.createRating(loginUser, dataObj);
     res.status(200).send(result);
   } catch (error) {
     console.log(error);
@@ -81,7 +78,7 @@ export async function getScheduleRating(req, res) {
     const scheduleId = req.query.schedule_id;
     console.log(scheduleId);
     const result = await scheduleService.getScheduleRating(scheduleId);
-     res.status(200).send(result);
+    res.status(200).send(result);
   } catch (error) {
     console.log(error);
     res.status(500).send({ error: error.message });
