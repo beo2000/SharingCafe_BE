@@ -6,7 +6,7 @@ export async function getNotificationHistoryByUserId(userId) {
 inner join notification_status ns 
 on 1=1
 and n.notification_status_id = ns.notification_status_id 
-where user_id = ${userId}
+where user_id = '${userId}'
 order by n.created_at DESC
   `;
   const result = await SequelizeInstance.query(sqlQuery, {
