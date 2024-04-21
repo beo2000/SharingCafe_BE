@@ -350,7 +350,7 @@ export async function getUserBlockedByUser(req, res) {
 export async function blockingAUser(req, res) {
   try {
     const loginUser = req.loginUser;
-    const blocked_id  = req.query.blocked_id;
+    const { blocked_id } = req.body;
     const result = await userService.blockingAUser(
       loginUser.user_id,
       blocked_id,
