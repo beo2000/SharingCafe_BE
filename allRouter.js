@@ -3476,6 +3476,13 @@ router.get('/api/location/getProvince', locationController.getProvince);
  *         example: 68ef7af9-28c1-46df-b2e8-df7657c7264b
  *         schema:
  *           type: string
+ *       - in: query
+ *         name: keyword
+ *         required: false
+ *         description: Keyword
+ *         example: Highland
+ *         schema:
+ *           type: string
  *     responses:
  *       '200':
  *         description: Successfully retrieved chat history.

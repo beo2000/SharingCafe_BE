@@ -122,11 +122,12 @@ export async function getRecommendCafe(req, res) {
     const name = req.query.name;
     let radius = 5; // Khởi tạo bán kính mặc định là 5 km
     let response;
+    const keyword = req.query.keyword ?? "Highland";
 
     // Lặp cho đến khi nhận được kết quả hoặc đạt tới giới hạn bán kính
     while (!response && radius <= 10) {
       response = await axios.get(
-        `https://rsapi.goong.io/Place/AutoComplete?input=Highland&location=${lat},${lng}&limit=200&radius=${radius}&api_key=KnB6OOmQcQpYSTnqzYhjqUmcGSBKUob1cDF9oOPw`,
+        `https://rsapi.goong.io/Place/AutoComplete?input=${keyword}&location=${lat},${lng}&limit=200&radius=${radius}&api_key=KnB6OOmQcQpYSTnqzYhjqUmcGSBKUob1cDF9oOPw`,
       );
       // Nếu không nhận được kết quả, tăng radius lên 1 đơn vị km
       if (!response.data) {
