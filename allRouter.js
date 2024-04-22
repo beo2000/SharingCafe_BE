@@ -3020,13 +3020,30 @@ router.get('/api/test', locationController.getMiddlePoint);
  *       - MATCH SECTION
  *     parameters:
  *       - in: query
- *         name: limit
+ *         name: filterByAge
  *         description: 1
  *         required: false
+ *         type: string
+ *         default: 25 - 30
+ *       - in: query
+ *         name: filterByGender
+ *         description: 0
+ *         required: false
+ *         type: string
+ *         default: Nam
+ *       - in: query
+ *         name: filterByAddress
+ *         description: 1
+ *         required: false
+ *         type: string
+ *         default: Thị Xã Sầm Sơn, Tỉnh Thanh Hóa
+ *       - in: query
+ *         name: limit
+ *         description: 0
+ *         required: false
  *         type: integer
- *         default: 1
- *         minimum: 1
- *         maximum: 100
+ *         default: 0
+ *         minimum: 0
  *       - in: query
  *         name: offset
  *         description: 0

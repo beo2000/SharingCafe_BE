@@ -232,8 +232,18 @@ export async function getUserInfoByEmail(email) {
   const result = await userDAL.getUserDetailsByEmail(email);
   return result;
 }
-export async function getUserMatchByInterest(userId) {
-  const result = await userDAL.getUserMatchByInterest(userId);
+export async function getUserMatchByInterest(
+  userId,
+  filterByAge,
+  filterByGender,
+  filterByAddress,
+) {
+  const result = await userDAL.getUserMatchByInterest(
+    userId,
+    filterByAge,
+    filterByGender,
+    filterByAddress,
+  );
   return result;
 }
 export async function getUserMatchWithStatus(userId, status) {
@@ -254,6 +264,9 @@ export async function getUserMatchByInterestPaging(userId, limit, offset) {
   const [user] = await userDAL.getUserInfoById(userId);
   let result = await userDAL.getUserMatchByInterestPaging(
     userId,
+    filterByAge,
+    filterByGender,
+    filterByAddress,
     limit,
     offset,
   );
@@ -268,7 +281,12 @@ export async function getUserMatchByInterestPaging(userId, limit, offset) {
       ),
     };
   });
-  const list = await userDAL.getUserMatchByInterest(userId);
+  const list = await userDAL.getUserMatchByInterest(
+    userId,
+    filterByAge,
+    filterByGender,
+    filterByAddress,
+  );
   return { total: list.length, limit, offset, data: result };
 }
 
