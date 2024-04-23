@@ -11,8 +11,11 @@ export async function saveMessage(messageData) {
   const { from, to, messageContent } = messageData;
   const [userFrom] = await userDAL.getUserInfoById(from);
   const [userTo] = await userDAL.getUserInfoById(to);
-  const title = `CHAT FEATURE`;
-  const body = `${messageContent} by ${userFrom.user_name}`;
+  // const title = `CHAT FEATURE`;
+  // const body = `${messageContent} by ${userFrom.user_name}`;
+
+  const tiêu_đề = `TÍNH NĂNG TRÒ CHUYỆN`;
+  const nội_dung = `${messageContent} bởi ${userFrom.user_name}`;
   firebaseHelper.sendNotification(userTo.token_id, title, body);
   return messageId;
 }

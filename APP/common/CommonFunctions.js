@@ -38,3 +38,7 @@ export function calculateDistance(lat1, lon1, lat2, lon2) {
 
   return earthRadiusKm * c;
 }
+export function getValueByLabel(label) {
+  const matchTranslate = MATCH_TRANSLATE.find((item) => item.label === label);
+  return matchTranslate ? matchTranslate.value : null;
+}
