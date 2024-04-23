@@ -427,20 +427,21 @@ WHERE
  select 
  *
 FROM total t
+ where 1=1
   `;
   filterByAge
     ? (sqlQuery += `
-and df.age = '${filterByAge}'
+and t.age = '${filterByAge}'
 `)
     : '';
   filterByGender
     ? (sqlQuery += `
-and df.gender = '${filterByGender}'
+and t.gender = '${filterByGender}'
 `)
     : '';
   filterByAddress
     ? (sqlQuery += `
-and df.address = '${filterByAddress}'
+and t.address = '${filterByAddress}'
 `)
     : '';
 

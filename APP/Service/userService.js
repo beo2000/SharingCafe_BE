@@ -260,7 +260,14 @@ export async function getUserMatchWithPendingStatus(userId) {
   const result = await userDAL.getUserMatchWithPendingStatus(userId);
   return result;
 }
-export async function getUserMatchByInterestPaging(userId, limit, offset) {
+export async function getUserMatchByInterestPaging(
+  userId,
+  filterByAge,
+  filterByGender,
+  filterByAddress,
+  limit,
+  offset,
+) {
   const [user] = await userDAL.getUserInfoById(userId);
   let result = await userDAL.getUserMatchByInterestPaging(
     userId,
