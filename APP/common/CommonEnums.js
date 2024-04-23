@@ -9,3 +9,10 @@ export const MATCH_STATUS = {
   ACCEPTED: 'Accepted',
   DISLIKE: 'Dislike',
 };
+export const MATCH_TRANSLATE = [
+  { label: 'Matched', value: 'Kết đôi' },
+  { label: 'Pending', value: 'Chờ' },
+  { label: 'Declined', value: 'Từ chối' },
+  { label: 'Accepted', value: 'Xác nhận' },
+  { label: 'Dislike', value: 'Không thích' },
+];
