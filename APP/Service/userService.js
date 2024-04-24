@@ -344,11 +344,11 @@ export async function updateUserMatchStatus(userId, dataObj) {
   // const bodyCurrent = `MATCHING STATUS : ${statusStage.user_match_status} with ${userLiked.user_name}`;
   // const bodyLike = `MATCHING STATUS : ${statusStage.user_match_status} by ${userCurrent.user_name}`;
 
-  const title = `TÍNH NĂNG KẾT ĐÔI`;
-  const bodyCurrent = `TRẠNG THÁI KẾT ĐÔI: ${commonFunctions.getValueByLabel(
+  const title = `Kết nối`;
+  const bodyCurrent = `Bạn ${commonFunctions.getValueByLabel(
     statusStage.user_match_status,
   )} với ${userLiked.user_name}`;
-  const bodyLike = `TRẠNG THÁI KẾT ĐÔI: ${commonFunctions.getValueByLabel(
+  const bodyLike = `Bạn ${commonFunctions.getValueByLabel(
     statusStage.user_match_status,
   )} bởi ${userCurrent.user_name}`;
 
