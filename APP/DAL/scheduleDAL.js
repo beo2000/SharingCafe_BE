@@ -94,8 +94,8 @@ export async function getScheduleHistoryByUserId(userId) {
     "user" u3 
     on s.receiver_id = u3.user_id 
   WHERE
-    sender_id = 'c6067823-5590-4071-91b0-a0394913892a'
-    OR receiver_id = 'c6067823-5590-4071-91b0-a0394913892a'
+    sender_id = '${userId}'
+    OR receiver_id = '${userId}'
     AND schedule_time < NOW()
   GROUP BY 
     s.schedule_id, 
