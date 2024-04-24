@@ -63,10 +63,10 @@ export async function getScheduleHistoryByUserId(userId) {
   s."location",
   s.sender_id, 
   u2.user_name as sender,
-  u2.profile_avatar,
+  u2.profile_avatar as sender_avatar,
   s.receiver_id ,
   u3.user_name as receiver,
-  u3.profile_avatar,
+  u3.profile_avatar as receiver_avatar,
   s.is_accept,
   s.created_at,
   jsonb_agg(
@@ -74,7 +74,6 @@ export async function getScheduleHistoryByUserId(userId) {
       'rating_id', r.rating_id ,
       'user_id', u.user_id ,
       'user_name', u.user_name ,
-      'profile_avatar', u.profile_avatar ,
       'content', r."content"  ,
       'rating', r.rating
       ) 
