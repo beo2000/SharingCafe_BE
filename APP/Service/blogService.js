@@ -5,8 +5,13 @@ export async function getBlogs(page, title){
     return await blogDAL.getBlogs(page, title);
 }
 
-export async function getBlog(blogId){
-    return await blogDAL.getBlog(blogId);
+export async function getBlog(blogId, userId){
+    var blogInfo = await blogDAL.getBlog(blogId);
+    if (userId) {
+        var likeCount = await blogDAL.isUserLikeBlog(blogId, userId)
+        blogInfo[0].is_like = likeCount.length > 0;
+    }
+    return blogInfo;
 }
 
 export async function createBlog(dataObj){

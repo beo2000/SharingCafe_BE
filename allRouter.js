@@ -2066,6 +2066,13 @@ router.post(
  *         schema:
  *           type: string
  *         example: f4b02935-dbe1-4b8a-a0af-8cbd92c71c35
+ *       - in: query
+ *         name: userId
+ *         required: false
+ *         description: ID of the loggedUser
+ *         schema:
+ *           type: string
+ *         example: b43cc80d-9c56-40c0-b170-4950b8cb702e
  *     responses:
  *       '200':
  *         description: Successful response

@@ -91,6 +91,23 @@ export async function getBlog(blogId) {
   return result;
 }
 
+export async function isUserLikeBlog(blogId, loggedUserId) {
+  const sqlQuery = `
+  select 
+    * 
+  from 
+    like_blog 
+  where 
+    blog_id = '${blogId}' 
+    and user_id = '${loggedUserId}'
+  `;
+  const result = await SequelizeInstance.query(sqlQuery, {
+    type: SequelizeInstance.QueryTypes.SELECT,
+    raw: true,
+  });
+  return result;
+}
+
 export async function createBlog(blogId, dataObj) {
   return await Blog.create({
     blog_id: blogId,
