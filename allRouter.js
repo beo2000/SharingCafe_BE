@@ -2549,6 +2549,9 @@ router.post(
  *                 type: string
  *                 description: ID of the blog
  *                 example: "9d47a0e3-9f5c-4108-9985-ba52d467a6c2"
+ *               content:
+ *                 type: string
+ *                 description: reason to report
  *               report_status_id:
  *                 type: string
  *                 description: ID of the report status
@@ -2628,6 +2631,9 @@ router.post(
  *                 type: string
  *                 description: ID of the event
  *                 example: "50b415b6-b874-429c-9f31-56db62ff0c13"
+ *               content:
+ *                 type: string
+ *                 description: reason to report
  *               report_status_id:
  *                 type: string
  *                 description: ID of the report status
@@ -2684,6 +2690,9 @@ router.post(
  *                 type: string
  *                 description: ID of the user
  *                 example: "716ab41a-a01e-46ac-a907-f0c1419f212f"
+ *               content:
+ *                 type: string
+ *                 description: reason to report
  *               report_status_id:
  *                 type: string
  *                 description: ID of the report status
