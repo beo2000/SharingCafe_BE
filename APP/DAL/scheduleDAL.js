@@ -69,7 +69,7 @@ export async function getScheduleHistoryByUserId(userId) {
   u3.profile_avatar as receiver_avatar,
   s.is_accept,
   s.created_at,
-  jsonb_agg(
+  coalesce(jsonb_agg(
       jsonb_build_object(
       'rating_id', r.rating_id ,
       'user_id', u.user_id ,
@@ -77,7 +77,7 @@ export async function getScheduleHistoryByUserId(userId) {
       'content', r."content"  ,
       'rating', r.rating
       ) 
-    ) as rating
+    ) FILTER (WHERE r.rating_id IS NOT NULL), '[]') as rating
   FROM
     schedule s
   LEFT JOIN
