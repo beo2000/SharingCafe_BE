@@ -25,6 +25,7 @@ export async function getEvents(title, date, page) {
       "user" u
       on u.user_id = e.organizer_id
     where  (e.time_of_event >= '${date1.toUTCString()}' or e.end_of_event <= '${date1.toUTCString()}') and e.title  like '%${name}%'
+    order by e.created_at desc
     offset ((${page} - 1) * 5) rows 
  	  fetch next 5 rows only
   `;
@@ -42,6 +43,7 @@ export async function getEvents(title, date, page) {
       "user" u
       on u.user_id = e.organizer_id
       where (e.time_of_event >= '${date1.toUTCString()}' or e.end_of_event >= '${date1.toUTCString()}') and e.title  like '%${name}%'
+      order by e.created_at desc
     `;
   }
   console.log(sqlQuery);

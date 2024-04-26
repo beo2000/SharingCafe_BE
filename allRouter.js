@@ -1669,8 +1669,6 @@ router.put('/api/admin/event/:eventId', admController.updateEventStatus);
  *
  * /api/event:
  *   get:
- *     security:
- *       - BearerAuth: []
  *     summary: Get all events
  *     description: Retrieve a list of all events.
  *     tags:
