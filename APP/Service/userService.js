@@ -404,7 +404,7 @@ export async function getDistance(
 export async function getProfile(userId, currentUserId) {
   var currentUserLocation = await userDAL.getLocationByUserId(currentUserId);
   var userLocation = await userDAL.getLocationByUserId(userId);
-  var distance = await getDistance(
+  var distance = await commonFunctions.calculateDistance(
     userLocation.lat,
     userLocation.lng,
     currentUserLocation.lat,
