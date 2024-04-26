@@ -8,7 +8,7 @@ export async function getEvents(title, date, page) {
   }
   let date1 = new Date(date);
   if (date1 == 'Invalid Date') {
-    date1 = new Date(Date.now());
+    date1 = new Date('1/1/1000');
   }
   console.log(date1.toUTCString());
   if (page) {
@@ -42,8 +42,8 @@ export async function getEvents(title, date, page) {
     join
       "user" u
       on u.user_id = e.organizer_id
-      where (e.time_of_event >= '${date1.toUTCString()}' or e.end_of_event >= '${date1.toUTCString()}') and e.title  like '%${name}%'
-      order by e.created_at desc
+    where  (e.time_of_event >= '${date1.toUTCString()}' or e.end_of_event <= '${date1.toUTCString()}') and e.title  like '%${name}%'
+    order by e.created_at desc
     `;
   }
   console.log(sqlQuery);
