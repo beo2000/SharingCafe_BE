@@ -1,4 +1,5 @@
 import * as eventDAL from '../DAL/eventDAL.js';
+import * as userDAL from '../DAL/userDAL.js';
 import * as commonFunctions from '../common/CommonFunctions.js';
 import * as firebaseHelper from '../utility/FirebaseHelper.js';
 import { v4 as uuidv4 } from 'uuid';
@@ -144,6 +145,11 @@ export async function joinEvent(event_id, userId) {
   const participation_id = uuidv4();
   const event = await eventDAL.getEvent(event_id);
   if (!event) throw new Error('Event not found !!!');
+  const [userJoin] = await userDAL.getUserInfoById(userId);
+  const [userHost] = await userDAL.getUserInfoById(event.user_id);
+  const titleTo = `TÍNH NĂNG SỰ KIỆN`;
+  const bodyTo = `Thông báo mới: Người dùng ${userJoin.user_name} đã tham gia vào một sự kiện của bạn vào lúc. Số lượng người dùng đã được cập nhập 😘😘😘`;
+  firebaseHelper.sendNotification(userHost.token_id, titleTo, bodyTo);
   return await eventDAL.joinEvent(participation_id, event_id, userId);
 }
 

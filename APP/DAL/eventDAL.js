@@ -1,4 +1,8 @@
-import { Event, SequelizeInstance, EventParticipation } from '../utility/DbHelper.js';
+import {
+  Event,
+  SequelizeInstance,
+  EventParticipation,
+} from '../utility/DbHelper.js';
 
 export async function getEvents(title, date, page) {
   let sqlQuery = '';
@@ -57,7 +61,7 @@ export async function getEvents(title, date, page) {
 export async function getEvent(eventId) {
   const sqlQuery = `
   select 
-    e.*, u.user_name, i.name
+    e.*, u.user_id, u.user_name, i.name
   from
     public."event" e 
   left join 
@@ -89,7 +93,7 @@ export async function createEvent(eventId, dataObj) {
     is_visible: dataObj.is_visible,
     interest_id: dataObj.interest_id,
     is_visible: true,
-    participants_count: 0
+    participants_count: 0,
   });
 }
 
@@ -419,7 +423,7 @@ export async function leaveEvent(event_id, userId) {
   const deletedEventParticipation = await EventParticipation.destroy({
     where: {
       event_id: event_id,
-      user_id: userId,      
+      user_id: userId,
     },
   });
   return deletedEventParticipation;

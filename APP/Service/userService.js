@@ -340,11 +340,8 @@ export async function updateUserMatchStatus(userId, dataObj) {
     statusStage.user_match_status_id,
     upsertOnly,
   );
-  // const title = `MATCHING FEATURE`;
-  // const bodyCurrent = `MATCHING STATUS : ${statusStage.user_match_status} with ${userLiked.user_name}`;
-  // const bodyLike = `MATCHING STATUS : ${statusStage.user_match_status} by ${userCurrent.user_name}`;
 
-  const title = `Kết nối`;
+  const title = `TÍNH NĂNG KẾT NỐI`;
   const bodyCurrent = `Bạn ${commonFunctions.getValueByLabel(
     statusStage.user_match_status,
   )} với ${userLiked.user_name}`;

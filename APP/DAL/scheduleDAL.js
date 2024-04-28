@@ -125,7 +125,8 @@ SELECT
     u.token_id as user_from_token,
     u2.user_name as user_to,
     u2.token_id as user_token_token,
-    'The schedule ' || s.content || ' occurring at ' || s.schedule_time || ' has been updated as ' || now()  as message
+    'The schedule ' || s.content || ' occurring at ' || s.schedule_time || ' has been updated as ' || now()  as message,
+    s.content
 FROM
     public.schedule s
 inner join public.user u

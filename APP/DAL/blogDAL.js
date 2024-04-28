@@ -65,8 +65,8 @@ export async function getBlogs(page, title) {
 
 export async function getBlog(blogId) {
   const sqlQuery = `
-  select 
-    b.*, u.user_name, u.profile_avatar, i.name
+ select 
+    b.*, u.user_name, u.profile_avatar, i.name, u.token_id 
   from 
     blog b 
   join 
