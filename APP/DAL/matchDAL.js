@@ -24,25 +24,26 @@ export async function upsertMatch(
   if (upsertOnly)
     sqlQuery = `
     INSERT INTO public.user_match (user_match_id, current_user_id, user_id_liked, user_match_status_id, created_at) 
-    VALUES (:user_match_id, :current_user_id, :user_id_liked, :user_match_status_id, NOW())
+    VALUES (:user_match_id, :current_user_id, :user_id_liked, :statusId, NOW())
     ON CONFLICT (user_match_id)
     DO UPDATE SET 
-        user_match_status_id = :user_match_status_id, 
+        user_match_status_id = :statusId, 
         created_at = NOW()
     RETURNING *;
   `;
   else
-    sqlQuery = `UPDATE public.user_match 
-                   SET user_match_status_id=:user_match_status_id
-                   , created_at=now() 
-                   WHERE user_match_id=:user_match_id`;
+    sqlQuery = `
+  UPDATE public.user_match 
+  SET user_match_status_id=:statusId
+  , created_at=now() 
+  WHERE user_match_id=:user_match_id`;
 
   const result = await SequelizeInstance.query(sqlQuery, {
     replacements: {
       user_match_id: matchId,
       current_user_id: userId,
       user_id_liked: userId2,
-      user_match_status_id: statusId,
+      statusId,
     },
     type: SequelizeInstance.QueryTypes.SELECT,
     raw: true,

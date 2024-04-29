@@ -121,9 +121,9 @@ export async function getScheduleHistoryByUserId(userId) {
 export async function getScheduleId(scheduleId) {
   const sqlQuery = `
 SELECT
-    u.user_id as user_from,
+    u.user_name as user_from,
     u.token_id as user_from_token,
-    u2.user_id as user_to,
+    u2.user_name as user_to,
     u2.token_id as user_token_token,
     'The schedule ' || s.content || ' occurring at ' || s.schedule_time || ' has been updated as ' || now()  as message,
     s.content
