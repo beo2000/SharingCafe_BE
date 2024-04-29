@@ -2182,6 +2182,9 @@ router.post(
  *               is_approve:
  *                 type: boolean
  *                 description: Updated approval status of the blog
+ *               interest_id:
+ *                 type: string
+ *                 description: Update interest of the blog
  *     responses:
  *       '200':
  *         description: Blog updated successfully

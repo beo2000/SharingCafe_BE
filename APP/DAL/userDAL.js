@@ -464,12 +464,27 @@ INNER JOIN
 INNER JOIN 
     user_match_status ums ON um.user_match_status_id = ums.user_match_status_id 
 WHERE 
-    (um.current_user_id = '${userId}' OR um.user_id_liked = '${userId}')
+    (um.user_id_liked = '${userId}' or um.current_user_id = '${userId}')
     AND ums.user_match_status_id IS NOT null
     and u.user_id <> '${userId}'
   `;
 
-  if (status) {
+  if (status == 'Pending') {
+    sqlQuery = ` 
+    SELECT 
+    *
+FROM 
+    public.user u
+INNER JOIN 
+    user_match um ON um.user_id_liked = u.user_id OR um.current_user_id = u.user_id 
+INNER JOIN 
+    user_match_status ums ON um.user_match_status_id = ums.user_match_status_id 
+WHERE 
+    um.user_id_liked = '${userId}'
+    AND ums.user_match_status_id IS NOT null
+    and u.user_id <> '${userId}'
+    AND ums.user_match_status = '${status}'`;
+  } else if (status == 'Matched'){
     sqlQuery += ` AND ums.user_match_status = '${status}'`;
   }
   let userDetails = await SequelizeInstance.query(sqlQuery, {

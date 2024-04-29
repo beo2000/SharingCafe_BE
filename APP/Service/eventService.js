@@ -52,9 +52,11 @@ export async function updateImage(fileData) {
 export async function getEventUrl(event_id) {
   const event = await getEvent(event_id);
   if (!event) throw new Error('Event not found !!!');
-  return {
-    url: `https://sharing-coffee-be-capstone-com.onrender.com/api/event/${event_id}`,
-  };
+  else {
+    return {
+      url: `https://sharing-coffee-be-capstone-com.onrender.com/api/event/${event_id}`,
+    };
+  }
 }
 
 export async function getUserEvent(title, date, page) {
@@ -143,12 +145,12 @@ export async function sendNotificationIfEventOccurToday() {
 
 export async function joinEvent(event_id, userId) {
   const participation_id = uuidv4();
-  const event = await eventDAL.getEvent(event_id);
+  const [event] = await eventDAL.getEvent(event_id);
   if (!event) throw new Error('Event not found !!!');
   const [userJoin] = await userDAL.getUserInfoById(userId);
-  const [userHost] = await userDAL.getUserInfoById(event.user_id);
+  const [userHost] = await userDAL.getUserInfoById(event.organizer_id);
   const titleTo = `TÍNH NĂNG SỰ KIỆN`;
-  const bodyTo = `Thông báo mới: Người dùng ${userJoin.user_name} đã tham gia vào một sự kiện của bạn vào lúc. Số lượng người dùng đã được cập nhập 😘😘😘`;
+  const bodyTo = `Thông báo mới: Người dùng ${userJoin.user_name} đã tham gia vào một sự kiện của bạn. Số lượng người dùng đã được cập nhập 😘😘😘`;
   firebaseHelper.sendNotification(userHost.token_id, titleTo, bodyTo);
   return await eventDAL.joinEvent(participation_id, event_id, userId);
 }
