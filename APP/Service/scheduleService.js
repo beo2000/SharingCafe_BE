@@ -48,10 +48,8 @@ export async function createRating(loginUser, dataObj) {
   const [schedule] = await scheduleDAL.getScheduleId(dataObj.schedule_id);
   const tile = `ĐÁNH GIÁ LỊCH TRÌNH`;
   const body = `Cuộc hẹn với nội dung ${schedule.content} vừa được đánh giá`;
-  const [userFrom] = await userDAL.getUserInfoById(dataObj.user_from);
-  const [userTo] = await userDAL.getUserInfoById(dataObj.user_to);
-  firebaseHelper.sendNotification(userFrom.token_id, tile, body);
-  firebaseHelper.sendNotification(userTo.token_id, tile, body);
+  firebaseHelper.sendNotification(schedule.user_from_token, tile, body);
+  firebaseHelper.sendNotification(schedule.user_to_token, tile, body);
   return await scheduleDAL.createRating(rating_id, loginUser, dataObj);
 }
 

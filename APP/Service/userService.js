@@ -516,8 +516,8 @@ export async function getUserBlockedByUser(userId) {
   return await userDAL.getUserBlockedByUser(userId);
 }
 export async function blockingAUser(userId, blockedId) {
-  const [userCurrent] = await userDAL.getUserInfoById(userId);
-  const [userLiked] = await userDAL.getUserInfoById(blockedId);
+  // const [userCurrent] = await userDAL.getUserInfoById(userId);
+  // const [userLiked] = await userDAL.getUserInfoById(blockedId);
   const status = await matchDAL.getMatchStatus();
   const [match] = await matchDAL.getMatchCouple(userId, blockedId);
   console.log(match);

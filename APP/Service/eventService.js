@@ -143,7 +143,7 @@ export async function sendNotificationIfEventOccurToday() {
 
 export async function joinEvent(event_id, userId) {
   const participation_id = uuidv4();
-  const event = await eventDAL.getEvent(event_id);
+  const [event] = await eventDAL.getEvent(event_id);
   if (!event) throw new Error('Event not found !!!');
   const [userJoin] = await userDAL.getUserInfoById(userId);
   const [userHost] = await userDAL.getUserInfoById(event.user_id);
