@@ -884,10 +884,9 @@ export async function deleteUserInterests(userId) {
 export async function upsertInterests(data) {
   let sqlQuery = `
   INSERT INTO public.user_interest (user_interest_id, interest_id, user_id, created_at) 
-  VALUES(gen_random_uuid(), :interest_id, :user_id, now())
+  VALUES(gen_random_uuid(), '${data.interest_id}', '${data.user_id}', now())
   `;
   let result = await SequelizeInstance.query(sqlQuery, {
-    replacements: data,
     type: SequelizeInstance.QueryTypes.SELECT,
     raw: true,
   });
@@ -909,10 +908,9 @@ export async function deleteUnlikeTopics(userId) {
 export async function upsertUnlikeTopics(data) {
   let sqlQuery = `
   INSERT INTO public.unlike_topic (unlike_topic_id, user_id, topic, created_at) 
-  VALUES(gen_random_uuid(), :user_id, :topic, now());
+  VALUES(gen_random_uuid(), '${data.user_id}', '${data.topic}', now());
   `;
   let result = await SequelizeInstance.query(sqlQuery, {
-    replacements: data,
     type: SequelizeInstance.QueryTypes.SELECT,
     raw: true,
   });
@@ -935,10 +933,9 @@ export async function deletePersonalProblems(userId) {
 export async function upsertPersonalProblems(data) {
   let sqlQuery = `
   INSERT INTO public.personal_problem (personal_problem_id, user_id, problem, created_at) 
-  VALUES(gen_random_uuid(), :user_id, :problem, now());
+  VALUES(gen_random_uuid(), '${data.user_id}', '${data.problem}', now());
   `;
   let result = await SequelizeInstance.query(sqlQuery, {
-    replacements: data,
     type: SequelizeInstance.QueryTypes.SELECT,
     raw: true,
   });
@@ -960,10 +957,9 @@ export async function deleteFavoriteDrinks(userId) {
 export async function upsertFavoriteDrinks(data) {
   let sqlQuery = `
   INSERT INTO public.favorite_drink (favorite_drink_id, user_id, favorite_drink, created_at) 
-  VALUES(gen_random_uuid(), :user_id, :favorite_drink, now());
+  VALUES(gen_random_uuid(), '${data.user_id}', '${data.favorite_drink}', now());
   `;
   let result = await SequelizeInstance.query(sqlQuery, {
-    replacements: data,
     type: SequelizeInstance.QueryTypes.SELECT,
     raw: true,
   });
@@ -985,10 +981,9 @@ export async function deleteFreeTimes(userId) {
 export async function upsertFreeTimes(data) {
   let sqlQuery = `
   INSERT INTO public.free_time (free_time_id, user_id, free_time, created_at) 
-  VALUES(gen_random_uuid(), :user_id, :free_time, now());
+  VALUES(gen_random_uuid(), '${data.user_id}', '${data.free_time}', now());
   `;
   let result = await SequelizeInstance.query(sqlQuery, {
-    replacements: data,
     type: SequelizeInstance.QueryTypes.SELECT,
     raw: true,
   });
