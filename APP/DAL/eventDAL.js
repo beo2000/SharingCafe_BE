@@ -296,7 +296,7 @@ LEFT JOIN event_participation ep
 LEFT JOIN public."user" u 
   ON ep.user_id = u.user_id
 WHERE 
-  DATE(e.time_of_event) = CURRENT_DATE
+  DATE(e.time_of_event) = CURRENT_DATE and e.is_approve = true and e.is_visible = true
   and not exists (
     select 1
     from public.user_block

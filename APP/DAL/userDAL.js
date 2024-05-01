@@ -132,13 +132,12 @@ export async function updateUserToken(email, token) {
   let sqlQuery = `
       UPDATE public."user" 
       SET 
-        token_id = :token
+        token_id = '${token}'
       WHERE 
-        email = :email
+        email = '${email}'
     `;
 
   let [result] = await SequelizeInstance.query(sqlQuery, {
-    replacements: { email: email, token: token },
     type: SequelizeInstance.QueryTypes.UPDATE,
   });
 
@@ -1078,10 +1077,9 @@ export async function getUserBlockedByUser(userId) {
 from "user" u 
 inner join user_block ub 
 on blocked_id = u.user_id 
-and ub.blocker_id = :userId
+and ub.blocker_id = '${userId}'
   `;
   let result = await SequelizeInstance.query(sqlQuery, {
-    replacements: { userId },
     type: SequelizeInstance.QueryTypes.SELECT,
     raw: true,
   });
@@ -1091,11 +1089,10 @@ and ub.blocker_id = :userId
 export async function blockingAUser(userId, blockedId) {
   let sqlQuery = `
   INSERT INTO public.user_block (blocker_id, blocked_id, created_at)
-VALUES (:userId, :blockedId, now())
+VALUES ('${userId}', '${blockedId}', now())
 ON CONFLICT (blocker_id, blocked_id) DO NOTHING;
   `;
   let result = await SequelizeInstance.query(sqlQuery, {
-    replacements: { userId, blockedId },
     type: SequelizeInstance.QueryTypes.SELECT,
     raw: true,
   });
@@ -1104,10 +1101,9 @@ ON CONFLICT (blocker_id, blocked_id) DO NOTHING;
 export async function unBlockingAUser(userId, blockedId) {
   let sqlQuery = `
     DELETE FROM public.user_block 
-    WHERE blocker_id = :userId AND blocked_id = :blockedId
+    WHERE blocker_id = '${userId}' AND blocked_id = '${blockedId}'
   `;
   let result = await SequelizeInstance.query(sqlQuery, {
-    replacements: { userId, blockedId },
     type: SequelizeInstance.QueryTypes.DELETE, // Changed QueryTypes.SELECT to QueryTypes.DELETE
     raw: true,
   });
