@@ -90,7 +90,7 @@ export async function createEvent(eventId, dataObj) {
     location: dataObj.location,
     address: dataObj.address,
     background_img: dataObj.background_img,
-    is_visible: dataObj.is_visible,
+    is_approve: true,
     interest_id: dataObj.interest_id,
     is_visible: true,
     participants_count: 0,
