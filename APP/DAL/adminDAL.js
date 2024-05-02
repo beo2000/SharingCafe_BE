@@ -176,12 +176,14 @@ export async function getScheduleList() {
   s."content" , 
   s."location" , 
   s.schedule_time ,
-  s.is_accept
+  s.is_accept,
+  s.created_at
   from schedule s
   join "user" u 
   on u.user_id = s.sender_id
   join "user" u2
-  on u2.user_id = s.receiver_id 
+  on u2.user_id = s.receiver_id
+  order by s.created_at desc
     `;
   const list = await SequelizeInstance.query(sqlQuery, {
     type: SequelizeInstance.QueryTypes.SELECT,
