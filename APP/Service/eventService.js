@@ -152,6 +152,13 @@ export async function joinEvent(event_id, userId) {
   const titleTo = `TÍNH NĂNG SỰ KIỆN`;
   const bodyTo = `Thông báo mới: Người dùng ${userJoin.user_name} đã tham gia vào một sự kiện của bạn. Số lượng người dùng đã được cập nhập 😘😘😘`;
   firebaseHelper.sendNotification(userHost.token_id, titleTo, bodyTo);
+  const messageId = uuidv4();
+  const messageData = JSON.stringify({
+    from: userId,
+    to: event.organizer_id,
+    message: bodyTo,
+  });
+  await chatDAL.saveMessage(messageId, messageData);
   return await eventDAL.joinEvent(participation_id, event_id, userId);
 }
 
