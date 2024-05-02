@@ -313,8 +313,8 @@ export async function getSuggestEvent(userId) {
   return await userDAL.getSuggestEvent(userId);
 }
 export async function updateUserMatchStatus(userId, dataObj) {
-  // const [userCurrent] = await userDAL.getUserInfoById(userId);
-  // const [userLiked] = await userDAL.getUserInfoById(dataObj.user_id);
+  const [userCurrent] = await userDAL.getUserInfoById(userId);
+  const [userLiked] = await userDAL.getUserInfoById(dataObj.user_id);
   const status = await matchDAL.getMatchStatus();
   const [match] = await matchDAL.getMatchCouple(userId, dataObj.user_id);
   console.log(match);
@@ -341,29 +341,29 @@ export async function updateUserMatchStatus(userId, dataObj) {
     upsertOnly,
   );
 
-  // const title = `TÍNH NĂNG KẾT NỐI`;
-  // const bodyCurrent = `Bạn ${commonFunctions.getValueByLabel(
-  //   statusStage.user_match_status,
-  // )} với ${userLiked.user_name}`;
-  // const bodyLike = `Bạn ${commonFunctions.getValueByLabel(
-  //   statusStage.user_match_status,
-  // )} bởi ${userCurrent.user_name}`;
+  const title = `TÍNH NĂNG KẾT NỐI`;
+  const bodyCurrent = `Bạn ${commonFunctions.getValueByLabel(
+    statusStage.user_match_status,
+  )} với ${userLiked.user_name}`;
+  const bodyLike = `Bạn ${commonFunctions.getValueByLabel(
+    statusStage.user_match_status,
+  )} bởi ${userCurrent.user_name}`;
 
-  // const [newNotificationStatus] =
-  //   await notificationDAL.getNotificationNewStatus();
+  const [newNotificationStatus] =
+    await notificationDAL.getNotificationNewStatus();
 
-  // await notificationDAL.createNotification(
-  //   userId,
-  //   bodyCurrent,
-  //   newNotificationStatus.notification_status_id,
-  // );
-  // await notificationDAL.createNotification(
-  //   dataObj.user_id,
-  //   bodyLike,
-  //   newNotificationStatus.notification_status_id,
-  // );
-  // firebaseHelper.sendNotification(userLiked.token_id, title, bodyLike);
-  // firebaseHelper.sendNotification(userCurrent.token_id, title, bodyCurrent);
+  await notificationDAL.createNotification(
+    userId,
+    bodyCurrent,
+    newNotificationStatus.notification_status_id,
+  );
+  await notificationDAL.createNotification(
+    dataObj.user_id,
+    bodyLike,
+    newNotificationStatus.notification_status_id,
+  );
+  firebaseHelper.sendNotification(userLiked.token_id, title, bodyLike);
+  firebaseHelper.sendNotification(userCurrent.token_id, title, bodyCurrent);
 
   return await matchDAL.getMatchCouple(userId, dataObj.user_id);
 }
