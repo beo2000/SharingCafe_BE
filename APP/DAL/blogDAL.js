@@ -31,6 +31,7 @@ export async function getBlogs(page, title) {
       WHERE (blocker_id = u.user_id AND blocked_id = b.user_id)
           OR (blocker_id = b.user_id AND blocked_id = u.user_id)
     )
+    order by b.created_at desc
     offset ((${page} - 1 ) * 10) rows 
     fetch next 10 rows only
     `;
@@ -54,6 +55,7 @@ export async function getBlogs(page, title) {
       WHERE (blocker_id = u.user_id AND blocked_id = b.user_id)
           OR (blocker_id = b.user_id AND blocked_id = u.user_id)
     )
+    order by b.created_at desc
   `;
   }
   const result = await SequelizeInstance.query(sqlQuery, {
