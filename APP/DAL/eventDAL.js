@@ -61,7 +61,7 @@ export async function getEvents(title, date, page) {
 export async function getEvent(eventId) {
   const sqlQuery = `
   select 
-    e.*, u.user_id, u.user_name, i.name
+    e.*, u.user_id, u.user_name, i.name, e.title
   from
     public."event" e 
   left join 

@@ -150,8 +150,8 @@ export async function joinEvent(event_id, userId) {
   if (!event) throw new Error('Event not found !!!');
   const [userJoin] = await userDAL.getUserInfoById(userId);
   const [userHost] = await userDAL.getUserInfoById(event.organizer_id);
-  const titleTo = `TÍNH NĂNG SỰ KIỆN`;
-  const bodyTo = `Thông báo mới: Người dùng ${userJoin.user_name} đã tham gia vào một sự kiện của bạn. Số lượng người dùng đã được cập nhập 😘😘😘`;
+  const titleTo = `Sự kiện '${event.title}`;
+  const bodyTo = `${userJoin.user_name} đã tham gia sự kiện của bạn.`;
   firebaseHelper.sendNotification(userHost.token_id, titleTo, bodyTo);
   const [newNotificationStatus] =
     await notificationDAL.getNotificationNewStatus();
