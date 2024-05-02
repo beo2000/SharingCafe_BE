@@ -438,11 +438,6 @@ and t.age = '${filterByAge}'
 and t.gender = '${filterByGender}'
 `)
     : '';
-  filterByAddress
-    ? (sqlQuery += `
-and t.address = '${filterByAddress}'
-`)
-    : '';
 
   let userDetails = await SequelizeInstance.query(sqlQuery, {
     type: SequelizeInstance.QueryTypes.SELECT,
@@ -724,11 +719,6 @@ and df.age = '${filterByAge}'
   filterByGender
     ? (sqlQuery += `
 and df.gender = '${filterByGender}'
-`)
-    : '';
-  filterByAddress
-    ? (sqlQuery += `
-and df.address = '${filterByAddress}'
 `)
     : '';
 

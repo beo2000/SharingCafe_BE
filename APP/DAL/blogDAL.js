@@ -115,7 +115,7 @@ export async function createBlog(blogId, dataObj) {
     blog_id: blogId,
     user_id: dataObj.user_id,
     title: dataObj.title,
-    contetn: dataObj.content,
+    content: dataObj.content,
     image: dataObj.image,
     likes_count: 0,
     comments_count: 0,

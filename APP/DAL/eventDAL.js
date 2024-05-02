@@ -136,7 +136,7 @@ export async function getNewEvents() {
   const date = new Date(Date.now());
   const sqlQuery = `
   select 
-    e.event_id, e.title, e.background_img, e.time_of_event, e.address, e.participants_count, e.end_of_event
+    e.event_id, e.title, e.background_img, e.time_of_event, e.address, e.participants_count, e.end_of_event, e.created_at
   from
     public."event" e 
   left join 
@@ -153,7 +153,7 @@ export async function getNewEvents() {
       where (blocker_id = u.user_id and blocked_id = e.organizer_id)
           or (blocker_id = e.organizer_id and blocked_id = u.user_id)
     )
-  order by e.time_of_event
+  order by e.created_at desc
   `;
   const result = await SequelizeInstance.query(sqlQuery, {
     type: SequelizeInstance.QueryTypes.SELECT,
