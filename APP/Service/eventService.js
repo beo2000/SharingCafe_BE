@@ -2,6 +2,7 @@ import * as eventDAL from '../DAL/eventDAL.js';
 import * as userDAL from '../DAL/userDAL.js';
 import * as commonFunctions from '../common/CommonFunctions.js';
 import * as firebaseHelper from '../utility/FirebaseHelper.js';
+import * as notificationDAL from '../DAL/notificationDAL.js';
 import { v4 as uuidv4 } from 'uuid';
 import fs from 'fs';
 
@@ -152,13 +153,13 @@ export async function joinEvent(event_id, userId) {
   const titleTo = `TÍNH NĂNG SỰ KIỆN`;
   const bodyTo = `Thông báo mới: Người dùng ${userJoin.user_name} đã tham gia vào một sự kiện của bạn. Số lượng người dùng đã được cập nhập 😘😘😘`;
   firebaseHelper.sendNotification(userHost.token_id, titleTo, bodyTo);
-  const messageId = uuidv4();
-  const messageData = JSON.stringify({
-    from: userId,
-    to: event.organizer_id,
-    message: bodyTo,
-  });
-  await chatDAL.saveMessage(messageId, messageData);
+  const [newNotificationStatus] =
+    await notificationDAL.getNotificationNewStatus();
+  await notificationDAL.createNotification(
+    event.organizer_id,
+    bodyTo,
+    newNotificationStatus.notification_status_id,
+  );
   return await eventDAL.joinEvent(participation_id, event_id, userId);
 }
 
