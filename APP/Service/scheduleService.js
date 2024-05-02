@@ -1,6 +1,7 @@
 import * as scheduleDAL from '../DAL/scheduleDAL.js';
 import * as userDAL from '../DAL/userDAL.js';
 import * as firebaseHelper from '../utility/FirebaseHelper.js';
+import * as notificationDAL from '../DAL/notificationDAL.js';
 import { v4 as uuidv4 } from 'uuid';
 
 export async function createSchedule(dataObj) {
@@ -10,8 +11,8 @@ export async function createSchedule(dataObj) {
   const titleTo = `Bạn có lịch hẹn mới`;
   const bodyTo = `${userFrom.user_name} đã tạo một cuộc hẹn với bạn vào lúc ${dataObj.date}`;
   firebaseHelper.sendNotification(userTo.token_id, titleTo, bodyTo);
-  const [newNotificationStatus] = await scheduleDAL.getNotificationNewStatus();
-  await scheduleDAL.createNotification(dataObj.receiver_id, bodyTo, newNotificationStatus.notification_status_id);
+  const [newNotificationStatus] = await notificationDAL.getNotificationNewStatus();
+  await notificationDAL.createNotification(dataObj.receiver_id, bodyTo, newNotificationStatus.notification_status_id);
   return await scheduleDAL.createSchedule(schedule_id, dataObj);
 }
 export async function getScheduleBetweenUsers(userId, anotherUserId) {
