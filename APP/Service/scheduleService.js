@@ -8,10 +8,10 @@ export async function createSchedule(dataObj) {
   const [userFrom] = await userDAL.getUserInfoById(dataObj.sender_id);
   const [userTo] = await userDAL.getUserInfoById(dataObj.receiver_id);
   const titleTo = `Bạn có lịch hẹn mới`;
-  const bodyTo = `${userFrom.user_name} đã tạo một cuộc hẹn với bạn vào lúc ${dataObj.schedule_time}`;
+  const bodyTo = `${userFrom.user_name} đã tạo một cuộc hẹn với bạn vào lúc ${dataObj.date}`;
   firebaseHelper.sendNotification(userTo.token_id, titleTo, bodyTo);
   const [newNotificationStatus] = await scheduleDAL.getNotificationNewStatus();
-  await scheduleDAL.createNotification(userTo.user_id, bodyTo, newNotificationStatus.notification_status_id);
+  await scheduleDAL.createNotification(dataObj.receiver_id, bodyTo, newNotificationStatus.notification_status_id);
   return await scheduleDAL.createSchedule(schedule_id, dataObj);
 }
 export async function getScheduleBetweenUsers(userId, anotherUserId) {
