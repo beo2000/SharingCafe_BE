@@ -721,11 +721,6 @@ and df.age = '${filterByAge}'
 and df.gender = '${filterByGender}'
 `)
     : '';
-  filterByAddress
-    ? (sqlQuery += `
-and df.address = '${filterByAddress}'
-`)
-    : '';
 
   sqlQuery += `
 limit ${limit} 
