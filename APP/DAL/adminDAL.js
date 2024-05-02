@@ -98,7 +98,9 @@ export async function getUsers() {
               ui.user_id, ui.interest_id  
       ) ui ON ui.user_id = u.user_id
   GROUP BY 
-      u.user_id, u.role_id; 
+      u.user_id, u.role_id
+  ORDER BY
+      u.registration desc
   `;
   const result = await SequelizeInstance.query(sqlQuery, {
     type: SequelizeInstance.QueryTypes.SELECT,
