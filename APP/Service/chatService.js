@@ -5,8 +5,9 @@ import { v4 as uuidv4 } from 'uuid';
 
 export async function saveMessage(messageData) {
   const messageId = uuidv4();
-  const [block] = await userDAL.getBlockCouple(messageData);
-  if (block) {
+  const block = await userDAL.getBlockCouple(messageData);
+  console.log(block);
+  if (block.length == 0) {
     return null; // If blocked, return null
   }
   const { from, to, messageContent } = messageData;
