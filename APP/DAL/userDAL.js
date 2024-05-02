@@ -1103,7 +1103,7 @@ export async function getBlockCouple(messageData) {
           OR (blocker_id = '${to}' AND blocked_id = '${from}')
     `;
   let result = await SequelizeInstance.query(sqlQuery, {
-    type: SequelizeInstance.QueryTypes.INSERT,
+    type: SequelizeInstance.QueryTypes.SELECT,
     raw: true,
   });
   return result;
