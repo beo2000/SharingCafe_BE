@@ -24,6 +24,7 @@ export async function getUserDetails(email, password) {
       'lng',
       'address',
       'token_id',
+      'dob',
     ],
     include: [
       {
@@ -47,6 +48,7 @@ export async function getUserDetails(email, password) {
 }
 
 export async function register(userId, user) {
+  console.log();
   return await User.create({
     user_id: userId,
     user_name: user.user_name,
@@ -57,6 +59,7 @@ export async function register(userId, user) {
     gender: user.gender,
     age: user.age,
     is_available: true,
+    dob: new Date((new Date(user.dob).getTime() + (7 * 60 * 60 * 1000))),
     role_id: '6150886b-5920-4884-8e43-d4efb62f89d3',
   });
 }
@@ -842,6 +845,7 @@ export async function updateProfile(userId, profile) {
       lng: profile.lng,
       address: profile.address,
       token_id: profile.token_id,
+      dob: new Date((new Date(profile.dob).getTime() + (7 * 60 * 60 * 1000))),
     },
     {
       where: { user_id: userId },

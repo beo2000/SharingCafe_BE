@@ -14,7 +14,6 @@ export async function getEvents(title, date, page) {
   if (date1 == 'Invalid Date') {
     date1 = new Date('1/1/1000');
   }
-  console.log(date1.toUTCString());
   if (page) {
     sqlQuery = `
     select 

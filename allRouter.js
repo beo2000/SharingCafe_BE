@@ -12,6 +12,7 @@ import * as scheduleController from './APP/Controller/scheduleController.js';
 import * as reportController from './APP/Controller/reportController.js';
 import * as locationController from './APP/Controller/locationController.js';
 import * as notificationController from './APP/Controller/NotificationController.js';
+import * as mapController from './APP/Controller/mapController.js';
 const router = express.Router();
 
 /**
@@ -200,6 +201,9 @@ router.get('/api/admin/blog-statics', admController.getBlogStatics);
  *               story:
  *                 type: string
  *                 example: Chưa nghĩ ra được gì hay ho
+ *               dob:
+ *                 type: string
+ *                 example: 3/4/1995
  *     responses:
  *       '200':
  *         description: Registration successful
@@ -508,6 +512,9 @@ router.get('/api/admin/blog-statics', admController.getBlogStatics);
  *               profile_avatar:
  *                  type: string
  *                  description: User avatar to be updated
+ *               dob:
+ *                  type: string
+ *                  description: User date of birth to be updated
  *     responses:
  *       '200':
  *         description: User updated successfully
@@ -3659,4 +3666,221 @@ router.get(
   scheduleController.getScheduleHistoryByUserId,
 );
 
+router.get('/api/map/province', mapController.getProvinces);
+router.post('/api/map/province', mapController.createProvince);
+router.put('/api/map/province', mapController.updateProvince);
+router.delete('/api/map/province', mapController.deleteProvince);
+/**
+ * @swagger
+ * /api/map/province:
+ *   get:
+ *     summary: Get Vietnam province and it id
+ *     description: Retrieve Vietnam province and it id
+ *     tags:
+ *      - ADDRESS SECTION
+ *     responses:
+ *       '200':
+ *         description: Successfully retrieved province.
+ *       '400':
+ *         description: Bad request. Invalid parameters provided.
+ *       '500':
+ *         description: An internal server error occurred.
+ */
+
+/**
+ * @swagger
+ * /api/map/province:
+ *   post:
+ *     summary: Create a province
+ *     description: Create a privince
+ *     tags:
+ *      - ADDRESS SECTION
+ *     parameters:
+ *       - in: query
+ *         name: province
+ *         required: true
+ *         description: name of province
+ *         example: Bắc Ninh
+ *         schema:
+ *           type: string
+ *     responses:
+ *       '200':
+ *         description: Successfully create province.
+ *       '400':
+ *         description: Bad request. Invalid parameters provided.
+ *       '500':
+ *         description: An internal server error occurred.
+ */
+
+/**
+ * @swagger
+ * /api/map/province:
+ *   put:
+ *     summary: Update a province
+ *     description: Update a privince
+ *     tags:
+ *      - ADDRESS SECTION
+ *     parameters:
+ *       - in: query
+ *         name: province_id
+ *         required: true
+ *         description: id of province
+ *         schema:
+ *           type: string
+ *       - in: query
+ *         name: province
+ *         required: true
+ *         description: name of province
+ *         schema:
+ *           type: string
+ *     responses:
+ *       '200':
+ *         description: Successfully update province.
+ *       '400':
+ *         description: Bad request. Invalid parameters provided.
+ *       '500':
+ *         description: An internal server error occurred.
+ */
+
+/**
+ * @swagger
+ * /api/map/province:
+ *   delete:
+ *     summary: Delete a province
+ *     description: Delete a privince
+ *     tags:
+ *      - ADDRESS SECTION
+ *     parameters:
+ *       - in: query
+ *         name: province_id
+ *         required: true
+ *         description: id of province
+ *         schema:
+ *           type: string
+ *     responses:
+ *       '200':
+ *         description: Successfully update province.
+ *       '400':
+ *         description: Bad request. Invalid parameters provided.
+ *       '500':
+ *         description: An internal server error occurred.
+ */
+
+router.get('/api/map/district', mapController.getDistricts);
+router.post('/api/map/district', mapController.createDistrict);
+router.put('/api/map/district', mapController.updateDistrict);
+router.delete('/api/map/district', mapController.deleteDistrict);
+/**
+ * @swagger
+ * /api/map/district:
+ *   get:
+ *     summary: Get Vietnam district and it id
+ *     description: Retrieve Vietnam district and it id
+ *     tags:
+ *      - ADDRESS SECTION
+ *     parameters:
+ *       - in: query
+ *         name: province_id
+ *         required: false
+ *         description: id of province
+ *         schema:
+ *           type: string
+ *     responses:
+ *       '200':
+ *         description: Successfully retrieved province.
+ *       '400':
+ *         description: Bad request. Invalid parameters provided.
+ *       '500':
+ *         description: An internal server error occurred.
+ */
+
+/**
+ * @swagger
+ * /api/map/district:
+ *   post:
+ *     summary: Create a District
+ *     description: Create Vietnam district
+ *     tags:
+ *      - ADDRESS SECTION
+ *     parameters:
+ *       - in: query
+ *         name: province_id
+ *         required: true
+ *         description: id of province
+ *         schema:
+ *           type: string
+ *       - in: query
+ *         name: district
+ *         required: true
+ *         description: name of district
+ *         schema:
+ *           type: string
+ *     responses:
+ *       '200':
+ *         description: Successfully retrieved province.
+ *       '400':
+ *         description: Bad request. Invalid parameters provided.
+ *       '500':
+ *         description: An internal server error occurred.
+ */
+
+/**
+ * @swagger
+ * /api/map/district:
+ *   put:
+ *     summary: Update a District
+ *     description: Update Vietnam district
+ *     tags:
+ *      - ADDRESS SECTION
+ *     parameters:
+ *       - in: query
+ *         name: district_id
+ *         required: true
+ *         description: id of district
+ *         schema:
+ *           type: string
+ *       - in: query
+ *         name: province_id
+ *         required: true
+ *         description: id of province
+ *         schema:
+ *           type: string
+ *       - in: query
+ *         name: district
+ *         required: true
+ *         description: name of district
+ *         schema:
+ *           type: string
+ *     responses:
+ *       '200':
+ *         description: Successfully retrieved province.
+ *       '400':
+ *         description: Bad request. Invalid parameters provided.
+ *       '500':
+ *         description: An internal server error occurred.
+ */
+
+/**
+ * @swagger
+ * /api/map/district:
+ *   delete:
+ *     summary: Delete a District
+ *     description: Delete a District
+ *     tags:
+ *      - ADDRESS SECTION
+ *     parameters:
+ *       - in: query
+ *         name: district_id
+ *         required: true
+ *         description: id of district
+ *         schema:
+ *           type: string
+ *     responses:
+ *       '200':
+ *         description: Successfully retrieved province.
+ *       '400':
+ *         description: Bad request. Invalid parameters provided.
+ *       '500':
+ *         description: An internal server error occurred.
+ */
 export default router;

@@ -90,6 +90,9 @@ const User = sequelize.define(
     is_available: {
       type: DataTypes.BOOLEAN,
     },
+    dob: {
+      type: DataTypes.DATE,
+    },
   },
   {
     tableName: 'user',
@@ -796,8 +799,9 @@ const Province = sequelize.define(
   'province',
   {
     province_id: {
-      type: DataTypes.TEXT,
+      type: DataTypes.UUID,
       primaryKey: true,
+      defaultValue: DataTypes.UUIDV4,
     },
     province: {
       type: DataTypes.TEXT,
@@ -806,6 +810,28 @@ const Province = sequelize.define(
   },
   {
     tableName: 'province',
+    timestamps: false,
+  },
+);
+
+const District = sequelize.define(
+  'district',
+  {
+    district_id: {
+      type: DataTypes.UUID,
+      primaryKey: true,
+      defaultValue: DataTypes.UUIDV4,
+    },
+    province_id: {
+      type: DataTypes.UUID,
+    },
+    district: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+    },
+  },
+  {
+    tableName: 'district',
     timestamps: false,
   },
 );
@@ -922,5 +948,6 @@ export {
   FavoriteDrink,
   UserReport,
   Province,
+  District,
   Rating,
 };
