@@ -51,6 +51,7 @@ export async function getUser(userId) {
     purpose: '',
     favorite_location: '',
     address: '',
+    dob: '',
     interest: [],
     problem: [],
     unlike_topic: [],
@@ -70,6 +71,7 @@ export async function getUser(userId) {
         purpose: row.purpose,
         favorite_location: row.favorite_location,
         address: row.address,
+        dob: row.dob,
       };
     }
 
@@ -418,6 +420,7 @@ export async function getProfile(userId, currentUserId) {
     purpose: '',
     favorite_location: '',
     address: '',
+    dob: '',
     distance: distance,
     interest: [],
     problem: [],
@@ -438,6 +441,7 @@ export async function getProfile(userId, currentUserId) {
         purpose: row.purpose,
         favorite_location: row.favorite_location,
         address: row.address,
+        dob: row.dob,
       };
     }
 

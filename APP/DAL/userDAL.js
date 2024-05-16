@@ -1019,7 +1019,7 @@ export async function updateLocation(userId, lat, lng) {
 export async function getProfile(userId) {
   let sqlQuery = `
   select 
-    u.user_id, u.user_name, u.profile_avatar, u.story, u.gender, u.age, u.purpose, u.favorite_location, u.address,
+    u.user_id, u.user_name, u.profile_avatar, u.story, u.gender, u.age, u.purpose, u.favorite_location, u.address, u.dob,
     i.interest_id ,
     i."name" as interest_name,
     pp.personal_problem_id,
