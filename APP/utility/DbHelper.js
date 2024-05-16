@@ -265,6 +265,64 @@ const Notification = sequelize.define(
   },
 );
 
+export const UserFilterSetting = sequelize.define(
+  'UserFilterSetting',
+  {
+    user_id: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true,
+      allowNull: false,
+    },
+    by_province: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+      allowNull: true,
+    },
+    province_id: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      allowNull: true,
+    },
+    by_district: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+      allowNull: true,
+    },
+    district_id: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      allowNull: true,
+    },
+    by_age: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: true,
+      allowNull: true,
+    },
+    min_age: {
+      type: DataTypes.SMALLINT,
+      defaultValue: 0,
+      allowNull: true,
+    },
+    max_age: {
+      type: DataTypes.SMALLINT,
+      defaultValue: 100,
+      allowNull: true,
+    },
+    created_at: {
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW,
+      allowNull: false,
+    },
+  },
+  {
+    tableName: 'user_filter_setting',
+    schema: 'public',
+    timestamps: false,
+    comment: 'This user_filter_setting describe user setting for filtering',
+  },
+);
+
 const Friendship = sequelize.define(
   'Friendship',
   {

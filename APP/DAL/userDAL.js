@@ -3,7 +3,93 @@ import {
   User,
   UserInterest,
   SequelizeInstance,
+  UserFilterSetting,
 } from '../utility/DbHelper.js';
+
+export async function getUserFilterSetting(user_id) {
+  return await UserFilterSetting.findOne({ where: { user_id } });
+}
+export async function upsertUserFilterSetting(user_id, dataObj) {
+  const [userFilterSetting, created] = await UserFilterSetting.upsert({
+    user_id,
+    ...dataObj,
+  });
+  return { userFilterSetting, created };
+}
+
+export async function getUserByFilterSetting(user_id) {
+  let sqlQuery = `
+WITH user_filter_matching AS (
+  SELECT
+    user_id,
+    by_province,
+    province_id,
+    by_district,
+    district_id,
+    by_age,
+    min_age,
+    max_age,
+    created_at
+  FROM
+    public.user_filter_setting
+  WHERE
+    user_id = '${user_id}'
+), user_matched AS (
+  SELECT
+    um.*
+  FROM
+    user_match um
+  INNER JOIN
+    user_match_status ums
+  ON
+    um.user_match_status_id = ums.user_match_status_id
+  WHERE
+    current_user_id = '${user_id}'
+)
+SELECT 
+  u.user_id,
+  u.user_name,
+  u.phone,
+  u.email,
+  u.profile_avatar,
+  u.story,
+  u.registration,
+  u.gender,
+  DATE_PART('year', AGE(current_date, u.dob)) AS age,
+  u.purpose,
+  u.favorite_location,
+  u.lat,
+  u.lng,
+  u.address,
+  u.token_id
+FROM 
+  public.user u
+LEFT OUTER JOIN
+  user_filter_matching ufm
+ON
+  ufm.user_id = u.user_id
+  AND (
+    (ufm.by_province = true AND ufm.province_id = u.province_id) OR
+    (ufm.by_district = true AND ufm.district_id = u.district_id) OR
+    (ufm.by_age = true AND (
+      (ufm.min_age <= DATE_PART('year', AGE(current_date, u.dob)) AND 
+       ufm.max_age >= DATE_PART('year', AGE(current_date, u.dob)))
+    ))
+  )
+LEFT OUTER JOIN
+  user_matched um
+ON
+  um.user_id_liked = u.user_id
+WHERE
+  1 = 1
+  and um.user_match_status_id is null
+  `;
+  let result = await SequelizeInstance.query(sqlQuery, {
+    type: SequelizeInstance.QueryTypes.SELECT,
+    raw: true,
+  });
+  return result;
+}
 
 export async function getUserDetails(email, password) {
   let user = await User.findOne({
@@ -59,7 +145,7 @@ export async function register(userId, user) {
     gender: user.gender,
     age: user.age,
     is_available: true,
-    dob: new Date((new Date(user.dob).getTime() + (7 * 60 * 60 * 1000))),
+    dob: new Date(new Date(user.dob).getTime() + 7 * 60 * 60 * 1000),
     role_id: '6150886b-5920-4884-8e43-d4efb62f89d3',
   });
 }
@@ -481,7 +567,7 @@ WHERE
     AND ums.user_match_status_id IS NOT null
     and u.user_id <> '${userId}'
     AND ums.user_match_status = '${status}'`;
-  } else if (status == 'Matched'){
+  } else if (status == 'Matched') {
     sqlQuery += ` AND ums.user_match_status = '${status}'`;
   }
   let userDetails = await SequelizeInstance.query(sqlQuery, {
@@ -845,7 +931,7 @@ export async function updateProfile(userId, profile) {
       lng: profile.lng,
       address: profile.address,
       token_id: profile.token_id,
-      dob: new Date((new Date(profile.dob).getTime() + (7 * 60 * 60 * 1000))),
+      dob: new Date(new Date(profile.dob).getTime() + 7 * 60 * 60 * 1000),
     },
     {
       where: { user_id: userId },

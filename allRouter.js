@@ -3883,4 +3883,104 @@ router.delete('/api/map/district', mapController.deleteDistrict);
  *       '500':
  *         description: An internal server error occurred.
  */
+
+/**
+ * @swagger
+ * /api/auth/user/auth/setting-filter:
+ *   get:
+ *     security:
+ *       - BearerAuth: []
+ *     summary: SELECT USER SETTING FILTER
+ *     description: SELECT USER SETTING FILTER
+ *     tags:
+ *      - USER SETTING FILTER SECTION
+ *     responses:
+ *       '200':
+ *         description: Successfully retrieved province.
+ *       '400':
+ *         description: Bad request. Invalid parameters provided.
+ *       '500':
+ *         description: An internal server error occurred.
+ */
+router.get(
+  '/api/auth/user/auth/setting-filter',
+  userController.getUserFilterSetting,
+);
+/**
+ * @swagger
+ * /api/auth/user/auth/setting-filter:
+ *   put:
+ *     security:
+ *       - BearerAuth: []
+ *     summary: Upsert User Setting Filter
+ *     description: Upsert user setting filter
+ *     tags:
+ *       - USER SETTING FILTER SECTION
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               by_province:
+ *                 type: boolean
+ *                 description: Filter by province
+ *               province_id:
+ *                 type: string
+ *                 format: uuid
+ *                 description: Province ID for filtering
+ *               by_district:
+ *                 type: boolean
+ *                 description: Filter by district
+ *               district_id:
+ *                 type: string
+ *                 format: uuid
+ *                 description: District ID for filtering
+ *               by_age:
+ *                 type: boolean
+ *                 description: Filter by age
+ *               min_age:
+ *                 type: integer
+ *                 description: Minimum age for filtering
+ *                 example: 10
+ *               max_age:
+ *                 type: integer
+ *                 description: Maximum age for filtering
+ *                 example: 140
+ *     responses:
+ *       '200':
+ *         description: Successfully upserted user setting filter.
+ *       '400':
+ *         description: Bad request. Invalid parameters provided.
+ *       '500':
+ *         description: An internal server error occurred.
+ */
+router.put(
+  '/api/auth/user/auth/setting-filter',
+  userController.upsertUserFilterSetting,
+);
+
+/**
+ * @swagger
+ * /api/auth/user/auth/user-filter-setting:
+ *   get:
+ *     security:
+ *       - BearerAuth: []
+ *     summary: SELECT USER BY SETTING FILTER FOR MATCHING
+ *     description: SELECT USER BY SETTING FILTER FOR MATCHING
+ *     tags:
+ *      - USER BY SETTING FILTER FOR MATCHING SECTION
+ *     responses:
+ *       '200':
+ *         description: Successfully retrieved province.
+ *       '400':
+ *         description: Bad request. Invalid parameters provided.
+ *       '500':
+ *         description: An internal server error occurred.
+ */
+router.get(
+  '/api/auth/user/auth/user-filter-setting',
+  userController.getUserByFilterSetting,
+);
 export default router;

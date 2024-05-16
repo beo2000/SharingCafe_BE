@@ -547,3 +547,14 @@ export async function blockingAUser(userId, blockedId) {
 export async function unBlockingAUser(userId, blockedId) {
   return await userDAL.unBlockingAUser(userId, blockedId);
 }
+
+export async function getUserFilterSetting(userId) {
+  return await userDAL.getUserFilterSetting(userId);
+}
+
+export async function upsertUserFilterSetting(userId, dataObj) {
+  await userDAL.upsertUserFilterSetting(userId, dataObj);
+}
+export async function getUserByFilterSetting(userId) {
+  return await userDAL.getUserByFilterSetting(userId);
+}
