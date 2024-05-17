@@ -515,6 +515,12 @@ router.get('/api/admin/blog-statics', admController.getBlogStatics);
  *               dob:
  *                  type: string
  *                  description: User date of birth to be updated
+ *               province_id:
+ *                  type: string
+ *                  description: Id of province to be updated
+ *               district_id:
+ *                  type: string
+ *                  description: Id of disctrict to be updated
  *     responses:
  *       '200':
  *         description: User updated successfully

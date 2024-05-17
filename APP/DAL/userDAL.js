@@ -111,6 +111,8 @@ export async function getUserDetails(email, password) {
       'address',
       'token_id',
       'dob',
+      'province_id',
+      'district_id',
     ],
     include: [
       {
@@ -147,6 +149,8 @@ export async function register(userId, user) {
     is_available: true,
     dob: new Date(new Date(user.dob).getTime() + 7 * 60 * 60 * 1000),
     role_id: '6150886b-5920-4884-8e43-d4efb62f89d3',
+    province_id: user.province_id,
+    district_id: user.district_id,
   });
 }
 
@@ -932,6 +936,8 @@ export async function updateProfile(userId, profile) {
       address: profile.address,
       token_id: profile.token_id,
       dob: new Date(new Date(profile.dob).getTime() + 7 * 60 * 60 * 1000),
+      province_id: profile.province_id,
+      district_id: profile.district_id,
     },
     {
       where: { user_id: userId },
@@ -1105,7 +1111,7 @@ export async function updateLocation(userId, lat, lng) {
 export async function getProfile(userId) {
   let sqlQuery = `
   select 
-    u.user_id, u.user_name, u.profile_avatar, u.story, u.gender, u.age, u.purpose, u.favorite_location, u.address, u.dob,
+    u.user_id, u.user_name, u.profile_avatar, u.story, u.gender, u.age, u.purpose, u.favorite_location, u.address, u.dob, p.province, d.district,
     i.interest_id ,
     i."name" as interest_name,
     pp.personal_problem_id,
@@ -1123,6 +1129,8 @@ export async function getProfile(userId) {
     left join public.unlike_topic ut on ut.user_id = u.user_id 
     left join public.favorite_drink fd on fd.user_id = u.user_id
     left join public.free_time ft on ft.user_id = u.user_id 
+    left join public.province p on p.province_id = u.province_id
+    left join public.district d on d.district_id = u.district_id
     where u.user_id = '${userId}'
     `;
   let result = await SequelizeInstance.query(sqlQuery, {

@@ -93,6 +93,12 @@ const User = sequelize.define(
     dob: {
       type: DataTypes.DATE,
     },
+    province_id: {
+      type: DataTypes.UUID,
+    },
+    district_id: {
+      type: DataTypes.UUID,
+    },
   },
   {
     tableName: 'user',
