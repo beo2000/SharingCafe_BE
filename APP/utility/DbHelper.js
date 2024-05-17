@@ -315,6 +315,21 @@ export const UserFilterSetting = sequelize.define(
       defaultValue: 100,
       allowNull: true,
     },
+    by_sex: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: true,
+      allowNull: true,
+    },
+    sex_id: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      allowNull: true,
+    },
+    by_interest: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: true,
+      allowNull: true,
+    },
     created_at: {
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW,
