@@ -69,8 +69,8 @@ const User = sequelize.define(
     role_id: {
       type: DataTypes.UUID,
     },
-    gender: {
-      type: DataTypes.BOOLEAN,
+    gender_id: {
+      type: DataTypes.UUID,
     },
     age: {
       type: DataTypes.TEXT,
@@ -916,6 +916,10 @@ const Rating = sequelize.define(
       type: DataTypes.UUID,
       allowNull: false,
     },
+    user_id_rated: {
+      type: DataTypes.UUID,
+      allowNull: false,
+    },
     rating: {
       type: DataTypes.TEXT,
       allowNull: false,
@@ -930,6 +934,27 @@ const Rating = sequelize.define(
   },
   {
     tableName: 'rating',
+    timestamps: false,
+  },
+);
+
+const Gender = sequelize.define(
+  'gender',
+  {
+    gender_id: {
+      type: DataTypes.UUID,
+      primaryKey: true,
+      defaultValue: DataTypes.UUIDV4,
+    },
+    gender: {
+      type: DataTypes.TEXT,
+    },
+    is_ignore: {
+      type: DataTypes.BOOLEAN,
+    },
+  },
+  {
+    tableName: 'gender',
     timestamps: false,
   },
 );
@@ -1014,4 +1039,5 @@ export {
   Province,
   District,
   Rating,
+  Gender,
 };

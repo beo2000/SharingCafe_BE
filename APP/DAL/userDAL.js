@@ -102,7 +102,7 @@ export async function getUserDetails(email, password) {
       'profile_avatar',
       'story',
       'registration',
-      'gender',
+      'gender_id',
       'age',
       'purpose',
       'favorite_location',
@@ -144,7 +144,7 @@ export async function register(userId, user) {
     phone: user.phone,
     email: user.email,
     story: user.story,
-    gender: user.gender,
+    gender_id: user.gender_id,
     age: user.age,
     is_available: true,
     dob: new Date(new Date(user.dob).getTime() + 7 * 60 * 60 * 1000),
@@ -1111,7 +1111,8 @@ export async function updateLocation(userId, lat, lng) {
 export async function getProfile(userId) {
   let sqlQuery = `
   select 
-    u.user_id, u.user_name, u.profile_avatar, u.story, u.gender, u.age, u.purpose, u.favorite_location, u.address, u.dob, p.province, d.district,
+    u.user_id, u.user_name, u.profile_avatar, u.story, g.gender, u.age, u.purpose, u.favorite_location, u.address, u.dob, p.province, d.district,
+    (select  avg(rating)::numeric(2, 1) from rating r  where r.user_id_rated = '${userId}') as avg_rating ,
     i.interest_id ,
     i."name" as interest_name,
     pp.personal_problem_id,
@@ -1123,6 +1124,7 @@ export async function getProfile(userId) {
     ft.free_time_id,
     ft.free_time 
     from public."user" u
+    left join public.gender g on g.gender_id = u.gender_id
     left join public.user_interest ui on u.user_id = ui.user_id
     left join public.interest i on i.interest_id = ui.interest_id 
     left join public.personal_problem pp on pp.user_id = u.user_id 
@@ -1200,6 +1202,17 @@ export async function getBlockCouple(messageData) {
       WHERE (blocker_id = '${from}' AND blocked_id = '${to}')
           OR (blocker_id = '${to}' AND blocked_id = '${from}')
     `;
+  let result = await SequelizeInstance.query(sqlQuery, {
+    type: SequelizeInstance.QueryTypes.SELECT,
+    raw: true,
+  });
+  return result;
+}
+
+export async function getGender() {
+  let sqlQuery = `
+  select * from gender
+  `;
   let result = await SequelizeInstance.query(sqlQuery, {
     type: SequelizeInstance.QueryTypes.SELECT,
     raw: true,

@@ -494,7 +494,7 @@ router.get('/api/admin/blog-statics', admController.getBlogStatics);
  *               phone:
  *                 type: string
  *                 description: User phone to be updated
- *               gender:
+ *               gender_id:
  *                 type: string
  *                 description: User gender to be updated
  *               age:
@@ -835,6 +835,23 @@ router.get('/api/admin/blog-statics', admController.getBlogStatics);
  *       '500':
  *         description: Internal server error
  */
+
+/**
+ * @swagger
+ * /api/user/gender:
+ *   get:
+ *     summary: Get All gender option
+ *     description: Retrieve gender option
+ *     tags:
+ *      - USER SECTION
+ *     responses:
+ *       '200':
+ *         description: Successfully retrieved province.
+ *       '400':
+ *         description: Bad request. Invalid parameters provided.
+ *       '500':
+ *         description: An internal server error occurred.
+ */
 router.put('/api/auth/user/update-interests', userController.upsertInterests);
 router.put(
   '/api/auth/user/update-unlike-topic',
@@ -870,6 +887,8 @@ router.get(
   '/api/user/confirmVerificationEmail',
   userController.confirmVerificationEmail,
 );
+
+router.get('/api/user/gender', userController.getGender);
 
 router.post('/api/auth/user/block/block-user', userController.blockingAUser);
 router.delete(
@@ -3271,6 +3290,9 @@ router.get('/api/test', locationController.getMiddlePoint);
  *                 type: string
  *                 description: Rating of the meeting
  *                 example: "2"
+ *               user_id_rated:
+ *                 type: string
+ *                 description: ID of the user for rated
  *     responses:
  *       '201':
  *         description: Rating created successfully

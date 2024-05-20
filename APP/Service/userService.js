@@ -54,6 +54,7 @@ export async function getUser(userId) {
     dob: '',
     province: '',
     district: '',
+    avg_rating: '',
     interest: [],
     problem: [],
     unlike_topic: [],
@@ -76,6 +77,7 @@ export async function getUser(userId) {
         dob: row.dob,
         province: row.province,
         district: row.district,
+        avg_rating: row.avg_rating,
       };
     }
 
@@ -427,6 +429,7 @@ export async function getProfile(userId, currentUserId) {
     dob: '',
     province: '',
     district: '',
+    avg_rating: '',
     distance: distance,
     interest: [],
     problem: [],
@@ -450,6 +453,7 @@ export async function getProfile(userId, currentUserId) {
         dob: row.dob,
         province: row.province,
         district: row.district,
+        avg_rating: row.avg_rating,
       };
     }
 
@@ -565,4 +569,8 @@ export async function upsertUserFilterSetting(userId, dataObj) {
 }
 export async function getUserByFilterSetting(userId) {
   return await userDAL.getUserByFilterSetting(userId);
+}
+
+export async function getGender() {
+  return await userDAL.getGender();
 }

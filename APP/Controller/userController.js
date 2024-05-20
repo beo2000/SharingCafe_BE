@@ -420,3 +420,13 @@ export async function getUserByFilterSetting(req, res, next) {
     res.send(e);
   }
 }
+
+export async function getGender(req, res) {
+  try {
+    const result = await userService.getGender();
+    res.status(200).send(result);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ error: error.message });
+  }
+}

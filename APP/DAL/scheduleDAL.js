@@ -176,6 +176,7 @@ export async function createRating(rating_id, loginUser, dataObj) {
     content: dataObj.content,
     rating_id: rating_id,
     user_id: loginUser,
+    user_id_rated: dataObj.user_id_rated,
     rating: dataObj.rating,
   });
 }
