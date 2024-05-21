@@ -54,7 +54,7 @@ SELECT
   u.profile_avatar,
   u.story,
   u.registration,
-  u.gender,
+  g.gender,
   DATE_PART('year', AGE(current_date, u.dob)) AS age,
   u.purpose,
   u.favorite_location,
@@ -64,6 +64,7 @@ SELECT
   u.token_id
 FROM 
   public.user u
+LEFT JOIN gender g on g.gender_id = u.gender_id
 LEFT OUTER JOIN
   user_filter_matching ufm
 ON
