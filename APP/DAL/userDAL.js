@@ -17,7 +17,7 @@ export async function upsertUserFilterSetting(user_id, dataObj) {
   return { userFilterSetting, created };
 }
 
-export async function getUserByFilterSetting(user_id) {
+export async function getUserByFilterSetting(user_id, limit, offset) {
   let sqlQuery = `
 WITH user_filter_matching AS (
   SELECT
@@ -83,8 +83,14 @@ ON
   um.user_id_liked = u.user_id
 WHERE
   1 = 1
-  and um.user_match_status_id is null
+  and um.user_match_status_id is null 
   `;
+
+  if (limit && offset) {
+    sqlQuery += `
+    limit ${limit} 
+    offset ${offset}`;
+  }
   let result = await SequelizeInstance.query(sqlQuery, {
     type: SequelizeInstance.QueryTypes.SELECT,
     raw: true,
@@ -637,6 +643,8 @@ WITH interests AS (
         public."user" u
     INNER JOIN 
         user_interest ui ON ui.user_id = u.user_id
+    LEFT JOIN
+        gender g ON g.gender_id = u.gender_id
     INNER JOIN 
         interest i ON i.interest_id = ui.interest_id OR ui.interest_id = i.parent_interest_id
     WHERE 
@@ -665,6 +673,8 @@ match_liked AS (
         u.token_id
     FROM 
         public."user" u
+    LEFT JOIN
+        gender g ON g.gender_id = u.gender_id
     WHERE 
         u.user_id IN (
             SELECT current_user_id 
@@ -692,6 +702,8 @@ SELECT
         u.token_id
     FROM 
         interests u
+    LEFT JOIN
+        gender g ON g.gender_id = u.gender_id        
     WHERE 
         u.user_id <> '${userId}'
 )
@@ -716,6 +728,8 @@ SELECT
         u.token_id
     FROM 
         public."user" u
+    LEFT JOIN
+        gender g ON g.gender_id = u.gender_id
     WHERE 
         u.user_id <> '${userId}'
 )
@@ -763,6 +777,7 @@ u.user_id NOT IN (
     u.token_id
   from 
     public.user u
+  left join gender g on g.gender_id = u.gender_id
   where 1 = 1
   and u.user_id <> '${userId}'
   and u.age in (select age from "user" u2 where u2.user_id = '${userId}')
@@ -789,6 +804,7 @@ SELECT
     u.token_id
 FROM 
     match_liked u
+LEFT JOIN gender g on g.gender_id = u.gender_id
 WHERE 
     u.user_id <> '${userId}'
     and u.user_id not in (select blocker_id from user_block ub where blocked_id = '${userId}')

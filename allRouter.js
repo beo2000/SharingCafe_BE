@@ -3999,6 +3999,21 @@ router.put(
  *     description: SELECT USER BY SETTING FILTER FOR MATCHING
  *     tags:
  *      - USER BY SETTING FILTER FOR MATCHING SECTION
+ *     parameters:
+ *       - in: query
+ *         name: limit
+ *         required: true
+ *         description: limit of user will display
+ *         schema:
+ *           type: string
+ *         example: 20
+*       - in: query
+ *         name: offset
+ *         required: true
+ *         description: number of page
+ *         schema:
+ *           type: string
+ *         example: 0
  *     responses:
  *       '200':
  *         description: Successfully retrieved province.

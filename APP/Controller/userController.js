@@ -412,8 +412,10 @@ export async function upsertUserFilterSetting(req, res, next) {
 export async function getUserByFilterSetting(req, res, next) {
   try {
     const loginUser = req.loginUser;
+    const limit = req.query.limit;
+    const offset = req.query.offset;
     if (!loginUser) throw new Error(`YOU MUST LOGIN TO SETTING `);
-    const result = await userService.getUserByFilterSetting(loginUser.user_id);
+    const result = await userService.getUserByFilterSetting(loginUser.user_id, limit, offset);
     res.send(result.length ? result : []);
   } catch (e) {
     console.log(e);

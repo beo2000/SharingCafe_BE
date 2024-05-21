@@ -567,8 +567,8 @@ export async function getUserFilterSetting(userId) {
 export async function upsertUserFilterSetting(userId, dataObj) {
   await userDAL.upsertUserFilterSetting(userId, dataObj);
 }
-export async function getUserByFilterSetting(userId) {
-  return await userDAL.getUserByFilterSetting(userId);
+export async function getUserByFilterSetting(userId, limit, offset) {
+  return await userDAL.getUserByFilterSetting(userId, limit, offset);
 }
 
 export async function getGender() {
