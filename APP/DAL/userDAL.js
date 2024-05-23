@@ -382,18 +382,20 @@ export async function getUserMatchByInterest(
         u.profile_avatar,
         u.story,
         u.registration,
-        u.gender,
-        u.age,
+        g.gender,
+        DATE_PART('year', AGE(current_date, u.dob)) AS age,
         u.purpose,
         u.favorite_location,
         u.lat,
         u.lng,
         u.address,
-        u.token_id 
+        u.token_id
     FROM 
         public."user" u
     INNER JOIN 
         user_interest ui ON ui.user_id = u.user_id
+    INNER JOIN
+        gender g ON g.gender_id = u.gender_id
     INNER JOIN 
         interest i ON i.interest_id = ui.interest_id OR ui.interest_id = i.parent_interest_id
     WHERE 
@@ -412,8 +414,8 @@ match_liked AS (
         u.profile_avatar,
         u.story,
         u.registration,
-        u.gender,
-        u.age,
+        g.gender,
+        DATE_PART('year', AGE(current_date, u.dob)) AS age,
         u.purpose,
         u.favorite_location,
         u.lat,
@@ -422,6 +424,8 @@ match_liked AS (
         u.token_id
     FROM 
         public."user" u
+    INNER JOIN
+        gender g ON g.gender_id = u.gender_id
     WHERE 
         u.user_id IN (
             SELECT current_user_id 
@@ -439,8 +443,8 @@ SELECT
         u.profile_avatar,
         u.story,
         u.registration,
-        u.gender,
-        u.age,
+        g.gender,
+        DATE_PART('year', AGE(current_date, u.dob)) AS age,
         u.purpose,
         u.favorite_location,
         u.lat,
@@ -449,6 +453,8 @@ SELECT
         u.token_id
     FROM 
         interests u
+    INNER JOIN
+        gender g ON g.gender_id = u.gender_id
     WHERE 
         u.user_id <> '${userId}'
 )
@@ -463,8 +469,8 @@ SELECT
         u.profile_avatar,
         u.story,
         u.registration,
-        u.gender,
-        u.age,
+        g.gender,
+        DATE_PART('year', AGE(current_date, u.dob)) AS age,
         u.purpose,
         u.favorite_location,
         u.lat,
@@ -473,6 +479,8 @@ SELECT
         u.token_id
     FROM 
         public."user" u
+    INNER JOIN
+        gender g ON g.gender_id = u.gender_id
     WHERE 
         u.user_id <> '${userId}'
 )
@@ -510,8 +518,8 @@ SELECT
     u.profile_avatar,
     u.story,
     u.registration,
-    u.gender,
-    u.age,
+    g.gender,
+    DATE_PART('year', AGE(current_date, u.dob)) AS age,
     u.purpose,
     u.favorite_location,
     u.lat,
@@ -520,6 +528,8 @@ SELECT
     u.token_id
 FROM 
     match_liked u
+INNER JOIN
+    gender g ON g.gender_id = u.gender_id
 WHERE 
     u.user_id <> '${userId}'
     UNION 
@@ -631,14 +641,14 @@ WITH interests AS (
         u.profile_avatar,
         u.story,
         u.registration,
-        u.gender,
-        u.age,
+        g.gender,
+        DATE_PART('year', AGE(current_date, u.dob)) AS age,
         u.purpose,
         u.favorite_location,
         u.lat,
         u.lng,
         u.address,
-        u.token_id 
+        u.token_id
     FROM 
         public."user" u
     INNER JOIN 
@@ -663,8 +673,8 @@ match_liked AS (
         u.profile_avatar,
         u.story,
         u.registration,
-        u.gender,
-        u.age,
+        g.gender,
+        DATE_PART('year', AGE(current_date, u.dob)) AS age,
         u.purpose,
         u.favorite_location,
         u.lat,
@@ -692,8 +702,8 @@ SELECT
         u.profile_avatar,
         u.story,
         u.registration,
-        u.gender,
-        u.age,
+        g.gender,
+        DATE_PART('year', AGE(current_date, u.dob)) AS age,
         u.purpose,
         u.favorite_location,
         u.lat,
@@ -718,8 +728,8 @@ SELECT
         u.profile_avatar,
         u.story,
         u.registration,
-        u.gender,
-        u.age,
+        g.gender,
+        DATE_PART('year', AGE(current_date, u.dob)) AS age,
         u.purpose,
         u.favorite_location,
         u.lat,
@@ -767,8 +777,8 @@ u.user_id NOT IN (
     u.profile_avatar,
     u.story,
     u.registration,
-    u.gender,
-    u.age,
+    g.gender,
+    DATE_PART('year', AGE(current_date, u.dob)) AS age,
     u.purpose,
     u.favorite_location,
     u.lat,
@@ -794,8 +804,8 @@ SELECT
     u.profile_avatar,
     u.story,
     u.registration,
-    u.gender,
-    u.age,
+    g.gender,
+    DATE_PART('year', AGE(current_date, u.dob)) AS age,
     u.purpose,
     u.favorite_location,
     u.lat,
@@ -1128,7 +1138,7 @@ export async function updateLocation(userId, lat, lng) {
 export async function getProfile(userId) {
   let sqlQuery = `
   select 
-    u.user_id, u.user_name, u.profile_avatar, u.story, g.gender, u.age, u.purpose, u.favorite_location, u.address, u.dob, p.province, d.district,
+    u.user_id, u.user_name, u.profile_avatar, u.story, u.gender_id, g.gender, u.age, u.purpose, u.favorite_location, u.address, u.dob, u.province_id, p.province, u.district_id, d.district,
     (select  avg(rating)::numeric(2, 1) from rating r  where r.user_id_rated = '${userId}') as avg_rating ,
     i.interest_id ,
     i."name" as interest_name,

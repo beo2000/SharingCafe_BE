@@ -73,7 +73,7 @@ export async function getStatics() {
 export async function getUsers() {
   const sqlQuery = `
   SELECT 
-    u.*,
+    u.*, g.gender, d.district, p.province,
     json_agg(
         json_build_object(
             'interest_id', ui.interest_id,
@@ -97,6 +97,12 @@ export async function getUsers() {
           ORDER BY 
               ui.user_id, ui.interest_id  
       ) ui ON ui.user_id = u.user_id
+  LEFT JOIN 
+    gender g ON g.gender_id = u.gender_id
+  LEFT JOIN
+    district d ON d.district_id = u.district_id
+  LEFT JOIN
+    province p ON p.province_id = u.province_id
   GROUP BY 
       u.user_id, u.role_id
   ORDER BY
