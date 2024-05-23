@@ -65,6 +65,8 @@ SELECT
 FROM 
   public.user u
 LEFT JOIN gender g on g.gender_id = u.gender_id
+LEFT JOIN district d on d.district_id = u.district_id
+LEFT JOIN province p on p.province_id = u.province_id
 LEFT OUTER JOIN
   user_filter_matching ufm
 ON
@@ -954,7 +956,7 @@ export async function updateProfile(userId, profile) {
       story: profile.story,
       password: profile.password,
       profile_avatar: profile.profile_avatar,
-      gender: profile.gender,
+      gender_id: profile.gender_id,
       age: profile.age,
       purpose: profile.purpose,
       favorite_location: profile.favorite_location,
