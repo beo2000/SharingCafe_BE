@@ -110,12 +110,15 @@ io.on('connection', (socket) => {
   console.log('Authorization header:', accessToken);
   socket.on('message', async (data) => {
     console.log('Received data:', data);
-    const messageId = await chatController.saveMessage(data);
-    if(messageId) {
-      const message = await chatController.getMessage(messageId);
-      io.emit('message', message);
-    } else {
-      io.emit('message', "USER GOT BLOCKED");
+    if(data.appointment != null) {io.emit('message', data);}
+    else{
+      const messageId = await chatController.saveMessage(data);
+      if(messageId) {
+        const message = await chatController.getMessage(messageId);
+        return io.emit('message', message);
+      } else {
+        return  io.emit('message', "USER GOT BLOCKED");
+      }
     }
   });
 });

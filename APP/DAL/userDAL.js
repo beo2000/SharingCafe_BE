@@ -37,6 +37,7 @@ WITH user_filter_matching AS (
 ), user_matched AS (
   SELECT
     um.*
+    , ums.user_match_status
   FROM
     user_match um
   INNER JOIN
@@ -86,6 +87,7 @@ ON
 WHERE
   1 = 1
   and um.user_match_status_id is null 
+  and (um.user_match_status_id is not null or um.user_match_status != 'Matched')
   `;
 
   if (limit && offset) {
