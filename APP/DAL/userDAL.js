@@ -19,75 +19,70 @@ export async function upsertUserFilterSetting(user_id, dataObj) {
 
 export async function getUserByFilterSetting(user_id, limit, offset) {
   let sqlQuery = `
-WITH user_filter_matching AS (
-  SELECT
-    user_id,
-    by_province,
-    province_id,
-    by_district,
-    district_id,
-    by_age,
-    min_age,
-    max_age,
-    created_at
-  FROM
-    public.user_filter_setting
-  WHERE
-    user_id = '${user_id}'
-), user_matched AS (
-  SELECT
-    um.*
-    , ums.user_match_status
-  FROM
-    user_match um
-  INNER JOIN
-    user_match_status ums
-  ON
-    um.user_match_status_id = ums.user_match_status_id
-  WHERE
-    current_user_id = '${user_id}'
-)
-SELECT 
-  u.user_id,
-  u.user_name,
-  u.phone,
-  u.email,
-  u.profile_avatar,
-  u.story,
-  u.registration,
-  g.gender,
-  DATE_PART('year', AGE(current_date, u.dob)) AS age,
-  u.purpose,
-  u.favorite_location,
-  u.lat,
-  u.lng,
-  u.address,
-  u.token_id
-FROM 
-  public.user u
-LEFT JOIN gender g on g.gender_id = u.gender_id
-LEFT JOIN district d on d.district_id = u.district_id
-LEFT JOIN province p on p.province_id = u.province_id
-LEFT OUTER JOIN
-  user_filter_matching ufm
-ON
-  ufm.user_id = u.user_id
-  AND (
-    (ufm.by_province = true AND ufm.province_id = u.province_id) OR
-    (ufm.by_district = true AND ufm.district_id = u.district_id) OR
-    (ufm.by_age = true AND (
-      (ufm.min_age <= DATE_PART('year', AGE(current_date, u.dob)) AND 
-       ufm.max_age >= DATE_PART('year', AGE(current_date, u.dob)))
-    ))
+  WITH user_filter_matching AS (
+    SELECT
+      user_id,
+      by_province,
+      province_id,
+      by_district,
+      district_id,
+      by_age,
+      min_age,
+      max_age,
+      created_at
+    FROM
+      public.user_filter_setting
+    WHERE
+      user_id = '${user_id}'
+  ), user_matched AS (
+    SELECT
+      um.*,
+      ums.user_match_status
+    FROM
+      user_match um
+    INNER JOIN
+      user_match_status ums ON um.user_match_status_id = ums.user_match_status_id
+    WHERE
+      current_user_id = '${user_id}'
   )
-LEFT OUTER JOIN
-  user_matched um
-ON
-  um.user_id_liked = u.user_id
-WHERE
-  1 = 1
-  and um.user_match_status_id is null 
-  and (um.user_match_status_id is not null or um.user_match_status != 'Matched')
+  SELECT 
+    u.user_id,
+    u.user_name,
+    u.phone,
+    u.email,
+    u.profile_avatar,
+    u.story,
+    u.registration,
+    g.gender,
+    DATE_PART('year', AGE(current_date, u.dob)) AS age,
+    u.purpose,
+    u.favorite_location,
+    u.lat,
+    u.lng,
+    u.address,
+    u.token_id
+  FROM 
+    public.user u
+  LEFT JOIN 
+    gender g ON g.gender_id = u.gender_id
+  LEFT JOIN 
+    district d ON d.district_id = u.district_id
+  LEFT JOIN 
+    province p ON p.province_id = u.province_id
+  LEFT JOIN 
+    user_filter_matching ufm ON ufm.user_id = u.user_id
+    AND (
+      (ufm.by_province = true AND ufm.province_id = u.province_id) OR
+      (ufm.by_district = true AND ufm.district_id = u.district_id) OR
+      (ufm.by_age = true AND (
+        ufm.min_age <= DATE_PART('year', AGE(current_date, u.dob)) AND 
+        ufm.max_age >= DATE_PART('year', AGE(current_date, u.dob))
+      ))
+    )
+  LEFT JOIN 
+    user_matched um ON um.user_id_liked = u.user_id
+  WHERE
+    um.user_match_status IS NULL OR um.user_match_status != 'Matched' 
   `;
 
   if (limit && offset) {
