@@ -9,10 +9,10 @@ export async function saveMessage(messageData) {
   const { from, to, message } = messageData;
   const [userFrom] = await userDAL.getUserInfoById(from);
   const [userTo] = await userDAL.getUserInfoById(to);
-
   const title = `${userFrom.user_name} đã gửi tin nhắn cho bạn!`;
   const body = `${message}`;
-  firebaseHelper.sendNotification(userTo.token_id, title, body);
+  if (userTo?.token_id)
+    firebaseHelper.sendNotification(userTo.token_id, title, body);
   await chatDAL.saveMessage(messageId, messageData);
   return messageId;
 }
