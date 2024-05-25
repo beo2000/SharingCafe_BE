@@ -113,13 +113,17 @@ io.on('connection', (socket) => {
     let messageId = null
     let message = null
     console.log(data)
+    let responseMessage = data
     if(data?.appointment == null){
+      responseMessage = "USER GOT BLOCKED"
       messageId = await chatController.saveMessage(data);
       console.log(messageId)
-      if(messageId)
-      message = await chatController.getMessage(messageId);
+      if(messageId){
+        message = await chatController.getMessage(messageId);
+        responseMessage = message
+      }
     }
-      io.emit('message', data?.appointment != null ? data : messageId ?  message :  "USER GOT BLOCKED");
+      io.emit('message', responseMessage);
 
   });
 });
