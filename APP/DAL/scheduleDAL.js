@@ -5,10 +5,35 @@ export async function createSchedule(schedule_id, dataObj) {
     schedule_id: schedule_id,
     content: dataObj.content,
     location: dataObj.location,
-    schedule_time: dataObj.date,
+    schedule_time: new Date(new Date(dataObj.date).getTime() + 7 * 60 * 60 * 1000),
     sender_id: dataObj.sender_id,
     receiver_id: dataObj.receiver_id,
   });
+}
+
+export async function checkSchedule(dataObj) {
+  const sqlQuery = `
+  SELECT 
+    AGE(s.schedule_time, '${dataObj.date}') AS time_diff,
+    *
+  FROM 
+    schedule s
+  WHERE 1=1
+   And  ABS(EXTRACT(EPOCH FROM AGE(s.schedule_time, '${dataObj.date}'))) <= EXTRACT(EPOCH FROM INTERVAL '1 hour 30 minutes')
+   and (
+   	(s.sender_id = '${dataObj.sender_id}' and s.receiver_id = '${dataObj.receiver_id}') 
+   	or (sender_id = '${dataObj.receiver_id}'
+	  and receiver_id = '${dataObj.sender_id}')
+   )
+   and (s.is_accept is null or s.is_accept = true)
+  order by
+	  schedule_time desc
+  `;
+  const userDetails = await SequelizeInstance.query(sqlQuery, {
+    type: SequelizeInstance.QueryTypes.UPDATE,
+    raw: true,
+  });
+  return userDetails;
 }
 
 export async function getScheduleBetweenUsers(userId, anotherUserId) {
@@ -240,6 +265,5 @@ export async function canceledSchedule(userId, blockedId) {
     type: SequelizeInstance.QueryTypes.UPDATE,
     raw: true,
   });
-
   return userDetails;
 }
