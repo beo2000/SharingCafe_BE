@@ -62,6 +62,9 @@ SELECT
   , receiver.profile_avatar as receiver_avatar
   , "content"
   , created_at
+  , json_agg(
+    
+  )
 FROM 
   public.message m
 inner join 
@@ -72,8 +75,10 @@ inner join
   public."user" receiver
   on 1 = 1
    and receiver.user_id = m.receiver_id
-    WHERE 1 = 1
-    and message_id = '${messageId}'
+left join schedule s
+on s.schedule_id =  '${messageId}'
+WHERE 1 = 1
+ and message_id = '${messageId}'
     `;
   const result = await SequelizeInstance.query(sqlQuery, {
     type: SequelizeInstance.QueryTypes.SELECT,
