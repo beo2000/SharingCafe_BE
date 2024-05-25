@@ -9,11 +9,12 @@ export async function createSchedule(dataObj) {
   const [userFrom] = await userDAL.getUserInfoById(dataObj.sender_id);
   const [userTo] = await userDAL.getUserInfoById(dataObj.receiver_id);
   const checkSchedule = await scheduleDAL.checkSchedule(dataObj);
-  if (checkSchedule.length > 0 && Object.keys(checkSchedule[0]).length === 0) {
+  if (checkSchedule.length > 0) {
     const titleTo = `Bạn có lịch hẹn mới`;
     const bodyTo = `${userFrom.user_name} đã tạo một cuộc hẹn với bạn vào lúc ${dataObj.date}`;
     firebaseHelper.sendNotification(userTo.token_id, titleTo, bodyTo);
-    const [newNotificationStatus] = await notificationDAL.getNotificationNewStatus();
+    const [newNotificationStatus] =
+      await notificationDAL.getNotificationNewStatus();
     await notificationDAL.createNotification(
       dataObj.receiver_id,
       bodyTo,
