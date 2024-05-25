@@ -14,18 +14,15 @@ export async function createSchedule(schedule_id, dataObj) {
 export async function checkSchedule(dataObj) {
   const sqlQuery = `
   SELECT 
-    AGE(s.schedule_time, '${dataObj.date}') AS time_diff,
+    AGE(schedule_time, '${dataObj.date}') AS time_diff,
     *
   FROM 
-    schedule s
+    public.schedule
   WHERE 1=1
-   And  ABS(EXTRACT(EPOCH FROM AGE(s.schedule_time, '${dataObj.date}'))) <= EXTRACT(EPOCH FROM INTERVAL '1 hour 30 minutes')
-   and (
-   	(s.sender_id = '${dataObj.sender_id}' and s.receiver_id = '${dataObj.receiver_id}') 
-   	or (sender_id = '${dataObj.receiver_id}'
-	  and receiver_id = '${dataObj.sender_id}')
-   )
-   and (s.is_accept is null or s.is_accept = true)
+   And  ABS(EXTRACT(EPOCH FROM AGE(schedule_time, '${dataObj.date}'))) <= EXTRACT(EPOCH FROM INTERVAL '1 hour 30 minutes')
+   and ( sender_id = '${dataObj.sender_id}' or receiver_id = '${dataObj.sender_id}')
+   and (is_accept is null or is_accept = true)
+   AND DATE(schedule_time) = '${dataObj.date}'
   order by
 	  schedule_time desc
   `;
