@@ -31,8 +31,6 @@ export async function getUserByFilterSetting(user_id, limit, offset) {
       by_age,
       min_age,
       max_age,
-      by_sex,
-      sex_id,
       created_at
     FROM
       public.user_filter_setting
