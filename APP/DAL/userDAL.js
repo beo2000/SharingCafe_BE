@@ -47,7 +47,7 @@ export async function getUserByFilterSetting(user_id, limit, offset) {
     WHERE
       current_user_id = '${user_id}'
   )
-  SELECT 
+  SELECT
     u.user_id,
     u.user_name,
     u.phone,
@@ -62,33 +62,25 @@ export async function getUserByFilterSetting(user_id, limit, offset) {
     u.favorite_location,
     u.lat,
     u.lng,
-    d.district,
-    p.province,
-    u.token_id
-  FROM 
+    u.address,
+    u.token_id,
+    u.province_id,
+    u.district_id,
+    u.dob
+  FROM
     public.user u
-  LEFT JOIN 
+  LEFT JOIN
     gender g ON g.gender_id = u.gender_id
-  LEFT JOIN 
+  LEFT JOIN
     district d ON d.district_id = u.district_id
-  LEFT JOIN 
+  LEFT JOIN
     province p ON p.province_id = u.province_id
-  LEFT JOIN 
-    user_filter_matching ufm ON ufm.user_id = u.user_id
-    AND (
-      (ufm.by_province = true AND ufm.province_id = u.province_id) OR
-      (ufm.by_district = true AND ufm.district_id = u.district_id) OR
-      (ufm.by_age = true AND (
-        ufm.min_age <= DATE_PART('year', AGE(current_date, u.dob)) AND 
-        ufm.max_age >= DATE_PART('year', AGE(current_date, u.dob))
-      )) OR
-      (ufm.by_sex = true AND ufm.sex_id = u.gender_id)
-    )
-  LEFT JOIN 
-    user_matched um ON um.user_id_liked = u.user_id
   WHERE
-  (um.user_match_status IS NULL OR um.user_match_status != 'Matched')
-  and u.user_id != '${user_id}'
+    u.user_id NOT IN (SELECT user_id_liked FROM user_matched)
+AND CASE WHEN (select by_province from user_filter_matching) = TRUE THEN u.province_id in (select province_id from user_filter_matching) ELSE TRUE END
+AND CASE WHEN (select by_district from user_filter_matching) = TRUE THEN u.district_id in (select district_id from user_filter_matching) ELSE TRUE END
+AND CASE WHEN (select by_sex from user_filter_matching) = TRUE THEN u.gender_id in (select sex_id from user_filter_matching) ELSE TRUE END
+AND CASE WHEN (select by_age from user_filter_matching) = TRUE THEN ((SELECT min_age FROM user_filter_matching) <= DATE_PART('year', AGE(current_date, u.dob)) AND(SELECT max_age FROM user_filter_matching) >= DATE_PART('year', AGE(current_date, u.dob))) ELSE TRUE END
   `;
 
   if (limit && offset) {
