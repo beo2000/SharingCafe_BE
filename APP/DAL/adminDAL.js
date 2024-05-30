@@ -73,7 +73,20 @@ export async function getStatics() {
 export async function getUsers() {
   const sqlQuery = `
   SELECT 
-    u.*, g.gender, d.district, p.province,
+    u.user_name,
+    u.phone,
+    u.email,
+    u.profile_avatar,
+    u.story,
+    u.registration,
+    u.is_available,
+    u.purpose,
+    u.favorite_location,
+    DATE_PART('year', AGE(current_date, u.dob)) AS age,
+    u.lat,
+    u.lng,
+    u.token_id, 
+    g.gender, d.district, p.province,
     json_agg(
         json_build_object(
             'interest_id', ui.interest_id,
