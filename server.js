@@ -123,20 +123,20 @@ io.on('connection', (socket) => {
         responseMessage = message
       }
     }
-      io.emit('message', responseMessage);
+    io.emit('message', responseMessage);
 
   });
 });
 // Schedule the task to run every 5 minutes
-import cron from 'node-cron';
+// import cron from 'node-cron';
 
-cron.schedule('*/30 * * * * *', async () => {
-  try {
-    await eventService.sendNotificationIfEventOccurToday(); 
-  } catch (error) {
-    console.error('Error:', error);
-  }
-});
+// cron.schedule('*/30 * * * * *', async () => {
+//   try {
+//     await eventService.sendNotificationIfEventOccurToday(); 
+//   } catch (error) {
+//     console.error('Error:', error);
+//   }
+// });
 
 // Initialize Firebase
 admin.initializeApp({
