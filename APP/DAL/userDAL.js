@@ -85,6 +85,7 @@ AND CASE WHEN (select by_district from user_filter_matching) = TRUE THEN u.distr
 AND CASE WHEN (select by_sex from user_filter_matching) = TRUE THEN u.gender_id in (select sex_id from user_filter_matching) ELSE TRUE END
 AND CASE WHEN (select by_age from user_filter_matching) = TRUE THEN ((SELECT min_age FROM user_filter_matching) <= DATE_PART('year', AGE(current_date, u.dob)) AND(SELECT max_age FROM user_filter_matching) >= DATE_PART('year', AGE(current_date, u.dob))) ELSE TRUE END
 AND CASE WHEN (select by_interest from user_filter_matching) = TRUE THEN (EXISTS (SELECT 1 FROM user_interest ui WHERE ui.user_id = u.user_id AND ui.interest_id IN (SELECT interest_id FROM user_interested))) ELSE TRUE END
+AND u.user_id != '${user_id}'
 ORDER BY RANDOM()`;
 
   if (limit && offset) {
