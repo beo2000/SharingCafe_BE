@@ -11,7 +11,7 @@ export async function getAdmDetails(email, password) {
       'profile_avatar',
       'story',
       'registration',
-      'gender',
+      'gender_id',
       'age',
       'purpose',
       'favorite_location',
@@ -104,7 +104,7 @@ export async function getUsers() {
   LEFT JOIN
     province p ON p.province_id = u.province_id
   GROUP BY 
-      u.user_id, u.role_id
+      u.user_id, u.role_id, g.gender, d.district, p.province
   ORDER BY
       u.registration desc
   `;

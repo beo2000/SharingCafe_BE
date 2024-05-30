@@ -26,6 +26,8 @@ export async function getUserByFilterSetting(user_id, limit, offset) {
       province_id,
       by_district,
       district_id,
+      by_sex,
+      sex_id,
       by_age,
       min_age,
       max_age,
@@ -53,13 +55,15 @@ export async function getUserByFilterSetting(user_id, limit, offset) {
     u.profile_avatar,
     u.story,
     u.registration,
+    u.gender_id,
     g.gender,
     DATE_PART('year', AGE(current_date, u.dob)) AS age,
     u.purpose,
     u.favorite_location,
     u.lat,
     u.lng,
-    u.address,
+    d.district,
+    p.province,
     u.token_id
   FROM 
     public.user u
@@ -77,12 +81,14 @@ export async function getUserByFilterSetting(user_id, limit, offset) {
       (ufm.by_age = true AND (
         ufm.min_age <= DATE_PART('year', AGE(current_date, u.dob)) AND 
         ufm.max_age >= DATE_PART('year', AGE(current_date, u.dob))
-      ))
+      )) OR
+      (ufm.by_sex = true AND ufm.sex_id = u.gender_id)
     )
   LEFT JOIN 
     user_matched um ON um.user_id_liked = u.user_id
   WHERE
-    um.user_match_status IS NULL OR um.user_match_status != 'Matched' 
+  (um.user_match_status IS NULL OR um.user_match_status != 'Matched')
+  and u.user_id != '${user_id}'
   `;
 
   if (limit && offset) {

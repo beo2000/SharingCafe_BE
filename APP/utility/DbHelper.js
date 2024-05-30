@@ -133,7 +133,7 @@ const PersonalProblem = sequelize.define(
 const UnlikeTopic = sequelize.define(
   'UnlikeTopic',
   {
-    personal_problem_id: {
+    unlike_topic_id: {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
@@ -181,7 +181,7 @@ const FavoriteDrink = sequelize.define(
 const FreeTime = sequelize.define(
   'FreeTime',
   {
-    personal_problem_id: {
+    free_time_id: {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
@@ -189,7 +189,7 @@ const FreeTime = sequelize.define(
     user_id: {
       type: DataTypes.UUID,
     },
-    topic: {
+    free_time: {
       type: DataTypes.TEXT,
     },
     created_at: {

@@ -3976,6 +3976,13 @@ router.get(
  *                 type: integer
  *                 description: Maximum age for filtering
  *                 example: 140
+ *               by_sex:
+ *                 type: boolean
+ *                 description: Filter by gender
+ *               sex_id:
+ *                 type: string
+ *                 format: uuid
+ *                 description: Gender ID for filtering
  *     responses:
  *       '200':
  *         description: Successfully upserted user setting filter.
