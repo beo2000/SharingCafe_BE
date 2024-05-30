@@ -31,6 +31,7 @@ export async function getUserByFilterSetting(user_id, limit, offset) {
       by_age,
       min_age,
       max_age,
+      by_interest,
       created_at
     FROM
       public.user_filter_setting
@@ -46,6 +47,8 @@ export async function getUserByFilterSetting(user_id, limit, offset) {
       user_match_status ums ON um.user_match_status_id = ums.user_match_status_id
     WHERE
       current_user_id = '${user_id}'
+  ), user_interested AS (
+    SELECT interest_id FROM user_interest WHERE user_id = '${user_id}'
   )
   SELECT
     u.user_id,
@@ -81,7 +84,8 @@ AND CASE WHEN (select by_province from user_filter_matching) = TRUE THEN u.provi
 AND CASE WHEN (select by_district from user_filter_matching) = TRUE THEN u.district_id in (select district_id from user_filter_matching) ELSE TRUE END
 AND CASE WHEN (select by_sex from user_filter_matching) = TRUE THEN u.gender_id in (select sex_id from user_filter_matching) ELSE TRUE END
 AND CASE WHEN (select by_age from user_filter_matching) = TRUE THEN ((SELECT min_age FROM user_filter_matching) <= DATE_PART('year', AGE(current_date, u.dob)) AND(SELECT max_age FROM user_filter_matching) >= DATE_PART('year', AGE(current_date, u.dob))) ELSE TRUE END
-  `;
+AND CASE WHEN (select by_interest from user_filter_matching) = TRUE THEN ((SELECT interest_id FROM user_interest ui WHERE u.user_id = ui.user_id) IN (select interest_id from user_interested)) ELSE TRUE END
+ORDER BY RANDOM()`;
 
   if (limit && offset) {
     sqlQuery += `
