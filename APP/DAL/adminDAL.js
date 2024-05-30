@@ -196,12 +196,30 @@ export async function getScheduleList() {
   s."location" , 
   s.schedule_time ,
   s.is_accept,
-  s.created_at
+  s.created_at,
+  coalesce(jsonb_agg(
+    jsonb_build_object(
+    'rating_id', r.rating_id ,
+    'user_id', u.user_id ,
+    'user_name', u.user_name ,
+    'content', r."content"  ,
+    'rating', r.rating
+    ) 
+  ) FILTER (WHERE r.rating_id IS NOT NULL), '[]') as rating
   from schedule s
-  join "user" u 
-  on u.user_id = s.sender_id
-  join "user" u2
-  on u2.user_id = s.receiver_id
+  LEFT JOIN
+    rating r 
+    on r.schedule_id = s.schedule_id
+  left join 
+    "user" u 
+    on u.user_id = s.sender_id
+  left join 
+    "user" u2
+    on u2.user_id = s.receiver_id
+  left join
+    "user" u3 
+    on r.user_id = u3.user_id
+  group by s.schedule_id, u.user_name, u2.user_name
   order by s.created_at desc
     `;
   const list = await SequelizeInstance.query(sqlQuery, {
