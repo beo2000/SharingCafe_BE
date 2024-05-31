@@ -17,7 +17,7 @@ export async function checkSchedule(dataObj) {
   SELECT 1
   FROM schedule
   WHERE (sender_id = '${dataObj.sender_id}' OR receiver_id = '${dataObj.sender_id}')
-  AND is_accept != false
+  AND is_accept != false OR is_accept IS NULL
   AND ABS(EXTRACT(EPOCH FROM (schedule_time - '${dataObj.date}'))) < ${timeOffInSeconds};
   `;
   const result = await SequelizeInstance.query(sqlQuery, {
