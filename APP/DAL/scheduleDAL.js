@@ -12,25 +12,19 @@ export async function createSchedule(schedule_id, dataObj) {
 }
 
 export async function checkSchedule(dataObj) {
+  const timeOffInSeconds = 5400;
   const sqlQuery = `
-  SELECT 
-    AGE(schedule_time, '${dataObj.date}') AS time_diff,
-    *
-  FROM 
-    public.schedule
-  WHERE 1=1
-   And  ABS(EXTRACT(EPOCH FROM AGE(schedule_time, '${dataObj.date}'))) <= EXTRACT(EPOCH FROM INTERVAL '1 hour 30 minutes')
-   and ( sender_id = '${dataObj.sender_id}' or receiver_id = '${dataObj.sender_id}')
-   and (is_accept is null or is_accept = true)
-   AND DATE(schedule_time) = '${dataObj.date}'
-  order by
-	  schedule_time desc
+  SELECT 1
+  FROM schedule
+  WHERE (sender_id = '${dataObj.sender_id}' OR receiver_id = '${dataObj.sender_id}')
+  AND is_accept != false
+  AND ABS(EXTRACT(EPOCH FROM (schedule_time - '${dataObj.date}'))) < ${timeOffInSeconds};
   `;
-  const userDetails = await SequelizeInstance.query(sqlQuery, {
-    type: SequelizeInstance.QueryTypes.UPDATE,
+  const result = await SequelizeInstance.query(sqlQuery, {
+    type: SequelizeInstance.QueryTypes.SELECT,
     raw: true,
   });
-  return userDetails;
+  return result.length == 0;
 }
 
 export async function getScheduleBetweenUsers(userId, anotherUserId) {
