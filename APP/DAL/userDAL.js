@@ -47,7 +47,13 @@ export async function getUserByFilterSetting(user_id, limit, offset) {
       user_match_status ums ON um.user_match_status_id = ums.user_match_status_id
     WHERE
       current_user_id = '${user_id}'
-  ), user_interested AS (
+  ),
+   user_liked AS (
+       SELECT um2.*,
+      ums.user_match_status FROM user_match um2 INNER JOIN
+      user_match_status ums ON um2.user_match_status_id = ums.user_match_status_id WHERE user_id_liked = '${user_id}'
+   ),
+    user_interested AS (
     SELECT interest_id FROM user_interest WHERE user_id = '${user_id}'
   )
   SELECT
@@ -80,6 +86,7 @@ export async function getUserByFilterSetting(user_id, limit, offset) {
     province p ON p.province_id = u.province_id
   WHERE
     u.user_id NOT IN (SELECT user_id_liked FROM user_matched)
+AND u.user_id NOT IN (SELECT current_user_id FROM user_liked)
 AND CASE WHEN (select by_province from user_filter_matching) = TRUE THEN u.province_id in (select province_id from user_filter_matching) ELSE TRUE END
 AND CASE WHEN (select by_district from user_filter_matching) = TRUE THEN u.district_id in (select district_id from user_filter_matching) ELSE TRUE END
 AND CASE WHEN (select by_sex from user_filter_matching) = TRUE THEN u.gender_id in (select sex_id from user_filter_matching) ELSE TRUE END
