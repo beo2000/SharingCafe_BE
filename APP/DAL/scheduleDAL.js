@@ -5,7 +5,7 @@ export async function createSchedule(schedule_id, dataObj) {
     schedule_id: schedule_id,
     content: dataObj.content,
     location: dataObj.location,
-    schedule_time: new Date(new Date(dataObj.date).getTime() + 7 * 60 * 60 * 1000),
+    schedule_time: new Date(dataObj.date),
     sender_id: dataObj.sender_id,
     receiver_id: dataObj.receiver_id,
   });
