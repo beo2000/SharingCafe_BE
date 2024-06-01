@@ -14,11 +14,14 @@ export async function createSchedule(schedule_id, dataObj) {
 export async function checkSchedule(dataObj) {
   const timeOffInSeconds = 5400;
   const sqlQuery = `
-  SELECT 1
-  FROM schedule
-  WHERE (sender_id = '${dataObj.sender_id}' OR receiver_id = '${dataObj.sender_id}')
-  AND is_accept != false OR is_accept IS NULL
-  AND ABS(EXTRACT(EPOCH FROM (schedule_time - '${dataObj.date}'))) < ${timeOffInSeconds};
+  WITH pending_schedule AS (
+    SELECT *
+    FROM schedule
+    WHERE
+        (sender_id = '${dataObj.sender_id}' OR receiver_id = '${dataObj.sender_id}')
+    AND is_accept != false OR is_accept IS NULL
+  )
+      SELECT 1 FROM pending_schedule WHERE ABS(EXTRACT(EPOCH FROM (schedule_time - '${dataObj.date}'))) < ${timeOffInSeconds};
   `;
   const result = await SequelizeInstance.query(sqlQuery, {
     type: SequelizeInstance.QueryTypes.SELECT,
