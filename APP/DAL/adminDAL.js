@@ -73,6 +73,7 @@ export async function getStatics() {
 export async function getUsers() {
   const sqlQuery = `
   SELECT 
+    u.user_id,
     u.user_name,
     u.phone,
     u.email,
