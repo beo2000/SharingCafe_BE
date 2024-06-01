@@ -201,9 +201,6 @@ router.get('/api/admin/blog-statics', admController.getBlogStatics);
  *               story:
  *                 type: string
  *                 example: Chưa nghĩ ra được gì hay ho
- *               dob:
- *                 type: string
- *                 example: 3/4/1995
  *     responses:
  *       '200':
  *         description: Registration successful
