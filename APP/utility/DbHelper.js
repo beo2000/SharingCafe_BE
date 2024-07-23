@@ -27,6 +27,12 @@ const sequelize = new Sequelize({
   password: DB_PASSWORD,
   database: DB_DATABASE,
   sync: false,
+  dialectOptions: {
+    ssl: {
+      require: true, // This will enable SSL connection
+      rejectUnauthorized: false // This will bypass rejecting unauthorized connections
+    }
+  }
 });
 
 const User = sequelize.define(
