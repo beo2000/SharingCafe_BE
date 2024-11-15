@@ -32,45 +32,45 @@ app.use(cors());
 app.use(express.json());
 
 // Middleware to extract user information from JWT token
-// const getUserInfoMiddleware = async (req, res, next) => {
-//   const accessToken =
-//     req.headers.authorization && req.headers.authorization.split(' ')[1];
+const getUserInfoMiddleware = async (req, res, next) => {
+  const accessToken =
+    req.headers.authorization && req.headers.authorization.split(' ')[1];
 
-//   if (!accessToken) {
-//     return res.status(401).json({
-//       error: 'Unauthorized - Access token missing',
-//       accessToken: accessToken,
-//     });
-//   }
+  if (!accessToken) {
+    return res.status(401).json({
+      error: 'Unauthorized - Access token missing',
+      accessToken: accessToken,
+    });
+  }
 
-//   try {
-//     const decodedToken = jwt.verify(accessToken, SECRET_KEY);
-//     const email = decodedToken.email;
-//     const [loginUser] = await userService.getUserInfoByEmail(email);
-//     req.loginUser = loginUser;
-//     next();
-//   } catch (error) {
-//     res.status(401).json({
-//       error: 'Unauthorized - Invalid access token',
-//       message: error.message,
-//     });
-//   }
-// };
+  try {
+    const decodedToken = jwt.verify(accessToken, SECRET_KEY);
+    const email = decodedToken.email;
+    const [loginUser] = await userService.getUserInfoByEmail(email);
+    req.loginUser = loginUser;
+    next();
+  } catch (error) {
+    res.status(401).json({
+      error: 'Unauthorized - Invalid access token',
+      message: error.message,
+    });
+  }
+};
 
 // Middleware for authentication
 const authenticatedRoutes = ['/api/auth/'];
-// app.use(async (req, res, next) => {
-//   const requestedRoute = req.path;
-//   const authCheck = authenticatedRoutes.some((prefix) =>
-//     requestedRoute.includes(prefix),
-//   );
+app.use(async (req, res, next) => {
+  const requestedRoute = req.path;
+  const authCheck = authenticatedRoutes.some((prefix) =>
+    requestedRoute.includes(prefix),
+  );
 
-//   if (authCheck) {
-//     await getUserInfoMiddleware(req, res, next);
-//   } else {
-//     next();
-//   }
-// });
+  if (authCheck) {
+    await getUserInfoMiddleware(req, res, next);
+  } else {
+    next();
+  }
+});
 
 // Routes
 app.get('/', (req, res) => {
