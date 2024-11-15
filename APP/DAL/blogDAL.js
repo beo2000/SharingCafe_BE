@@ -305,23 +305,14 @@ export async function searchByName(title) {
 
 export async function getComments(blogId) {
   const sqlQuery = `
-  select 
-    c.comment_id , c."content", c.parent_comment_id, u.user_id ,u.user_name , u.profile_avatar
-  from 
- 	"comment" c
-  join
- 	  "user" u 
- 	  on u.user_id = c.user_id
-  join 
- 	  blog b 
- 	  on b.blog_id = c.blog_id 
-  where c.blog_id = '${blogId}'
-  AND NOT EXISTS (
-      SELECT 1
-      FROM public.user_block
-      WHERE (blocker_id = u.user_id AND blocked_id = b.user_id)
-          OR (blocker_id = b.user_id AND blocked_id = u.user_id)
-    )
+    select 
+      c.comment_id , c."content", c.parent_comment_id,
+      u.user_id ,u.user_name , u.profile_avatar
+    from 
+      "comment" c
+        join  "user" u
+          on c.blog_id = '${blogId}' 
+            and u.user_id = c.user_id
   `;
   const result = await SequelizeInstance.query(sqlQuery, {
     type: SequelizeInstance.QueryTypes.SELECT,
