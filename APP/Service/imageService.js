@@ -1,7 +1,6 @@
 import * as ImageDAL from '../DAL/imageDAL.js'
 
 export async function uploadMultipleImage({ items }) {
-  await ImageDAL.deleteImages({ items })
   return await ImageDAL.uploadMultipleImage({ items })
 }
 
