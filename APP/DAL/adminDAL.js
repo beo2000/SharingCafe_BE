@@ -76,7 +76,7 @@ export async function getStatics() {
   })
   return statics
 }
-export async function getUsers() {
+export async function getUsers({ page, size }) {
   const sqlQuery = `
   SELECT 
     u.user_id,
@@ -127,6 +127,7 @@ export async function getUsers() {
       u.user_id, u.role_id, g.gender, d.district, p.province
   ORDER BY
       u.registration desc
+  ${page && size ? ` limit ${page}, ${(page - 1) * size}` : ''}
   `
   const result = await SequelizeInstance.query(sqlQuery, {
     type: SequelizeInstance.QueryTypes.SELECT,
