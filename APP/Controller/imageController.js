@@ -19,3 +19,13 @@ export async function getImageFromRefIdAndType(req, res) {
     res.status(500).send({ error: error.message })
   }
 }
+
+export async function updateMultipleImage(req, res, net) {
+  try {
+    const result = await imageService.updateMultipleImage(req.body)
+    res.status(200).send(result)
+  } catch (error) {
+    console.log(error)
+    res.status(500).send({ error: error.message })
+  }
+}

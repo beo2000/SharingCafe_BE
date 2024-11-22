@@ -4016,6 +4016,11 @@ router.put(
  *         schema:
  *           type: string
  *         example: 0
+ *       - in: query
+ *         name: interest_ids
+ *         description: id interest
+ *         schema:
+ *           type: string
  *     responses:
  *       '200':
  *         description: Successfully retrieved province.
@@ -4109,5 +4114,42 @@ router.get('/api/auth/image', imageController.getImageFromRefIdAndType)
  *         description: An internal server error occurred.
  */
 router.post('/api/auth/image', imageController.uploadMultipleImage)
+
+/**
+ * @swagger
+ * /api/auth/image:
+ *   post:
+ *     security:
+ *       - BearerAuth: []
+ *     summary: Upload multiple image
+ *     description: Upload multiple image
+ *     tags:
+ *       - IMAGE
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               ref_id:
+ *                 type: string
+ *                 required: true
+ *               type:
+ *                 type: number
+ *                 required: true
+ *               urls:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *     responses:
+ *       '200':
+ *         description: Successfully.
+ *       '400':
+ *         description: Bad request.
+ *       '500':
+ *         description: An internal server error occurred.
+ */
+router.put('/api/auth/image', imageController.updateMultipleImage)
 
 export default router
