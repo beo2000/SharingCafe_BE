@@ -341,6 +341,10 @@ export const UserFilterSetting = sequelize.define(
       defaultValue: DataTypes.NOW,
       allowNull: false,
     },
+    priority_interest_ids: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+    }
   },
   {
     tableName: 'user_filter_setting',

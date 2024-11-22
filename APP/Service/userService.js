@@ -574,7 +574,34 @@ export async function upsertUserFilterSetting(userId, dataObj) {
   await userDAL.upsertUserFilterSetting(userId, dataObj);
 }
 export async function getUserByFilterSetting(userId, limit, offset) {
-  return await userDAL.getUserByFilterSetting(userId, limit, offset);
+  var users = await userDAL.getUserByFilterSetting(userId, null, null);
+  var settings = await userDAL.getUserFilterSetting(userId);
+  if (settings == null) {
+    return users;
+  }
+  var priority_interest_ids = settings.priority_interest_ids;
+  if (priority_interest_ids == null) {
+    return users;
+  }
+  var userIds = users.map((e) => e.user_id);
+  var userInterests = await userDAL.getUserInterests({userIds});
+  var orderedUsers = [];
+  for (var i = 0; i < users.length; i++) {
+    var user = users[i];
+    var interests = userInterests.filter((e) => e.user_id == user.user_id);
+    var interestCount = interests.filter(
+      (e) => priority_interest_ids.includes(e.interest_id),
+    ).length;
+    if (interestCount == 0) {
+      orderedUsers.push(user);
+    } else {
+      orderedUsers.unshift(user);
+    }
+  }
+  if (limit != null && offset != null) {
+    return orderedUsers.slice(offset, offset + limit);
+  }
+  return orderedUsers;
 }
 
 export async function getGender() {

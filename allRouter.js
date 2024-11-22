@@ -3978,6 +3978,10 @@ router.get(
  *                 type: string
  *                 format: uuid
  *                 description: Gender ID for filtering
+ *               priority_interest_ids:
+ *                 type: string
+ *                 description: Priority interest IDs for filtering
+ *                 example: "1;2;3"
  *     responses:
  *       '200':
  *         description: Successfully upserted user setting filter.
