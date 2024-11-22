@@ -3352,6 +3352,25 @@ router.get(
   '/api/user/schedule/schedule-details',
   scheduleController.getScheduleRating
 )
+
+/**
+ * @swagger
+ * /api/auth/calendar:
+ *   get:
+ *     summary: Get auth calendar
+ *     tags:
+ *       - CALENDAR
+ *     security:
+ *       - BearerAuth: []
+ *     responses:
+ *       '200':
+ *         description: Successfully retrieved chat history.
+ *       '400':
+ *         description: Bad request. Invalid parameters provided.
+ *       '500':
+ *         description: An internal server error occurred.
+ */
+router.get('/api/auth/calendar', scheduleController.getCalendar)
 /**
  * @swagger
  * tags:
@@ -3978,6 +3997,10 @@ router.get(
  *                 type: string
  *                 format: uuid
  *                 description: Gender ID for filtering
+ *               priority_interest_ids:
+ *                 type: string
+ *                 description: Priority interest IDs for filtering
+ *                 example: "1;2;3"
  *     responses:
  *       '200':
  *         description: Successfully upserted user setting filter.
