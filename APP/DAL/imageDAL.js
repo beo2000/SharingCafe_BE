@@ -3,7 +3,10 @@ import { Image, SequelizeInstance } from '../utility/DbHelper.js'
 import { Op } from 'sequelize'
 
 export async function uploadMultipleImage({ items }) {
-  return await Image.bulkCreate(items)
+  let ref_id = items[0].ref_id
+  let type = items[0].type
+  let urls = items.map((item) => item.url)
+  return await updateMultipleImage({ ref_id, type, urls })
 }
 
 export async function getImageFromRefIdAndType({ ref_id, type }) {
