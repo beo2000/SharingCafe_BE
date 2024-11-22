@@ -4141,7 +4141,7 @@ router.post('/api/auth/image', imageController.uploadMultipleImage)
 /**
  * @swagger
  * /api/auth/image:
- *   post:
+ *   put:
  *     security:
  *       - BearerAuth: []
  *     summary: Upload multiple image

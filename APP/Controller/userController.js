@@ -415,7 +415,7 @@ export async function getUserByFilterSetting(req, res, next) {
     if (!loginUser) throw new Error(`YOU MUST LOGIN TO SETTING `)
     const result = await userService.getUserByFilterSetting(
       interest_ids,
-      loginUser,
+      loginUser.user_id,
       limit,
       offset
     )
