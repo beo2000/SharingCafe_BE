@@ -17,6 +17,7 @@ export const MATCH_TRANSLATE = [
   { label: 'Dislike', value: 'không hứng thú' },
 ]
 export const TYPE_IMAGE = {
+  DELETE: 0,
   USER: 1,
   EVENT: 2,
   BLOG: 3,
