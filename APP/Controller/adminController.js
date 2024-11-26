@@ -56,8 +56,6 @@ export async function getUser(req, res) {
 
 export async function getUsers(req, res) {
   try {
-    const loginUser = req.loginUser
-    if (!loginUser) throw new Error(`YOU MUST LOGIN TO SETTING `)
     const result = await admService.getUsers(req.query)
     res.status(200).send(result)
   } catch (error) {

@@ -1268,15 +1268,15 @@ export async function getGender() {
 }
 
 export async function getUserInterests({ userIds }) {
-  var ids = userIds.map((id) => `'${id}'`).join(',');
+  var ids = userIds.map((id) => `'${id}'`).join(',')
   let sqlQuery = `
   select i.interest_id, i.user_id 
   from user_interest i 
   where i.user_id in (${ids})
-  `;
+  `
   let result = await SequelizeInstance.query(sqlQuery, {
     type: SequelizeInstance.QueryTypes.SELECT,
     raw: true,
-  });
-  return result;
+  })
+  return result
 }
