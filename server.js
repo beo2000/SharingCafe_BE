@@ -48,6 +48,7 @@ const getUserInfoMiddleware = async (req, res, next) => {
     const email = decodedToken.email;
     const [loginUser] = await userService.getUserInfoByEmail(email);
     req.loginUser = loginUser;
+    req.user = loginUser;
     next();
   } catch (error) {
     res.status(401).json({

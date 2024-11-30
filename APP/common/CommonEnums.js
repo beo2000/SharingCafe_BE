@@ -23,7 +23,19 @@ export const TYPE_IMAGE = {
   BLOG: 3,
   COMMENT: 4,
 }
+
+export const TYPE_DISCUSS = {
+  EVENT: 1,
+}
+
 export const TYPE_COMMENT = {
   EVENT: 1,
   BLOG: 2,
+  DISCUSS: 3,
+}
+
+export const TYPE_LIKE = {
+  BLOG: 1,
+  EVENT: 2,
+  DISCUSS: 3,
 }

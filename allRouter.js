@@ -14,6 +14,7 @@ import * as locationController from './APP/Controller/locationController.js'
 import * as notificationController from './APP/Controller/NotificationController.js'
 import * as mapController from './APP/Controller/mapController.js'
 import * as imageController from './APP/Controller/imageController.js'
+import * as discussController from './APP/Controller/discussController.js'
 import { validate } from 'express-validation'
 import * as imageValidation from './APP/validation/image.js'
 import Router from 'express'
@@ -4174,5 +4175,46 @@ router.post('/api/auth/image', imageController.uploadMultipleImage)
  *         description: An internal server error occurred.
  */
 router.put('/api/auth/image', imageController.updateMultipleImage)
+
+/**
+ * @swagger
+ * /api/auth/discuss:
+ *   post:
+ *     security:
+ *       - BearerAuth: []
+ *     summary: Create Discuss
+ *     description: Create Discuss
+ *     tags:
+ *       - DISCUSS
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               items:
+ *                 type: array
+ *                 items:
+ *                   properties:
+ *                     ref_id:
+ *                       type: string
+ *                       required: true
+ *                     type:
+ *                       type: number
+ *                       required: true
+ *                     content:
+ *                       type: string
+ *                     title:
+ *                       type: string
+ *     responses:
+ *       '200':
+ *         description: Successfully.
+ *       '400':
+ *         description: Bad request.
+ *       '500':
+ *         description: An internal server error occurred.
+ */
+router.post('/api/auth/discuss', discussController.createDiscuss)
 
 export default router

@@ -1,4 +1,4 @@
-import { Sequelize, DataTypes } from 'sequelize'
+import { Sequelize, DataTypes, UUID } from 'sequelize'
 import dotenv from 'dotenv'
 dotenv.config()
 const DB_HOST = process.env.DB_HOST
@@ -344,7 +344,7 @@ export const UserFilterSetting = sequelize.define(
     priority_interest_ids: {
       type: DataTypes.TEXT,
       allowNull: true,
-    }
+    },
   },
   {
     tableName: 'user_filter_setting',
@@ -469,6 +469,12 @@ const Comment = sequelize.define(
       type: DataTypes.DATE,
       allowNull: false,
       defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),
+    },
+    ref_id: {
+      type: DataTypes.UUID,
+    },
+    type: {
+      type: DataTypes.INTEGER,
     },
   },
   {
@@ -884,6 +890,33 @@ const LikeBlog = sequelize.define(
   }
 )
 
+const Like = sequelize.define(
+  'like',
+  {
+    id: {
+      type: DataTypes.UUID,
+      primaryKey: true,
+      defaultValue: DataTypes.UUIDV4,
+    },
+    ref_id: {
+      type: DataTypes.UUID,
+      allowNull: false,
+    },
+    type: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    user_id: {
+      type: DataTypes.UUID,
+      allowNull: false,
+    },
+  },
+  {
+    tableName: 'like',
+    timestamps: false,
+  }
+)
+
 const Province = sequelize.define(
   'province',
   {
@@ -984,6 +1017,40 @@ const Gender = sequelize.define(
   }
 )
 
+const Discuss = sequelize.define(
+  'discuss',
+  {
+    id: {
+      type: DataTypes.UUID,
+      primaryKey: true,
+      defaultValue: DataTypes.UUIDV4,
+    },
+    ref_id: {
+      type: DataTypes.UUID,
+    },
+    type: {
+      type: DataTypes.INTEGER,
+    },
+    like_count: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0,
+    },
+    content: {
+      type: DataTypes.TEXT,
+    },
+    title: {
+      type: DataTypes.TEXT,
+    },
+    created_by: {
+      type: DataTypes.UUID,
+    },
+  },
+  {
+    tableName: 'discuss',
+    timestamps: false,
+  }
+)
+
 const Image = sequelize.define(
   'image',
   {
@@ -1079,6 +1146,7 @@ export {
   Interest,
   UserInterest,
   Schedule,
+  Like,
   LikeBlog,
   PersonalProblem,
   UnlikeTopic,
@@ -1090,4 +1158,5 @@ export {
   Rating,
   Gender,
   Image,
+  Discuss,
 }
