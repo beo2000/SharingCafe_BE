@@ -4217,4 +4217,31 @@ router.put('/api/auth/image', imageController.updateMultipleImage)
  */
 router.post('/api/auth/discuss', discussController.createDiscuss)
 
+/**
+ * @swagger
+ * /api/auth/discuss:
+ *   get:
+ *     security:
+ *       - BearerAuth: []
+ *     summary: Get Discuss
+ *     description: Get Discuss
+ *     tags:
+ *       - DISCUSS
+ *     parameters:
+ *       - in: query
+ *         name: ref_id
+ *         required: true
+ *       - in: query
+ *         name: type
+ *         required: true
+ *     responses:
+ *       '200':
+ *         description: Successfully.
+ *       '400':
+ *         description: Bad request.
+ *       '500':
+ *         description: An internal server error occurred.
+ */
+router.get('/api/auth/discuss', discussController.getDiscuss)
+
 export default router

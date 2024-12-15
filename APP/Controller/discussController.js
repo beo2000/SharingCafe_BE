@@ -9,3 +9,13 @@ export async function createDiscuss(req, res) {
     res.status(500).send({ error: error.message })
   }
 }
+
+export async function getDiscuss(req, res) {
+  try {
+    const result = await discussService.getDiscuss(req.query)
+    res.status(200).send(result)
+  } catch (error) {
+    console.log(error)
+    res.status(500).send({ error: error.message })
+  }
+}
