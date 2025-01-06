@@ -34,7 +34,6 @@ export async function updateBlogStatus(blogId, blogDetails) {
     const blogCreator = await userDAL.getTokenId(blog.user_id)
     const titleTo = `TÍNH NĂNG BÀI VIẾT`
     const bodyTo = `Thông báo mới: Bài viết ${blog.title} đã bị Admin vô hiệu hóa`
-    console.log(blogCreator.token_id)
     firebaseHelper.sendNotification(blogCreator.token_id, titleTo, bodyTo)
     return await adminDAL.updateBlogStatus(blogId, blogDetails)
   }

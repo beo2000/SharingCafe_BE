@@ -147,6 +147,7 @@ export async function updateUserStatus(userId, userDetails) {
   return await User.update(
     {
       is_available: userDetails.is_available,
+      is_visible: blogDetails.is_visible,
     },
     {
       where: { user_id: userId },
@@ -158,6 +159,7 @@ export async function updateBlogStatus(blogId, blogDetails) {
   return await Blog.update(
     {
       is_approve: blogDetails.is_approve,
+      is_visible: blogDetails.is_visible,
     },
     {
       where: { blog_id: blogId },
@@ -169,6 +171,7 @@ export async function updateEventStatus(eventId, eventDetails) {
   return await Event.update(
     {
       is_approve: eventDetails.is_approve,
+      is_visible: blogDetails.is_visible,
     },
     {
       where: { event_id: eventId },
