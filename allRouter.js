@@ -3330,6 +3330,34 @@ router.get('/api/test', locationController.getMiddlePoint)
  *       '500':
  *         description: Internal Server Error
  */
+
+
+/**
+ * @swagger
+ * /api/auth/match/unfriend:
+ *   delete:
+ *     summary: Unfriend with match id
+ *     description: Unfriend with match id
+ *     tags:
+ *      - MATCH SECTION
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: matchedId
+ *         required: true
+ *         description: match id
+ *         schema:
+ *           type: string
+ *     responses:
+ *       '200':
+ *         description: Successfully update province.
+ *       '400':
+ *         description: Bad request. Invalid parameters provided.
+ *       '500':
+ *         description: An internal server error occurred.
+ */
+router.delete('/api/auth/match/unfriend', matchController.unFriendWithMatchId)
 router.put('/api/user/schedule/status', scheduleController.changeStatus)
 router.get('/api/match/user-status/count', matchController.countUserByStatus)
 router.get('/api/auth/matches-interest', matchController.getUserMatchByInterest)

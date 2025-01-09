@@ -89,3 +89,17 @@ GROUP BY user_match_status, user_id_liked
 
   return result;
 }
+
+export async function removeMatchedUser(user_match_id) {
+  const sqlQuery = `
+    DELETE FROM user_match 
+    WHERE user_match_id = '${user_match_id}'
+  `;
+
+  const result = await SequelizeInstance.query(sqlQuery, {
+    type: SequelizeInstance.QueryTypes.SELECT,
+    raw: true,
+  });
+
+  return result;
+}

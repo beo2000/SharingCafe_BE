@@ -83,3 +83,14 @@ export async function updateUserMatchStatus(req, res, next) {
     res.status(500).send({ error: error.message });
   }
 }
+
+export async function unFriendWithMatchId(req, res, next) {
+  const matchedId = req.query.matchedId;
+  try {
+    const result = await userService.removeMatchedUser(matchedId);
+    res.status(200).send(result);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ error: error.message });
+  }
+}

@@ -593,3 +593,7 @@ export async function getUserByFilterSetting(
 export async function getGender() {
   return await userDAL.getGender()
 }
+
+export async function removeMatchedUser(matchedId) {
+  return await matchDAL.removeMatchedUser(matchedId)
+}
