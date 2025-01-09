@@ -376,8 +376,11 @@ export async function updateUserMatchStatus(userId, dataObj) {
     bodyLike,
     newNotificationStatus.notification_status_id
   )
-  firebaseHelper.sendNotification(userLiked.token_id, title, bodyLike)
-  firebaseHelper.sendNotification(userCurrent.token_id, title, bodyCurrent)
+
+  if ([ commonEnum.MATCH_STATUS.ACCEPTED, commonEnum.MATCH_STATUS.MATCHED, commonEnum.MATCH_STATUS.PENDING, commonEnum.MATCH_STATUS ].includes(statusStage.user_match_status)) {
+    firebaseHelper.sendNotification(userLiked.token_id, title, bodyLike)
+    firebaseHelper.sendNotification(userCurrent.token_id, title, bodyCurrent)
+  }
 
   return await matchDAL.getMatchCouple(userId, dataObj.user_id)
 }
