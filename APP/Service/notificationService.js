@@ -35,3 +35,7 @@ export async function sendNotificationForSchedule(req) {
   }
   return true;
 }
+
+export async function readNotification(notification_ids) {
+  return await notificationDAL.readNotification(notification_ids);
+}

@@ -38,3 +38,16 @@ export async function sendNotificationForSchedule(req, res) {
     res.status(500).send(e)
   }
 }
+
+export async function readNotification(req, res) {
+  try {
+    const notification_ids = req.body.notification_ids
+    const result = await notificationService.readNotification(notification_ids)
+    res.send({
+      result: result,
+    })
+  } catch (e) {
+    console.log(e)
+    res.status(500).send(e)
+  }
+}

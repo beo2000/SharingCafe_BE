@@ -44,3 +44,19 @@ export async function createNotification(userId, content, statusId) {
     throw error;
   }
 }
+
+export async function readNotification(notification_ids) {
+  const sqlQuery = `
+  update notification set notification_status_id = (select notification_status_id from notification_status where notification_status = 'READED') 
+  where notification_id in (${notification_ids.map((id) => `'${id}'`).join(',')})
+  `;
+  try {
+    const result = await SequelizeInstance.query(sqlQuery, {
+      type: SequelizeInstance.QueryTypes.UPDATE,
+    });
+    return result;
+  } catch (error) {
+    console.error('Error in readNotification:', error);
+    throw error;
+  }
+}

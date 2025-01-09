@@ -3704,6 +3704,30 @@ router.get(
   notificationController.sendNotificationForSchedule
 )
 
+/**
+ * @swagger
+ * /api/notifications/readNotifications:
+ *   put:
+ *     summary: Read notifications
+ *     tags:
+ *       - NOTIFICATION SECTION
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               notification_ids:
+ *                 type: array
+ *     responses:
+ *       '200':
+ *         description: Successful response with notification
+ *       '400':
+ *         description: Bad request
+ */
+router.put('/api/notifications/readNotifications', notificationController.readNotification)
+
 router.get(
   '/api/auth/schedule/get-history',
   scheduleController.getScheduleHistoryByUserId
