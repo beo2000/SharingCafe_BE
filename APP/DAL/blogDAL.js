@@ -406,7 +406,7 @@ export async function unlikeBlog(dataObj) {
     raw: true,
   })
   const deletedLikeBlog = await LikeBlog.destroy({
-    where: { like_blog_id: dataObj.like_blog_id },
+    where: { user_id: dataObj.user_id, blog_id: dataObj.blog_id },
   })
   return deletedLikeBlog
 }
