@@ -6,5 +6,7 @@ export async function createDiscuss(discuss, user) {
 }
 
 export async function getDiscuss(query) {
-  return await Discuss.getDiscuss(query)
+  var refId = query.ref_id;
+  var type = query.type;
+  return await Discuss.getDiscuss(refId, type);
 }
