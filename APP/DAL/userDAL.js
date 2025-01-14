@@ -105,6 +105,7 @@ export async function getUserByFilterSetting(
         : 'SELECT interest_id FROM user_interested'
     }))) ELSE TRUE END
     AND u.user_id != '${user_id}'
+    AND u.profile_avatar IS NOT NULL
 ORDER BY RANDOM()
 `
 
