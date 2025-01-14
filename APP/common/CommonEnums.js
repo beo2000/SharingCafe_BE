@@ -10,10 +10,10 @@ export const MATCH_STATUS = {
   DISLIKE: 'Dislike',
 }
 export const MATCH_TRANSLATE = [
-  { label: 'Matched', value: 'đồng ý kết bạn' },
-  { label: 'Pending', value: 'vừa gủi lời mời kết bạn' },
+  { label: 'Matched', value: 'đã trở thành bạn bè' },
+  { label: 'Pending', value: 'vừa có lời mời kết bạn' },
   { label: 'Declined', value: 'từ chối lời mời kết bạn' },
-  { label: 'Accepted', value: 'chấp nhận lời mời' },
+  { label: 'Accepted', value: 'đã trở thành bạn bè' },
   { label: 'Dislike', value: 'không hứng thú' },
 ]
 export const TYPE_IMAGE = {

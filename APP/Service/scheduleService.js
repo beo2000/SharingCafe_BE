@@ -11,7 +11,7 @@ export async function createSchedule(dataObj) {
   const checkSchedule = await scheduleDAL.checkSchedule(dataObj);
   if (checkSchedule) {
     const titleTo = `Bạn có lịch hẹn mới`;
-    const bodyTo = `${userFrom.user_name} đã tạo một cuộc hẹn với bạn vào lúc ${dataObj.date}`;
+    const bodyTo = `${userFrom.user_name} đã tạo một cuộc hẹn với bạn`;
     firebaseHelper.sendNotification(userTo.token_id, titleTo, bodyTo);
     const [newNotificationStatus] =
       await notificationDAL.getNotificationNewStatus();
@@ -38,16 +38,10 @@ export async function changeStatus(dataObj) {
   // const tile = `SCHEDULE HAS BEEN UPDATED `;
 
   const tile = `LỊCH TRÌNH ĐÃ ĐƯỢC CẬP NHẬT `;
-  firebaseHelper.sendNotification(
-    schedule.user_from_token,
-    tile,
-    `KÍNH GỬI ${schedule.user_from}` + schedule.message,
-  );
-  firebaseHelper.sendNotification(
+  firebaseHelper.sendNotificationToMultipleDevices([
     schedule.user_to_token,
-    tile,
-    `KÍNH GỬI ${schedule.user_to}` + schedule.message,
-  );
+    schedule.user_from_token,
+  ], tile, `Lịch trình với nội dung ${schedule.content} đã được cập nhật`);
   return await scheduleDAL.changeStatus(dataObj);
 }
 

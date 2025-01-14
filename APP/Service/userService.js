@@ -356,12 +356,12 @@ export async function updateUserMatchStatus(userId, dataObj) {
   )
 
   const title = `TÍNH NĂNG KẾT NỐI`
-  const bodyCurrent = `Bạn ${commonFunctions.getValueByLabel(
+  const bodyCurrent = `Bạn với ${userLiked.user_name} ${commonFunctions.getValueByLabel(
     statusStage.user_match_status
-  )} với ${userLiked.user_name}`
-  const bodyLike = `Bạn ${commonFunctions.getValueByLabel(
+  )}`
+  const bodyLike = `Bạn với ${userCurrent.user_name} ${commonFunctions.getValueByLabel(
     statusStage.user_match_status
-  )} bởi ${userCurrent.user_name}`
+  )}`
 
   const [newNotificationStatus] =
     await notificationDAL.getNotificationNewStatus()
@@ -377,7 +377,7 @@ export async function updateUserMatchStatus(userId, dataObj) {
     newNotificationStatus.notification_status_id
   )
 
-  if ([ commonEnum.MATCH_STATUS.ACCEPTED, commonEnum.MATCH_STATUS.MATCHED, commonEnum.MATCH_STATUS.PENDING, commonEnum.MATCH_STATUS ].includes(statusStage.user_match_status)) {
+  if ([ commonEnum.MATCH_STATUS.ACCEPTED, commonEnum.MATCH_STATUS.MATCHED, commonEnum.MATCH_STATUS.PENDING ].includes(statusStage.user_match_status)) {
     firebaseHelper.sendNotification(userLiked.token_id, title, bodyLike)
     firebaseHelper.sendNotification(userCurrent.token_id, title, bodyCurrent)
   }
