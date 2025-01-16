@@ -10,3 +10,11 @@ export async function getDiscuss(query) {
   var type = query.type;
   return await Discuss.getDiscuss(refId, type);
 }
+
+export async function commentDiscussion(discussId, content, user) {
+  return await Discuss.commentDiscussion(discussId, content, user.user_id);
+}
+
+export async function getComments(discussId) {
+  return await Discuss.getComments(discussId);
+}

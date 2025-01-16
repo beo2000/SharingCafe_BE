@@ -19,3 +19,23 @@ export async function getDiscuss(req, res) {
     res.status(500).send({ error: error.message })
   }
 }
+
+export async function commentDiscussion(req, res) {
+  try {
+    const result = await discussService.commentDiscussion(req.body.discuss_id, req.body.content, req.user)
+    res.status(200).send(result)
+  } catch (error) {
+    console.log(error)
+    res.status(500).send({ error: error.message })
+  }
+}
+
+export async function getComments(req, res, next) {
+  try {
+    const result = await discussService.getComments(req.query.discuss_id)
+    res.status(200).send(result)
+  } catch (error) {
+    console.log(error)
+    res.status(500).send({ error: error.message })
+  }
+}

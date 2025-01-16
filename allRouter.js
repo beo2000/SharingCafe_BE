@@ -4169,7 +4169,7 @@ router.get('/api/auth/image', imageController.getImageFromRefIdAndType)
  *             type: object
  *             properties:
  *               items:
- *                 type: array
+ *                 type: object
  *                 items:
  *                   properties:
  *                     ref_id:
@@ -4295,5 +4295,61 @@ router.post('/api/auth/discuss', discussController.createDiscuss)
  *         description: An internal server error occurred.
  */
 router.get('/api/auth/discuss', discussController.getDiscuss)
+
+/**
+ * @swagger
+ * /api/auth/discuss/comment:
+ *   post:
+ *     security:
+ *       - BearerAuth: []
+ *     summary: Comment Discuss
+ *     description: Comment Discuss
+ *     tags:
+ *       - DISCUSS
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               discuss_id:
+ *                 type: string
+ *                 required: true
+ *               content:
+ *                 type: string
+ *     responses:
+ *       '200':
+ *         description: Successfully.
+ *       '400':
+ *         description: Bad request.
+ *       '500':
+ *         description: An internal server error occurred.
+ */
+router.post('/api/auth/discuss/comment', discussController.commentDiscussion)
+
+/**
+ * @swagger
+ * /api/auth/discuss/comment:
+ *   get:
+ *     security:
+ *       - BearerAuth: []
+ *     summary: Get Discuss comments
+ *     description: Get Discuss comments
+ *     tags:
+ *       - DISCUSS
+ *     parameters:
+ *       - in: query
+ *         name: discuss_id
+ *         required: true
+ *     responses:
+ *       '200':
+ *         description: Successfully.
+ *       '400':
+ *         description: Bad request.
+ *       '500':
+ *         description: An internal server error occurred.
+ */
+router.get('/api/auth/discuss/comment', discussController.getComments)
 
 export default router
