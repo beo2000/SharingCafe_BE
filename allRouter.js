@@ -4352,4 +4352,36 @@ router.post('/api/auth/discuss/comment', discussController.commentDiscussion)
  */
 router.get('/api/auth/discuss/comment', discussController.getComments)
 
+/**
+ * @swagger
+ * /api/auth/discuss/like:
+ *   post:
+ *     security:
+ *       - BearerAuth: []
+ *     summary: Like Discuss
+ *     description: Like Discuss
+ *     tags:
+ *       - DISCUSS
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               discuss_id:
+ *                 type: string
+ *                 required: true
+ *               is_like:
+ *                 type: boolean
+ *     responses:
+ *       '200':
+ *         description: Successfully.
+ *       '400':
+ *         description: Bad request.
+ *       '500':
+ *         description: An internal server error occurred.
+ */
+router.post('/api/auth/discuss/like', discussController.likeDiscuss)
+
 export default router
