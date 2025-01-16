@@ -356,30 +356,32 @@ export async function updateUserMatchStatus(userId, dataObj) {
   )
 
   const title = `TÍNH NĂNG KẾT NỐI`
-  const bodyCurrent = `Bạn với ${userLiked.user_name} ${commonFunctions.getValueByLabel(
+  const bodyCurrent = `Bạn ${commonFunctions.getValueByLabel(
     statusStage.user_match_status
-  )}`
-  const bodyLike = `Bạn với ${userCurrent.user_name} ${commonFunctions.getValueByLabel(
+  )} ${userLiked.user_name}`
+  const bodyLike = `Bạn ${commonFunctions.getValueByLabel(
     statusStage.user_match_status
-  )}`
-
-  const [newNotificationStatus] =
-    await notificationDAL.getNotificationNewStatus()
-
-  await notificationDAL.createNotification(
-    userId,
-    bodyCurrent,
-    newNotificationStatus.notification_status_id
-  )
-  await notificationDAL.createNotification(
-    dataObj.user_id,
-    bodyLike,
-    newNotificationStatus.notification_status_id
-  )
-
-  if ([ commonEnum.MATCH_STATUS.ACCEPTED, commonEnum.MATCH_STATUS.MATCHED ].includes(statusStage.user_match_status)) {
+  )} ${userCurrent.user_name}`
+  
+  if ([ commonEnum.MATCH_STATUS.ACCEPTED, commonEnum.MATCH_STATUS.MATCHED, commonEnum.MATCH_STATUS.PENDING ].includes(statusStage.user_match_status)) {
+    const [newNotificationStatus] =
+      await notificationDAL.getNotificationNewStatus()
+  
+    if (statusStage.user_match_status != commonEnum.MATCH_STATUS.PENDING) {
+      await notificationDAL.createNotification(
+        userId,
+        bodyCurrent,
+        newNotificationStatus.notification_status_id
+      )
+      firebaseHelper.sendNotification(userCurrent.token_id, title, bodyCurrent)
+    }
+    
+    await notificationDAL.createNotification(
+      dataObj.user_id,
+      bodyLike,
+      newNotificationStatus.notification_status_id
+    )
     firebaseHelper.sendNotification(userLiked.token_id, title, bodyLike)
-    firebaseHelper.sendNotification(userCurrent.token_id, title, bodyCurrent)
   }
 
   return await matchDAL.getMatchCouple(userId, dataObj.user_id)
