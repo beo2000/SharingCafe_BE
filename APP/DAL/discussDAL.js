@@ -56,7 +56,7 @@ export async function likeDiscuss(discussId, userId, isLike) {
     UPDATE public.discuss SET like_count = like_count ${isLike ? '+' : '-'} 1 WHERE id = '${discussId}';
   `;
   isLike ? 
-  Like.create({
+  await Like.create({
     ref_id: discussId,
     type: TYPE_LIKE.DISCUSS,
     user_id: userId
